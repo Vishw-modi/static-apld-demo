@@ -290,13 +290,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 40px;
+      padding: 8px 40px;
     }
 
     .brand-lockup {
       display: flex;
       align-items: center;
       gap: 12px;
+      cursor: pointer;
     }
 
     .brand-mark {
@@ -359,7 +360,7 @@
       flex: 1;
       display: flex;
       align-items: center;
-      padding: 20px 40px 60px;
+      padding: 10px 40px 60px;
     }
 
     .landing-hero-inner {
@@ -1745,13 +1746,11 @@
   <!-- ============ LANDING ============ -->
   <section id="view-landing">
     <div class="landing-nav">
-      <div class="brand-lockup">
+      <div class="brand-lockup" onclick="location.reload()">
         <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo"
-          style="height: 55px; object-fit: contain;">
+          style="height: 65px; object-fit: contain; transform: scale(1.25); transform-origin: left center;">
       </div>
       <div class="landing-nav-links">
-
-        <span class="pill-tag">Live Demo</span>
       </div>
     </div>
 
@@ -1837,14 +1836,13 @@
   <section id="view-explore" class="hidden">
     <div class="app-header">
       <div class="header-left">
-        <div class="brand-lockup" id="btn-home">
+        <div class="brand-lockup" id="btn-home" style="margin-right: 40px;" onclick="location.reload()">
           <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo"
-            style="height: 35px; object-fit: contain;">
+            style="height: 45px; object-fit: contain; transform: scale(1.25); transform-origin: left center;">
         </div>
-        <div class="crumb">Explore <b>/ Cohort Builder — Plaque Psoriasis (PsO)</b></div>
+        <div class="crumb">Explore <b>/ Cohort Builder</b></div>
       </div>
       <div class="header-right">
-        <span class="env-tag">Demo Data</span>
         <div class="avatar-badge">U</div>
       </div>
     </div>
@@ -2165,10 +2163,23 @@
     function barChart(opts) {
       // opts: {title, subtitle, data:[{label,value,color}], unit, maxValue}
       const card = h("div", "card");
-      card.appendChild(h("div", "card-title", opts.title));
-      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      card.style.display = "flex";
+      card.style.flexDirection = "column";
+      card.style.alignItems = "center";
+      card.style.justifyContent = "center";
+      const titleEl = h("div", "card-title", opts.title);
+      titleEl.style.textAlign = "center";
+      titleEl.style.marginBottom = "16px";
+      card.appendChild(titleEl);
+      if (opts.subtitle) {
+        const subEl = h("div", "card-sub", opts.subtitle);
+        subEl.style.textAlign = "center";
+        card.appendChild(subEl);
+      }
       const max = opts.maxValue || Math.max(...opts.data.map(d => d.value)) * 1.08;
       const rows = h("div");
+      rows.style.width = "100%";
+      rows.style.padding = "0 20px"; // Give it some breathing room
       opts.data.forEach(d => {
         const row = h("div", "bar-row");
         const wPct = Math.max((d.value / max) * 100, 2);
@@ -2189,8 +2200,19 @@
     function donutChart(opts) {
       // opts: {title, subtitle, data:[{label,value,color}]}
       const card = h("div", "card");
-      card.appendChild(h("div", "card-title", opts.title));
-      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      card.style.display = "flex";
+      card.style.flexDirection = "column";
+      card.style.alignItems = "center";
+      card.style.justifyContent = "center";
+      const titleEl = h("div", "card-title", opts.title);
+      titleEl.style.textAlign = "center";
+      titleEl.style.marginBottom = "16px";
+      card.appendChild(titleEl);
+      if (opts.subtitle) {
+        const subEl = h("div", "card-sub", opts.subtitle);
+        subEl.style.textAlign = "center";
+        card.appendChild(subEl);
+      }
       const total = opts.data.reduce((a, b) => a + b.value, 0);
       const size = 168, r = 62, cx = size / 2, cy = size / 2, sw = 26;
       const circ = 2 * Math.PI * r;
@@ -2233,7 +2255,7 @@
         sub.textContent = opts.centerSub;
         svg.appendChild(sub);
       }
-      const row = h("div"); row.style.display = "flex"; row.style.gap = "18px"; row.style.alignItems = "center";
+      const row = h("div"); row.style.display = "flex"; row.style.gap = "18px"; row.style.alignItems = "center"; row.style.justifyContent = "center"; row.style.width = "100%";
       const svgWrap = h("div"); svgWrap.appendChild(svg);
       row.appendChild(svgWrap);
       const legend = h("div", "chart-legend"); legend.style.flexDirection = "column"; legend.style.marginTop = "0";
@@ -2626,11 +2648,10 @@
     /* ============================================================
        FLOW: LANDING -> EXPLORE
     ============================================================ */
-    document.getElementById("btn-explore").addEventListener("click", startExplore);
-    document.getElementById("btn-watch").addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
-    document.getElementById("btn-home").addEventListener("click", () => {
-      if (confirm("Return to the landing page? This will restart the demo.")) location.reload();
+    document.getElementById("btn-explore").addEventListener("click", () => {
+      document.getElementById('dataset-modal').style.display = 'flex';
     });
+    document.getElementById("btn-watch").addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
 
     async function startExplore() {
       document.getElementById("view-landing").classList.add("hidden");
@@ -3237,6 +3258,100 @@
           </svg>
           Run Analysis
         </button>
+      </div>
+    </div>
+  </div>
+  <div id="dataset-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <style>
+      .dataset-card { display:flex; gap:16px; padding:16px; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:all 0.15s; background:#f8fafc; }
+      .dataset-card:hover { border-color:#94a3b8; }
+      .dataset-card.active { border:2px solid #12939f; padding:15px; background:#f0f9fa; }
+    </style>
+    <div style="background:#fff; width:100%; max-width:600px; border-radius:16px; padding:24px; box-shadow:0 20px 40px rgba(0,0,0,0.2); position:relative;">
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+        <div>
+          <h2 style="font-size:20px; font-weight:600; color:var(--navy-900); margin:0 0 4px;">Select Datasets</h2>
+          <p style="font-size:14px; color:var(--ink-secondary); margin:0;">Choose data sources for <span style="color:#12939f; font-weight:500;">Patient Cohort</span></p>
+        </div>
+        <button onclick="document.getElementById('dataset-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:var(--ink-muted); padding:4px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Dataset List -->
+      <div style="display:flex; flex-direction:column; gap:12px; max-height:400px; overflow-y:auto; margin-bottom:24px; padding-right:4px;">
+        <label class="dataset-card">
+          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">IQVIA LAAD Claims</div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Longitudinal access and adjudication data with medical and pharmacy claims across multiple payers.</div>
+            <div style="font-size:12px; font-weight:500; color:#94a3b8;">280M+ patient records</div>
+          </div>
+        </label>
+        
+        <label class="dataset-card">
+          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Symphony Health</div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Integrated dataverse combining claims, prescriptions, and EHR data for comprehensive patient insights.</div>
+            <div style="font-size:12px; font-weight:500; color:#94a3b8;">300M+ lives covered</div>
+          </div>
+        </label>
+
+        <label class="dataset-card">
+          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">McKesson Compile</div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Prescription and medical claims data sourced from retail and specialty pharmacies nationwide.</div>
+            <div style="font-size:12px; font-weight:500; color:#94a3b8;">220M+ patient records</div>
+          </div>
+        </label>
+
+        <label class="dataset-card">
+          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Veeva Compass</div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Patient-level prescription data with prescriber linkage, covering retail and mail order.</div>
+            <div style="font-size:12px; font-weight:500; color:#94a3b8;">190M+ patient records</div>
+          </div>
+        </label>
+      </div>
+
+      <script>
+        function toggleDataset() {
+          const hasChecked = document.querySelectorAll('#dataset-modal input:checked').length > 0;
+          const btn = document.getElementById('btn-dataset-continue');
+          if (hasChecked) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+            btn.style.background = '#12939f';
+          } else {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            btn.style.background = '#9ebec5';
+          }
+        }
+      </script>
+
+      <!-- Footer Buttons -->
+      <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center; border-top:1px solid #e2e8f0; margin:0 -24px; padding:16px 24px 0;">
+        <button onclick="document.getElementById('dataset-modal').style.display='none'" style="background:none; border:none; color:var(--navy-900); font-weight:600; font-size:14px; cursor:pointer; padding:8px 16px;">Cancel</button>
+        <button id="btn-dataset-continue" disabled onclick="document.getElementById('dataset-modal').style.display='none'; startExplore();" style="background:#9ebec5; color:#fff; border:none; border-radius:8px; font-weight:600; font-size:14px; padding:10px 20px; cursor:not-allowed; opacity:0.5; display:flex; align-items:center; gap:6px; transition:background 0.2s;">Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button>
       </div>
     </div>
   </div>
