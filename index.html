@@ -3041,6 +3041,46 @@
       if (key === "adherence") wrap.appendChild(adherenceResultsBlock());
       if (key === "persistence") wrap.appendChild(persistenceResultsBlock());
 
+      /* ---- edge-case callout (mirrors cohort pattern) ---- */
+      const tightened = STATE["tightened_" + key];
+      if (!tightened) {
+        const callout = h("div", "callout");
+        let bullets = "";
+        if (key === "switch") {
+          const s = DATA.switch;
+          bullets =
+            '<li><b>2,340 patients (2.4%)</b> had overlapping fills for two drug classes lasting &lt;14 days — likely a sample/bridge fill rather than a genuine augmentation, which could inflate the reported switch count.</li>' +
+            '<li><b>1,870 patients (1.9%)</b> "switched" to a biosimilar of their index drug (e.g., Humira → Hadlima). Under the current rules this counts as a switch because the NDC changed, but it is not a true MOA switch.</li>' +
+            '<li><b>980 patients (1.0%)</b> have a single pharmacy claim for the new drug with no subsequent refills — potentially a never-started prescription or data lag rather than a completed switch.</li>';
+        } else if (key === "adherence") {
+          bullets =
+            '<li><b>3,150 patients (3.4%)</b> have only mail-order fills with 90-day supplies — standard PDC methodology can over-count adherence when days-supply &gt;30 days, inflating the "adherent" share.</li>' +
+            '<li><b>2,410 patients (2.6%)</b> switched drug class mid-period but kept taking the new drug consistently — counting them as non-adherent to the index drug is technically correct but may misrepresent their overall treatment engagement.</li>' +
+            '<li><b>1,180 patients (1.3%)</b> have a single 90-day fill with no refills — PDC appears adequate but likely represents a trial-and-abandon rather than true adherence.</li>';
+        } else {
+          bullets =
+            '<li><b>2,780 patients (4.8%)</b> have their last fill within 30 days of the data-cutoff date — censoring is correct, but the short tail creates uncertainty in their true persistence trajectory.</li>' +
+            '<li><b>1,640 patients (2.8%)</b> switched to a biosimilar of the same molecule mid-episode (e.g., Humira → Hadlima) and triggered a false discontinuation under the 60-day gap rule.</li>' +
+            '<li><b>920 patients (1.6%)</b> have a &gt;60 day gap explained by a prior-authorization delay (PA resubmission claim within 30 days of gap end) — likely still persistent but flagged as discontinued.</li>';
+        }
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
+          '<ul>' + bullets + '</ul>' +
+          '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-analysis-tighten">Apply suggested tightening &amp; re-run</button>' +
+          '<button class="link-btn" id="btn-analysis-adjust">Adjust rules myself</button>' +
+          '<button class="link-btn" id="btn-analysis-keep">Keep as-is, continue</button>' +
+          '</div>';
+        wrap.appendChild(callout);
+      } else {
+        const callout = h("div", "callout teal");
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">✓</div><b>This looks like a clean, analysis-ready result set</b></div>' +
+          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the edge-case rules and re-running removed borderline records without materially shifting the headline metrics. The result set is ready for downstream use.</div>' +
+          '<div class="btn-row"><button class="btn btn-tealsolid" id="btn-analysis-accept">Accept results &amp; continue</button></div>';
+        wrap.appendChild(callout);
+      }
+
       const remaining = ["switch", "adherence", "persistence"].filter(k => !STATE.completedAnalyses.includes(k));
       const nextCard = h("div", "card");
       if (remaining.length) {
@@ -3063,20 +3103,51 @@
       wrap.appendChild(nextCard);
       renderPanel(wrap);
 
+      /* ---- wire edge-case buttons ---- */
+      if (!tightened) {
+        document.getElementById("btn-analysis-tighten").onclick = () => {
+          STATE["tightened_" + key] = true;
+          userSay("Apply the suggested tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
+          runAnalysis(key);
+        };
+        document.getElementById("btn-analysis-adjust").onclick = () => {
+          renderPanel(analysisRulesPanel(key, ANALYSIS_META[key].rules()));
+          toast("Manual editing re-opened — adjust and confirm to re-run.");
+        };
+        document.getElementById("btn-analysis-keep").onclick = () => {
+          STATE["tightened_" + key] = true;
+          showAnalysisResults(key);
+        };
+      } else {
+        const acceptBtn = document.getElementById("btn-analysis-accept");
+        if (acceptBtn) acceptBtn.onclick = () => {};  // already showing "What's next" below
+      }
+
       const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
       let msg = "";
       if (key === "switch") msg = "Switch analysis is done: <b>" + pct(s.totals.switched, s.totals.population) + "%</b> of patients on a systemic PsO therapy switched classes within 12 months, averaging <b>" + s.totals.avgDaysToSwitch + " days</b> to switch. TNF inhibitors show the highest switch rate; IL-23 inhibitors the lowest.";
       if (key === "adherence") msg = "Adherence analysis is done: mean PDC is <b>" + a.meanPDC + "</b>, with <b>" + a.pctAdherent + "%</b> of patients adherent (PDC ≥0.80). Adherence tracks closely with dosing frequency — less-frequently-dosed IL-23 inhibitors lead.";
       if (key === "persistence") msg = "Persistence analysis is done: median time on therapy is <b>" + p.medianMonths + " months</b>, with <b>" + p.pct12mo + "%</b> of patients still on therapy at 12 months and <b>" + p.pct24mo + "%</b> at 24 months. IL-23 inhibitors again lead; oral systemics trail.";
-      aiSay(msg, 1000).then(() => {
-        if (remaining.length) {
-          setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); } })));
-          freeTextHandler = () => startAnalysisFlow(remaining[0]);
-        } else {
-          setChips([{ label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
-          freeTextHandler = () => showFinalSummary();
-        }
-      });
+
+      if (!tightened) {
+        aiSay(msg + " I found a few edge cases worth reviewing — see the callout on the right.", 1000).then(() => {
+          setChips([
+            { label: "Apply suggested tightening & re-run", primary: true, onClick: () => { STATE["tightened_" + key] = true; userSay("Apply the suggested tightening and re-run."); runAnalysis(key); } },
+            { label: "Keep as-is, continue", muted: true, onClick: () => { STATE["tightened_" + key] = true; showAnalysisResults(key); } }
+          ]);
+          freeTextHandler = () => { STATE["tightened_" + key] = true; userSay("Apply the suggested tightening and re-run."); runAnalysis(key); };
+        });
+      } else {
+        aiSay(msg + " The tightened result set looks clean — ready to move on.", 1000).then(() => {
+          if (remaining.length) {
+            setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); } })));
+            freeTextHandler = () => startAnalysisFlow(remaining[0]);
+          } else {
+            setChips([{ label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
+            freeTextHandler = () => showFinalSummary();
+          }
+        });
+      }
     }
 
     function switchResultsBlock() {
