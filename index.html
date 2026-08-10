@@ -498,56 +498,40 @@ table.data-table tr:last-child td{border-bottom:none;}
 <body>
 
 <!-- ============ LANDING ============ -->
-<section id="view-landing">
-  <div class="landing-nav">
-    <div class="brand-lockup">
-      <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo" style="height: 55px; object-fit: contain;">
+<section id="view-landing" style="background: var(--page); min-height: 100vh; display: flex; flex-direction: column;">
+  <div class="app-header" style="background: transparent; border-bottom: none;">
+    <div class="header-left">
+      <div class="brand-lockup">
+        <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo" style="height: 35px; object-fit: contain;">
+      </div>
     </div>
-    <div class="landing-nav-links">
-      
-      <span class="pill-tag">Live Demo</span>
+    <div class="header-right">
+      <span style="font-size: 14px; font-weight: 600; color: var(--ink-secondary);">APLD Analytics Pipeline</span>
+      <div class="avatar-badge">U</div>
     </div>
   </div>
 
-  <div class="landing-hero">
-    <div class="landing-hero-inner">
-      <div>
-        <div class="landing-eyebrow"><span class="dot"></span> AI-assisted claims analytics</div>
-        <h1>From a business question to a<br><em>validated patient cohort</em> — in minutes.</h1>
-        <p class="lead">APLD pairs an AI analyst with 214M covered lives of longitudinal claims data. Describe the market you want to understand; the assistant proposes cohort logic, runs the analysis, and helps you dig into switch, adherence, and persistence behavior — no query language required.</p>
-        <div class="landing-cta-row">
-          <button class="btn btn-primary" id="btn-explore">Explore <span aria-hidden="true">→</span> Cohort Builder</button>
-          <button class="btn btn-secondary" id="btn-watch">▶ Watch a 30&nbsp;sec overview</button>
-        </div>
-        <div class="landing-modules">
-          <div class="module-tile active">Explore · Cohort Builder</div>
-          <div class="module-tile">Library</div>
-          <div class="module-tile">Reports</div>
-          <div class="module-tile">Data Coverage</div>
-        </div>
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; margin-top: -60px;">
+    <div style="text-align: center; margin-bottom: 48px; max-width: 600px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--teal-050);border:1px solid var(--teal-100);padding:6px 16px;border-radius:999px;font-size:12px;color:var(--teal-700);margin-bottom:20px;font-weight:600;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        AI-Powered APLD Analytics
       </div>
-      <div class="landing-visual">
-        <div class="vwin-bar"><span></span><span></span><span></span></div>
-        <div class="mini-chat-row">
-          <div class="mini-avatar">AI</div>
-          <div class="mini-bubble">What would you like to explore today?</div>
+      <h1 style="font-size: 38px; font-weight: 700; margin: 0 0 16px; color: var(--navy-900); letter-spacing: -0.5px;">Analytics Pipeline</h1>
+      <p style="font-size: 16px; color: var(--ink-secondary); line-height: 1.6; margin: 0;">Select an analysis type to begin your AI-assisted APLD study. Configure business rules, refine with our chatbot, and get actionable insights.</p>
+    </div>
+
+    <div style="width: 100%; max-width: 900px;">
+      <div id="btn-explore" class="card" style="background: var(--accent); border: none; border-radius: 16px; padding: 32px; color: #fff; cursor: pointer; position: relative; transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 0;">
+        <div style="position: absolute; top: 24px; right: 24px; background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">AI-Powered</div>
+        <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>
-        <div class="mini-chat-row">
-          <div class="mini-bubble me" style="margin-left:auto;">Understand the PsO market from claims data</div>
-        </div>
-        <div class="mini-chat-row">
-          <div class="mini-avatar">AI</div>
-          <div class="mini-bubble">Here's a suggested cohort definition — 6 business rules based on standard PsO real-world evidence criteria. Want to review them?</div>
-        </div>
-        <div class="mini-stats">
-          <div class="mini-stat"><b>162.5K</b><span>Cohort Patients</span></div>
-          <div class="mini-stat"><b>18.4%</b><span>12-Mo Switch Rate</span></div>
-          <div class="mini-stat"><b>9.4 mo</b><span>Median Persistence</span></div>
-        </div>
+        <h3 style="font-size: 22px; font-weight: 700; margin: 0 0 10px;">Patient Cohort</h3>
+        <p style="font-size: 15px; opacity: 0.95; margin: 0; line-height: 1.5; max-width: 80%;">Build custom patient cohorts using AI-guided criteria selection. Define inclusion/exclusion criteria, demographics, and clinical parameters interactively.</p>
       </div>
     </div>
   </div>
-  <div class="landing-foot">KMK APLD · Illustrative demo environment — all figures are simulated for walkthrough purposes.</div>
 </section>
 
 <!-- ============ EXPLORE APP ============ -->
