@@ -2697,11 +2697,7 @@
     }
 
     function offerUseCaseChips() {
-      setChips([
-        { label: "Understand the PsO market from claims data", primary: true, onClick: () => { userSay("I want to understand the PsO (plaque psoriasis) market from claims data."); goToCohortRules(); } },
-        { label: "Analyze GLP-1 switching in Type 2 Diabetes", muted: true, onClick: async () => { userSay("Analyze GLP-1 switching in Type 2 Diabetes"); await aiSay("Great question — the same assistant works the same way for any therapeutic area. For this walkthrough, let's stay focused on Psoriasis (PsO) so we can go deep end-to-end.", 700); setChips([{ label: "Continue with the PsO market", primary: true, onClick: () => { userSay("Continue with the PsO market"); goToCohortRules(); } }]); } },
-        { label: "Build an oncology adherence cohort", muted: true, onClick: async () => { userSay("Build an oncology adherence cohort"); await aiSay("Noted for a future session — let's keep this walkthrough on the PsO market so we can go from cohort to insight in one pass.", 700); setChips([{ label: "Continue with the PsO market", primary: true, onClick: () => { userSay("Continue with the PsO market"); goToCohortRules(); } }]); } }
-      ]);
+      setChips([]);
       freeTextHandler = () => goToCohortRules();
     }
 
