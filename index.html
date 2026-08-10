@@ -1385,7 +1385,7 @@ function cohortRulesPanel(){
     "Suggested business rules — PsO cohort",
     "AI-suggested starting point. Add, edit, or disable rules to match your definition.",
     STATE.cohortRuleset,
-    (activeRules)=> confirmCohortRules(activeRules),
+    (activeRules)=> runCohortAnalysis(1),
     "Confirm rules & continue"
   ));
   return wrap;
@@ -1591,7 +1591,7 @@ function analysisRulesPanel(key, rulesArr){
     "Suggested business rules — "+meta.label,
     "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
     rulesArr,
-    (activeRules)=> confirmAnalysisRules(key, activeRules),
+    (activeRules)=> runAnalysis(key),
     "Confirm rules & continue"
   ));
   return wrap;
