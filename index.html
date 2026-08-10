@@ -1058,6 +1058,12 @@
       box-shadow: var(--shadow-sm);
       padding: 28px 32px;
       margin-bottom: 24px;
+      overflow: visible;
+    }
+
+    .card svg {
+      max-width: 100%;
+      height: auto;
     }
 
     .card-title {
@@ -2329,7 +2335,7 @@
       const svgns = "http://www.w3.org/2000/svg";
       const svg = document.createElementNS(svgns, "svg");
       svg.setAttribute("viewBox", "0 0 " + w + " " + (hgt + 30));
-      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt + 30);
+      svg.setAttribute("width", "100%"); svg.style.height = "auto";
       [0, 0.25, 0.5, 0.75, 1].forEach(f => {
         const y = hgt - f * hgt;
         const line = document.createElementNS(svgns, "line");
@@ -2375,7 +2381,7 @@
       const svgns = "http://www.w3.org/2000/svg";
       const svg = document.createElementNS(svgns, "svg");
       svg.setAttribute("viewBox", "0 0 " + w + " " + hgt);
-      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt);
+      svg.setAttribute("width", "100%"); svg.style.height = "auto";
       [0, 25, 50, 75, 100].forEach(v => {
         const y = padT + plotH - (v / 100) * plotH;
         const line = document.createElementNS(svgns, "line");
@@ -2440,7 +2446,7 @@
       const svgns = "http://www.w3.org/2000/svg";
       const svg = document.createElementNS(svgns, "svg");
       svg.setAttribute("viewBox", "0 0 " + w + " " + hgt);
-      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt);
+      svg.setAttribute("width", "100%"); svg.style.height = "auto";
 
       function layout(nodes, usable) {
         let y = padTop; const out = [];
