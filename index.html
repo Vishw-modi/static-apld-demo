@@ -1982,14 +1982,17 @@
       return r;
     };
 
-    const SWITCH_RULES = () => ([
-      { id: cid(), category: "Index Therapy", text: "First claim for a systemic PsO therapy (biologic or oral systemic) within the confirmed cohort — defines the index drug and drug class", active: true },
-      { id: cid(), category: "Drug Classes", text: "Track 5 classes: TNF inhibitors, IL-17 inhibitors, IL-23 inhibitors, IL-12/23 inhibitor, Oral systemics", active: true },
-      { id: cid(), category: "Switch Definition", text: "A claim for a different drug class within 90 days of the index drug's last supply end, with no further index-drug claim in the following 60 days", active: true },
-      { id: cid(), category: "Switch Window", text: "12 months post-index", active: true },
-      { id: cid(), category: "Restart Logic", text: "If the gap before the new claim exceeds 180 days, classify as a restart rather than a switch", active: true },
-      { id: cid(), category: "Augmentation Logic", text: "If the index drug claim continues concurrently with the new drug for more than 60 days, classify as augmentation rather than a switch", active: true }
-    ]);
+    const SWITCH_RULES = () => {
+      const windowStr = STATE.switchWindow || "12 months";
+      return [
+        { id: cid(), category: "Index Therapy", text: "First claim for a systemic PsO therapy (biologic or oral systemic) within the confirmed cohort — defines the index drug and drug class", active: true },
+        { id: cid(), category: "Drug Classes", text: "Track 5 classes: TNF inhibitors, IL-17 inhibitors, IL-23 inhibitors, IL-12/23 inhibitor, Oral systemics", active: true },
+        { id: cid(), category: "Switch Definition", text: "A claim for a different drug class within 90 days of the index drug's last supply end, with no further index-drug claim in the following 60 days", active: true },
+        { id: cid(), category: "Switch Window", text: windowStr + " post-index", active: true },
+        { id: cid(), category: "Restart Logic", text: "If the gap before the new claim exceeds 180 days, classify as a restart rather than a switch", active: true },
+        { id: cid(), category: "Augmentation Logic", text: "If the index drug claim continues concurrently with the new drug for more than 60 days, classify as augmentation rather than a switch", active: true }
+      ];
+    };
 
     const ADHERENCE_RULES = () => ([
       { id: cid(), category: "Metric", text: "Proportion of Days Covered (PDC) over a 12-month measurement period following index fill", active: true },
@@ -2995,9 +2998,42 @@
       setChips([]); freeTextHandler = null;
       renderStepper(3, STATE.completedAnalyses);
       const meta = ANALYSIS_META[key];
-      await aiSay(meta.ackText, 900);
-      const rulesArr = meta.rules();
-      renderPanel(analysisRulesPanel(key, rulesArr));
+
+      if (key === "switch") {
+        await aiSay("Let's configure the parameters for the Switch Analysis first. What observation window would you like to use for tracking patient switching post-index?", 900);
+        
+        const chooseWindow = async (months) => {
+          STATE.switchWindow = months + " months";
+          await aiSay(`I've set the switch observation window to <b>${months} months</b> based on your input. Here are the suggested business rules for this switch analysis — please review them on the right.`, 800);
+          const rulesArr = meta.rules();
+          renderPanel(analysisRulesPanel(key, rulesArr));
+        };
+        
+        setChips([
+          { label: "Use standard 12-month window", primary: true, onClick: () => { userSay("Use standard 12-month window"); chooseWindow(12); } },
+          { label: "Use a shorter 6-month window", muted: true, onClick: () => { userSay("Use a shorter 6-month window"); chooseWindow(6); } },
+          { label: "Use a longer 24-month window", muted: true, onClick: () => { userSay("Use a longer 24-month window"); chooseWindow(24); } }
+        ]);
+        
+        freeTextHandler = (val) => {
+          const num = parseInt(val.replace(/\D/g, ""), 10);
+          if (num && [6, 12, 24].includes(num)) {
+            chooseWindow(num);
+          } else {
+            aiSay("I can configure a 6-month, 12-month, or 24-month switch window. Which one would you prefer?", 400).then(() => {
+              setChips([
+                { label: "Use standard 12-month window", primary: true, onClick: () => { userSay("Use standard 12-month window"); chooseWindow(12); } },
+                { label: "Use a shorter 6-month window", muted: true, onClick: () => { userSay("Use a shorter 6-month window"); chooseWindow(6); } },
+                { label: "Use a longer 24-month window", muted: true, onClick: () => { userSay("Use a longer 24-month window"); chooseWindow(24); } }
+              ]);
+            });
+          }
+        };
+      } else {
+        await aiSay(meta.ackText, 900);
+        const rulesArr = meta.rules();
+        renderPanel(analysisRulesPanel(key, rulesArr));
+      }
     }
 
     function analysisRulesPanel(key, rulesArr) {
