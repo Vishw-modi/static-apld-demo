@@ -2000,6 +2000,30 @@
       { id: cid(), category: "Switch Handling", text: "A switch to a new drug class after discontinuation starts a new persistence episode for the new drug, not a continuation of the old one", active: true }
     ]);
 
+    /* ============================================================
+       FLOW: SWITCH / ADHERENCE / PERSISTENCE (shared shell)
+    ============================================================ */
+    const ANALYSIS_META = {
+      switch: {
+        label: "Switch Analysis", rules: SWITCH_RULES,
+        pipeline: ["Extracting index therapy claims", "Identifying subsequent claims per patient", "Applying switch / augmentation / restart logic", "Aggregating drug-to-drug flows", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>switch analysis</b> — how we'll define an index drug, a true switch (vs. augmentation or restart), and the measurement window. Edit as needed, then run.",
+        confirmText: "To summarize: we'll track the 5 major PsO drug classes, define a switch as a new-class claim within 90 days of the index drug's supply end (with no further index-drug claim after), separate out restarts (&gt;180‑day gaps) and augmentation (concurrent use &gt;60 days), over a 12‑month window. Ready to run?"
+      },
+      adherence: {
+        label: "Adherence Analysis", rules: ADHERENCE_RULES,
+        pipeline: ["Extracting pharmacy fill history", "Calculating Proportion of Days Covered (PDC)", "Applying grace periods & switch exclusions", "Classifying adherent vs. non-adherent", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>adherence analysis</b> — using Proportion of Days Covered (PDC) with the standard PQA-aligned 0.80 threshold. Edit as needed, then run.",
+        confirmText: "To summarize: adherence will be measured as PDC over 12 months post-index, on patients with ≥2 fills and continuous enrollment, using a 30‑day grace period, with PDC ≥0.80 counted as adherent. Ready to run?"
+      },
+      persistence: {
+        label: "Persistence Analysis", rules: PERSISTENCE_RULES,
+        pipeline: ["Extracting therapy episodes", "Detecting discontinuation gaps (≥60 days)", "Applying censoring for patients still on therapy", "Building time-to-discontinuation curves", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>persistence analysis</b> — how we'll define discontinuation, censoring, and how switches interact with persistence episodes. Edit as needed, then run.",
+        confirmText: "To summarize: persistence runs up to 24 months post-index, discontinuation = a ≥60‑day gap with no refill, patients still active at data cutoff are censored, and a post-discontinuation switch starts a fresh episode for the new drug. Ready to run?"
+      }
+    };
+
     let CID = 1;
     function cid() { return "r" + (CID++); }
 
@@ -2925,29 +2949,7 @@
       freeTextHandler = () => startAnalysisFlow("switch");
     }
 
-    /* ============================================================
-       FLOW: SWITCH / ADHERENCE / PERSISTENCE (shared shell)
-    ============================================================ */
-    const ANALYSIS_META = {
-      switch: {
-        label: "Switch Analysis", rules: SWITCH_RULES,
-        pipeline: ["Extracting index therapy claims", "Identifying subsequent claims per patient", "Applying switch / augmentation / restart logic", "Aggregating drug-to-drug flows", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>switch analysis</b> — how we'll define an index drug, a true switch (vs. augmentation or restart), and the measurement window. Edit as needed, then run.",
-        confirmText: "To summarize: we'll track the 5 major PsO drug classes, define a switch as a new-class claim within 90 days of the index drug's supply end (with no further index-drug claim after), separate out restarts (&gt;180‑day gaps) and augmentation (concurrent use &gt;60 days), over a 12‑month window. Ready to run?"
-      },
-      adherence: {
-        label: "Adherence Analysis", rules: ADHERENCE_RULES,
-        pipeline: ["Extracting pharmacy fill history", "Calculating Proportion of Days Covered (PDC)", "Applying grace periods & switch exclusions", "Classifying adherent vs. non-adherent", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>adherence analysis</b> — using Proportion of Days Covered (PDC) with the standard PQA-aligned 0.80 threshold. Edit as needed, then run.",
-        confirmText: "To summarize: adherence will be measured as PDC over 12 months post-index, on patients with ≥2 fills and continuous enrollment, using a 30‑day grace period, with PDC ≥0.80 counted as adherent. Ready to run?"
-      },
-      persistence: {
-        label: "Persistence Analysis", rules: PERSISTENCE_RULES,
-        pipeline: ["Extracting therapy episodes", "Detecting discontinuation gaps (≥60 days)", "Applying censoring for patients still on therapy", "Building time-to-discontinuation curves", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>persistence analysis</b> — how we'll define discontinuation, censoring, and how switches interact with persistence episodes. Edit as needed, then run.",
-        confirmText: "To summarize: persistence runs up to 24 months post-index, discontinuation = a ≥60‑day gap with no refill, patients still active at data cutoff are censored, and a post-discontinuation switch starts a fresh episode for the new drug. Ready to run?"
-      }
-    };
+
 
     async function startAnalysisFlow(key) {
       setChips([]); freeTextHandler = null;
