@@ -2681,7 +2681,10 @@
     document.getElementById("btn-explore").addEventListener("click", () => {
       startExplore();
     });
-    document.getElementById("btn-watch").addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
+    const btnWatch = document.getElementById("btn-watch");
+    if (btnWatch) {
+      btnWatch.addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
+    }
 
     async function startExplore() {
       document.getElementById("view-landing").classList.add("hidden");
@@ -2778,6 +2781,7 @@
             discardAddition();
           }
         };
+      };
       freeTextHandler = handleCustomRule;
     }
 
