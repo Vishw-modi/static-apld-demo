@@ -2734,16 +2734,50 @@
             ruleText = `Patients must meet criteria: ${val}`;
         }
 
-        await aiSay(`I've refined that into a formal business rule and added it to your cohort definition. Please review the updated list.`, 600);
-        STATE.cohortRuleset.push({
+        const ruleToAdd = {
           id: cid(),
           category: ruleCategory,
           text: ruleText,
           active: true
-        });
-        renderPanel(cohortRulesPanel());
-        freeTextHandler = handleCustomRule;
-      };
+        };
+
+        await aiSay(`I've refined your request into the following formal business rule:<br><br><b>${ruleText}</b><br><br>Would you like me to add this to your cohort definition?`, 600);
+        
+        const confirmAddition = () => {
+          STATE.cohortRuleset.push(ruleToAdd);
+          renderPanel(cohortRulesPanel());
+          setChips([]);
+          aiSay("Rule added. Please review the updated list.", 400).then(() => {
+            freeTextHandler = handleCustomRule;
+          });
+        };
+
+        const discardAddition = () => {
+          setChips([]);
+          freeTextHandler = handleCustomRule;
+        };
+
+        setChips([
+          { 
+            label: "Yes, add it", 
+            primary: true, 
+            onClick: () => { userSay("Yes, add it."); confirmAddition(); } 
+          },
+          { 
+            label: "No, discard", 
+            muted: true, 
+            onClick: () => { userSay("No, discard."); discardAddition(); } 
+          }
+        ]);
+        
+        freeTextHandler = (resp) => {
+          userSay(resp);
+          if (resp.toLowerCase().includes("yes") || resp.toLowerCase().includes("add") || resp.toLowerCase().includes("sure") || resp.toLowerCase().includes("ok")) {
+            confirmAddition();
+          } else {
+            discardAddition();
+          }
+        };
       freeTextHandler = handleCustomRule;
     }
 
