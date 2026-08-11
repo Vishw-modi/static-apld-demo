@@ -758,20 +758,77 @@
       gap: 24px;
       min-height: 0;
       padding-right: 24px;
+      transition: grid-template-columns 0.25s ease;
+    }
+
+    .explore-grid.chat-collapsed {
+      grid-template-columns: 1fr;
+      padding-left: 24px;
     }
 
     /* ---- chat panel ---- */
     #chat-panel {
       border-right: 1px solid var(--border);
-      background: #fff;
+      background: #f8fafc;
       display: flex;
       flex-direction: column;
       min-height: 0;
     }
 
+    #chat-panel.collapsed {
+      display: none !important;
+    }
+
+    .collapse-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--ink-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    .collapse-toggle-btn:hover {
+      background: #f1f3f5;
+      color: var(--ink-primary);
+    }
+
+    .chat-expand-btn {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-900);
+      color: #fff;
+      border: 1px solid var(--border);
+      border-left: none;
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.12);
+      transition: background 0.2s, padding-left 0.2s;
+    }
+    .chat-expand-btn:hover {
+      background: var(--teal-600);
+      padding-left: 18px;
+    }
+    .chat-expand-btn.hidden {
+      display: none !important;
+    }
+
     .chat-head {
       padding: 20px 24px;
       border-bottom: 1px solid var(--border);
+      background: #fff;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -858,7 +915,9 @@
     }
 
     .bubble {
-      background: #f0f2f5;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       border-radius: 12px;
       border-top-left-radius: 4px;
       padding: 10px 13px;
@@ -967,6 +1026,7 @@
       gap: 8px;
       padding: 14px 18px;
       border-top: 1px solid var(--border);
+      background: #fff;
     }
 
     .chat-input-row input {
@@ -1789,52 +1849,110 @@
     <div class="landing-hero">
       <div class="landing-hero-inner">
         <div style="display:flex; flex-direction:column; justify-content:center;">
-          <style>#btn-explore:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(218,131,50,0.4) !important; }</style>
-          <div style="display:inline-flex; align-items:center; gap:6px; background:#e8f4f6; color:#12939f; font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; width:fit-content; margin-bottom:20px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+          <style>
+            #btn-explore:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 14px 28px rgba(218, 131, 50, 0.4) !important;
+            }
+          </style>
+          <div
+            style="display:inline-flex; align-items:center; gap:6px; background:#e8f4f6; color:#12939f; font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; width:fit-content; margin-bottom:20px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+            </svg>
             AI-Powered APLD Analytics
           </div>
-          <h1 style="font-size:36px; font-weight:700; color:var(--navy-900); margin:0 0 16px; line-height:1.2;">Analytics Pipeline</h1>
+          <h1 style="font-size:36px; font-weight:700; color:var(--navy-900); margin:0 0 16px; line-height:1.2;">
+            Analytics Pipeline</h1>
           <p style="font-size:15.5px; color:var(--ink-secondary); line-height:1.6; margin:0 0 32px; max-width:480px;">
-            Select an analysis type to begin your AI-assisted APLD study. Configure business rules, refine with our chatbot, and get actionable insights.
+            Select an analysis type to begin your AI-assisted APLD study. Configure business rules, refine with our
+            chatbot, and get actionable insights.
           </p>
-          
-          <div id="btn-explore" style="background:#da8332; border-radius:12px; padding:24px; color:#fff; cursor:pointer; position:relative; overflow:hidden; transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 10px 25px rgba(218,131,50,0.3); margin-bottom:16px;">
-            <div style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.25); border-radius:6px; font-size:11px; font-weight:600; padding:4px 8px;">AI-Powered</div>
-            <div style="width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+
+          <div id="btn-explore"
+            style="background:#da8332; border-radius:12px; padding:24px; color:#fff; cursor:pointer; position:relative; overflow:hidden; transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 10px 25px rgba(218,131,50,0.3); margin-bottom:16px;">
+            <div
+              style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.25); border-radius:6px; font-size:11px; font-weight:600; padding:4px 8px;">
+              AI-Powered</div>
+            <div
+              style="width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
             </div>
             <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Patient Cohort</div>
-            <div style="font-size:13.5px; opacity:0.9; line-height:1.5;">Build custom patient cohorts using AI-guided criteria selection. Define inclusion/exclusion criteria, demographics, and clinical parameters interactively.</div>
+            <div style="font-size:13.5px; opacity:0.9; line-height:1.5;">Build custom patient cohorts using AI-guided
+              criteria selection. Define inclusion/exclusion criteria, demographics, and clinical parameters
+              interactively.</div>
           </div>
-          
+
           <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
             <!-- Switch Analysis -->
-            <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
-              <div style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Build Cohort First</div>
-              <div style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 8h-3a2 2 0 0 1-2-2v-3m0-8h3a2 2 0 0 1 2 2v3M3 13v3a2 2 0 0 0 2 2h3"></path></svg>
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First</div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M8 3v3a2 2 0 0 1-2 2H3m18 8h-3a2 2 0 0 1-2-2v-3m0-8h3a2 2 0 0 1 2 2v3M3 13v3a2 2 0 0 0 2 2h3">
+                  </path>
+                </svg>
               </div>
-              <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Switch Analysis</div>
-              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Analyze brand-to-brand and therapy switching patterns, identify triggers, and quantify switch rates across treatment lines.</div>
+              <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Switch Analysis
+              </div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Analyze brand-to-brand and
+                therapy switching patterns, identify triggers, and quantify switch rates across treatment lines.</div>
             </div>
             <!-- Adherence -->
-            <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
-              <div style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Build Cohort First</div>
-              <div style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First</div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
               </div>
               <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Adherence</div>
-              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Measure medication adherence using PDC, MPR, and gap analysis metrics to understand patient compliance patterns.</div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Measure medication adherence
+                using PDC, MPR, and gap analysis metrics to understand patient compliance patterns.</div>
             </div>
             <!-- Persistence -->
-            <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
-              <div style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Build Cohort First</div>
-              <div style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First</div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
               </div>
               <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Persistence</div>
-              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Evaluate treatment persistence and time-to-discontinuation using Kaplan-Meier and survival analysis methods.</div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Evaluate treatment persistence
+                and time-to-discontinuation using Kaplan-Meier and survival analysis methods.</div>
             </div>
           </div>
         </div>
@@ -1883,12 +2001,17 @@
 
     <div class="explore-grid">
       <aside id="chat-panel">
-        <div class="chat-head">
-          <div class="ai-avatar">AI</div>
-          <div>
-            <b>APLD Assistant</b>
-            <div class="status"><span class="dot"></span> Connected to claims warehouse</div>
+        <div class="chat-head" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="ai-avatar">AI</div>
+            <div>
+              <b>APLD Assistant</b>
+              <div class="status"><span class="dot"></span> Connected to claims warehouse</div>
+            </div>
           </div>
+          <button id="btn-collapse-chat" class="collapse-toggle-btn" title="Collapse Chat" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
         </div>
         <div id="chat-messages"></div>
         <div id="chips-row"></div>
@@ -1904,6 +2027,12 @@
   </section>
 
   <div class="toast" id="toast"></div>
+
+  <!-- Floating chat expand button -->
+  <button id="btn-expand-chat" class="chat-expand-btn hidden" title="Expand Chat" type="button">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    <span>APLD Assistant</span>
+  </button>
 
   <script>
     /* ============================================================
@@ -2250,8 +2379,8 @@
         const color = resolveColor(d.color || "var(--series-1)");
         row.innerHTML =
           '<div class="bar-header">' +
-            '<div class="blabel">' + d.label + '</div>' +
-            '<div class="bar-value">' + (opts.unit === "pct" ? d.value.toFixed(1) + "%" : fmt(d.value)) + '</div>' +
+          '<div class="blabel">' + d.label + '</div>' +
+          '<div class="bar-value">' + (opts.unit === "pct" ? d.value.toFixed(1) + "%" : fmt(d.value)) + '</div>' +
           '</div>' +
           '<div class="bar-track"><div class="bar-fill" style="width:' + wPct + '%; background:' + color + '"></div></div>';
         const track = row.querySelector(".bar-fill");
@@ -2717,9 +2846,23 @@
     document.getElementById("btn-explore").addEventListener("click", () => {
       startExplore();
     });
-    const btnWatch = document.getElementById("btn-watch");
-    if (btnWatch) {
-      btnWatch.addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
+    const btnCollapse = document.getElementById("btn-collapse-chat");
+    const btnExpand = document.getElementById("btn-expand-chat");
+    const chatPanel = document.getElementById("chat-panel");
+    const exploreGrid = document.querySelector(".explore-grid");
+
+    if (btnCollapse && btnExpand && chatPanel && exploreGrid) {
+      btnCollapse.addEventListener("click", () => {
+        chatPanel.classList.add("collapsed");
+        exploreGrid.classList.add("chat-collapsed");
+        btnExpand.classList.remove("hidden");
+      });
+
+      btnExpand.addEventListener("click", () => {
+        chatPanel.classList.remove("collapsed");
+        exploreGrid.classList.remove("chat-collapsed");
+        btnExpand.classList.add("hidden");
+      });
     }
 
     async function startExplore() {
@@ -2747,27 +2890,27 @@
       STATE.cohortRunNum = 1;
       STATE.cohortRuleset = COHORT_RULES_V1();
       renderPanel(cohortRulesPanel());
-      
+
       const handleCustomRule = async (val) => {
         if (!val) return;
-        
+
         // Scripted refinement of the natural language input
         let ruleCategory = "Custom Rule";
         let ruleText = `Include patients with claims matching: ${val}`;
-        
+
         const lowerVal = val.toLowerCase();
         if (lowerVal.includes("l40.8")) {
-            ruleCategory = "Diagnosis";
-            ruleText = "Include patients with at least 1 medical claim for Other Psoriasis (ICD-10 L40.8) during the observation period";
+          ruleCategory = "Diagnosis";
+          ruleText = "Include patients with at least 1 medical claim for Other Psoriasis (ICD-10 L40.8) during the observation period";
         } else if (lowerVal.includes("l40.9")) {
-            ruleCategory = "Diagnosis";
-            ruleText = "Include patients with at least 1 medical claim for Psoriasis, unspecified (ICD-10 L40.9) during the observation period";
+          ruleCategory = "Diagnosis";
+          ruleText = "Include patients with at least 1 medical claim for Psoriasis, unspecified (ICD-10 L40.9) during the observation period";
         } else if (lowerVal.includes("50.9")) {
-            ruleCategory = "Diagnosis";
-            ruleText = "Include patients with a history of ICD-10 50.9 on or before the index date";
+          ruleCategory = "Diagnosis";
+          ruleText = "Include patients with a history of ICD-10 50.9 on or before the index date";
         } else {
-            ruleCategory = "Additional Criteria";
-            ruleText = `Patients must meet criteria: ${val}`;
+          ruleCategory = "Additional Criteria";
+          ruleText = `Patients must meet criteria: ${val}`;
         }
 
         const ruleToAdd = {
@@ -2778,7 +2921,7 @@
         };
 
         await aiSay(`I've refined your request into the following formal business rule:<br><br><b>${ruleText}</b><br><br>Would you like me to add this to your cohort definition?`, 600);
-        
+
         const confirmAddition = () => {
           STATE.cohortRuleset.push(ruleToAdd);
           renderPanel(cohortRulesPanel());
@@ -2794,18 +2937,18 @@
         };
 
         setChips([
-          { 
-            label: "Yes, add it", 
-            primary: true, 
-            onClick: () => { userSay("Yes, add it."); confirmAddition(); } 
+          {
+            label: "Yes, add it",
+            primary: true,
+            onClick: () => { userSay("Yes, add it."); confirmAddition(); }
           },
-          { 
-            label: "No, discard", 
-            muted: true, 
-            onClick: () => { userSay("No, discard."); discardAddition(); } 
+          {
+            label: "No, discard",
+            muted: true,
+            onClick: () => { userSay("No, discard."); discardAddition(); }
           }
         ]);
-        
+
         freeTextHandler = (resp) => {
           userSay(resp);
           if (resp.toLowerCase().includes("yes") || resp.toLowerCase().includes("add") || resp.toLowerCase().includes("sure") || resp.toLowerCase().includes("ok")) {
@@ -2893,15 +3036,15 @@
       wrap.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final analysis-ready cohort.", stages: d.funnel }));
 
       const grid = h("div", "chart-grid-2");
-      grid.appendChild(donutChart({ title: "Gender", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
+      grid.appendChild(donutChart({ title: "Gender Distribution", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
       const maxAgeObj = d.age.reduce((prev, curr) => (curr.value > prev.value) ? curr : prev, d.age[0]);
-      grid.appendChild(donutChart({ 
-        title: "Age band", 
+      grid.appendChild(donutChart({
+        title: "Age Distribution",
         data: d.age.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })),
         centerLabel: maxAgeObj.label,
         centerSub: "Largest segment"
       }));
-      grid.appendChild(barChart({ title: "Payer type", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      grid.appendChild(barChart({ title: "Payer Distribution", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       grid.appendChild(barChart({ title: "Region", unit: "pct", data: d.region.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       wrap.appendChild(grid);
 
@@ -3072,16 +3215,16 @@
 
       if (key === "switch") {
         await aiSay("Let's configure the parameters for the Switch Analysis first. What observation window would you like to use for tracking patient switching post-index?", 900);
-        
+
         const chooseWindow = async (months) => {
           STATE.switchWindow = months + " months";
           await aiSay(`I've set the switch observation window to <b>${months} months</b> based on your input. Here are the suggested business rules for this switch analysis — please review them on the right.`, 800);
           const rulesArr = getAnalysisRules(key);
           renderPanel(analysisRulesPanel(key, rulesArr));
         };
-        
+
         setChips([]);
-        
+
         freeTextHandler = (val) => {
           let months = 12;
           const valLower = val.toLowerCase();
@@ -3252,7 +3395,7 @@
         };
       } else {
         const acceptBtn = document.getElementById("btn-analysis-accept");
-        if (acceptBtn) acceptBtn.onclick = () => {};  // already showing "What's next" below
+        if (acceptBtn) acceptBtn.onclick = () => { };  // already showing "What's next" below
       }
 
       const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
@@ -3472,70 +3615,129 @@
       </div>
     </div>
   </div>
-  <div id="dataset-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div id="dataset-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
     <style>
-      .dataset-card { display:flex; gap:16px; padding:16px; border:1px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:all 0.15s; background:#f8fafc; }
-      .dataset-card:hover { border-color:#94a3b8; }
-      .dataset-card.active { border:2px solid #12939f; padding:15px; background:#f0f9fa; }
+      .dataset-card {
+        display: flex;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: #f8fafc;
+      }
+
+      .dataset-card:hover {
+        border-color: #94a3b8;
+      }
+
+      .dataset-card.active {
+        border: 2px solid #12939f;
+        padding: 15px;
+        background: #f0f9fa;
+      }
     </style>
-    <div style="background:#fff; width:100%; max-width:600px; border-radius:16px; padding:24px; box-shadow:0 20px 40px rgba(0,0,0,0.2); position:relative;">
+    <div
+      style="background:#fff; width:100%; max-width:600px; border-radius:16px; padding:24px; box-shadow:0 20px 40px rgba(0,0,0,0.2); position:relative;">
       <!-- Header -->
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
         <div>
           <h2 style="font-size:20px; font-weight:600; color:var(--navy-900); margin:0 0 4px;">Select Datasets</h2>
-          <p style="font-size:14px; color:var(--ink-secondary); margin:0;">Choose data sources for <span style="color:#12939f; font-weight:500;">Patient Cohort</span></p>
+          <p style="font-size:14px; color:var(--ink-secondary); margin:0;">Choose data sources for <span
+              style="color:#12939f; font-weight:500;">Patient Cohort</span></p>
         </div>
-        <button onclick="document.getElementById('dataset-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:var(--ink-muted); padding:4px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        <button onclick="document.getElementById('dataset-modal').style.display='none'"
+          style="background:none; border:none; cursor:pointer; color:var(--ink-muted); padding:4px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"></path>
+          </svg>
         </button>
       </div>
 
       <!-- Dataset List -->
-      <div style="display:flex; flex-direction:column; gap:12px; max-height:400px; overflow-y:auto; margin-bottom:24px; padding-right:4px;">
+      <div
+        style="display:flex; flex-direction:column; gap:12px; max-height:400px; overflow-y:auto; margin-bottom:24px; padding-right:4px;">
         <label class="dataset-card">
-          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
-          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          <input type="checkbox" style="display:none;"
+            onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div
+            style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
           </div>
           <div>
-            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">IQVIA LAAD Claims</div>
-            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Longitudinal access and adjudication data with medical and pharmacy claims across multiple payers.</div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">IQVIA LAAD Claims
+            </div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Longitudinal
+              access and adjudication data with medical and pharmacy claims across multiple payers.</div>
             <div style="font-size:12px; font-weight:500; color:#94a3b8;">280M+ patient records</div>
           </div>
         </label>
-        
+
         <label class="dataset-card">
-          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
-          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          <input type="checkbox" style="display:none;"
+            onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div
+            style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
           </div>
           <div>
-            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Symphony Health</div>
-            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Integrated dataverse combining claims, prescriptions, and EHR data for comprehensive patient insights.</div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Symphony Health
+            </div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Integrated
+              dataverse combining claims, prescriptions, and EHR data for comprehensive patient insights.</div>
             <div style="font-size:12px; font-weight:500; color:#94a3b8;">300M+ lives covered</div>
           </div>
         </label>
 
         <label class="dataset-card">
-          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
-          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          <input type="checkbox" style="display:none;"
+            onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div
+            style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
           </div>
           <div>
-            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">McKesson Compile</div>
-            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Prescription and medical claims data sourced from retail and specialty pharmacies nationwide.</div>
+            <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">McKesson Compile
+            </div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Prescription
+              and medical claims data sourced from retail and specialty pharmacies nationwide.</div>
             <div style="font-size:12px; font-weight:500; color:#94a3b8;">220M+ patient records</div>
           </div>
         </label>
 
         <label class="dataset-card">
-          <input type="checkbox" style="display:none;" onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
-          <div style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+          <input type="checkbox" style="display:none;"
+            onchange="this.parentElement.classList.toggle('active', this.checked); toggleDataset()">
+          <div
+            style="width:32px; height:32px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12939f" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
           </div>
           <div>
             <div style="font-size:15px; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Veeva Compass</div>
-            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Patient-level prescription data with prescriber linkage, covering retail and mail order.</div>
+            <div style="font-size:13px; color:var(--ink-secondary); line-height:1.4; margin-bottom:8px;">Patient-level
+              prescription data with prescriber linkage, covering retail and mail order.</div>
             <div style="font-size:12px; font-weight:500; color:#94a3b8;">190M+ patient records</div>
           </div>
         </label>
@@ -3560,9 +3762,16 @@
       </script>
 
       <!-- Footer Buttons -->
-      <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center; border-top:1px solid #e2e8f0; margin:0 -24px; padding:16px 24px 0;">
-        <button onclick="document.getElementById('dataset-modal').style.display='none'" style="background:none; border:none; color:var(--navy-900); font-weight:600; font-size:14px; cursor:pointer; padding:8px 16px;">Cancel</button>
-        <button id="btn-dataset-continue" disabled onclick="document.getElementById('dataset-modal').style.display='none'; startExplore();" style="background:#9ebec5; color:#fff; border:none; border-radius:8px; font-weight:600; font-size:14px; padding:10px 20px; cursor:not-allowed; opacity:0.5; display:flex; align-items:center; gap:6px; transition:background 0.2s;">Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button>
+      <div
+        style="display:flex; justify-content:flex-end; gap:12px; align-items:center; border-top:1px solid #e2e8f0; margin:0 -24px; padding:16px 24px 0;">
+        <button onclick="document.getElementById('dataset-modal').style.display='none'"
+          style="background:none; border:none; color:var(--navy-900); font-weight:600; font-size:14px; cursor:pointer; padding:8px 16px;">Cancel</button>
+        <button id="btn-dataset-continue" disabled
+          onclick="document.getElementById('dataset-modal').style.display='none'; startExplore();"
+          style="background:#9ebec5; color:#fff; border:none; border-radius:8px; font-weight:600; font-size:14px; padding:10px 20px; cursor:not-allowed; opacity:0.5; display:flex; align-items:center; gap:6px; transition:background 0.2s;">Continue
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg></button>
       </div>
     </div>
   </div>
