@@ -2083,13 +2083,13 @@
         ],
         totals: { population: 98900, switched: 18220, remained: 71120, discontinued: 9580, avgDaysToSwitch: 187, pctMoaSwitch: 82 },
         topPairs: [
-          { from: "Humira", fromClass: "TNF", to: "Skyrizi", toClass: "IL-23", value: 3840, color: "var(--series-1)" },
-          { from: "Enbrel", fromClass: "TNF", to: "Cosentyx", toClass: "IL-17", value: 2110, color: "var(--series-1)" },
-          { from: "Cosentyx", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1950, color: "var(--series-2)" },
-          { from: "Stelara", fromClass: "IL-12/23", to: "Tremfya", toClass: "IL-23", value: 1480, color: "var(--series-4)" },
-          { from: "Otezla", fromClass: "Oral", to: "Skyrizi", toClass: "IL-23", value: 1260, color: "var(--series-5)" },
-          { from: "Taltz", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1120, color: "var(--series-2)" },
-          { from: "All other combinations", fromClass: "—", to: "—", toClass: "", value: 6460, color: "var(--ink-muted)" }
+          { from: "Humira", fromClass: "TNF", to: "Skyrizi", toClass: "IL-23", value: 3840, avgDays: 168, color: "var(--series-1)" },
+          { from: "Enbrel", fromClass: "TNF", to: "Cosentyx", toClass: "IL-17", value: 2110, avgDays: 182, color: "var(--series-1)" },
+          { from: "Cosentyx", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1950, avgDays: 196, color: "var(--series-2)" },
+          { from: "Stelara", fromClass: "IL-12/23", to: "Tremfya", toClass: "IL-23", value: 1480, avgDays: 210, color: "var(--series-4)" },
+          { from: "Otezla", fromClass: "Oral", to: "Skyrizi", toClass: "IL-23", value: 1260, avgDays: 154, color: "var(--series-5)" },
+          { from: "Taltz", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1120, avgDays: 189, color: "var(--series-2)" },
+          { from: "All other combinations", fromClass: "—", to: "—", toClass: "", value: 6460, avgDays: 198, color: "var(--ink-muted)" }
         ]
       },
       adherence: {
@@ -2652,7 +2652,8 @@
         path.style.cursor = "pointer";
         path.addEventListener("mouseenter", () => path.setAttribute("opacity", "0.75"));
         path.addEventListener("mouseleave", (e) => { path.setAttribute("opacity", "0.45"); hideTooltip(); });
-        path.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + opts.left[lk.fromIdx].label + '</b> → <b>' + opts.right[lk.toIdx].label + '</b><br>' + fmt(lk.value) + ' patients'));
+        const pctVal = (frac_l * 100).toFixed(1) + "%";
+        path.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + opts.left[lk.fromIdx].label + '</b> → <b>' + opts.right[lk.toIdx].label + '</b><br>' + fmt(lk.value) + ' patients (<b>' + pctVal + '</b> of ' + opts.left[lk.fromIdx].label + ')'));
         svg.appendChild(path);
       });
 
@@ -2695,12 +2696,14 @@
       card.appendChild(h("div", "card-title", opts.title));
       if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
       const tbl = h("table", "data-table");
-      let body = "<tr><th>From (index)</th><th>To (switch)</th><th>Patients</th><th>Share of switches</th></tr>";
+      let body = "<tr><th>From (index)</th><th>To (switch)</th><th>Patients</th><th>Share of switches</th><th>Avg. time to switch</th></tr>";
       const totalSwitch = DATA.switch.totals.switched;
       opts.rows.forEach(r => {
+        const timeVal = r.avgDays ? r.avgDays + " days" : "—";
         body += "<tr><td><span class='tag-swatch' style='background:" + resolveColor(r.color) + "'></span>" + r.from + (r.fromClass && r.fromClass !== "—" ? " <span style='color:var(--ink-muted)'>(" + r.fromClass + ")</span>" : "") + "</td>" +
           "<td>" + r.to + (r.toClass ? " <span style='color:var(--ink-muted)'>(" + r.toClass + ")</span>" : "") + "</td>" +
-          "<td>" + fmt(r.value) + "</td><td>" + pct(r.value, totalSwitch) + "%</td></tr>";
+          "<td>" + fmt(r.value) + "</td><td>" + pct(r.value, totalSwitch) + "%</td>" +
+          "<td>" + timeVal + "</td></tr>";
       });
       tbl.innerHTML = body;
       card.appendChild(tbl);
@@ -3348,14 +3351,8 @@
           '<button class="link-btn" id="btn-analysis-keep">Keep as-is, continue</button>' +
           '</div>';
         wrap.appendChild(callout);
-      } else {
-        const callout = h("div", "callout teal");
-        callout.innerHTML =
-          '<div class="callout-head"><div class="callout-icon">✓</div><b>This looks like a clean, analysis-ready result set</b></div>' +
-          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the edge-case rules and re-running removed borderline records without materially shifting the headline metrics. The result set is ready for downstream use.</div>' +
-          '<div class="btn-row"><button class="btn btn-tealsolid" id="btn-analysis-accept">Accept results &amp; continue</button></div>';
-        wrap.appendChild(callout);
       }
+
 
       const remaining = ["switch", "adherence", "persistence"].filter(k => !STATE.completedAnalyses.includes(k));
       const nextCard = h("div", "card");
@@ -3393,10 +3390,8 @@
           STATE["tightened_" + key] = true;
           showAnalysisResults(key);
         };
-      } else {
-        const acceptBtn = document.getElementById("btn-analysis-accept");
-        if (acceptBtn) acceptBtn.onclick = () => { };  // already showing "What's next" below
       }
+
 
       const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
       let msg = "";
@@ -3583,15 +3578,15 @@
         <div style="font-weight:600; font-size:14px; margin-bottom:12px; color:var(--ink-primary);">Active Business
           Rules (<span id="modal-rule-count">0</span>)</div>
 
-        <div style="border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+        <div style="border:1px solid var(--border); border-radius:8px; overflow-y:auto; max-height:300px;">
           <table style="width:100%; border-collapse:collapse;">
-            <thead style="background:#f9fafb;">
+            <thead style="position:sticky; top:0; z-index:1;">
               <tr>
                 <th
-                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border);">
+                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border); background:#f9fafb;">
                   Parameter</th>
                 <th
-                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border);">
+                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border); background:#f9fafb;">
                   Value</th>
               </tr>
             </thead>
