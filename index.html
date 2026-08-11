@@ -1450,6 +1450,7 @@
       text-transform: uppercase;
       letter-spacing: 0.4px;
       margin-bottom: 6px;
+      min-height: 32px;
     }
 
     .stat-tile .value {
@@ -2338,6 +2339,7 @@
 
     function statTiles(items) {
       const wrap = h("div", "stat-row");
+      wrap.style.gridTemplateColumns = 'repeat(' + items.length + ', 1fr)';
       items.forEach(it => {
         const t = h("div", "stat-tile");
         let deltaHtml = "";
