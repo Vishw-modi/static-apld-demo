@@ -2726,7 +2726,7 @@
     /* ============================================================
        RULES EDITOR COMPONENT
     ============================================================ */
-    function rulesEditorCard(title, subtitle, rulesArr, onConfirm, confirmLabel) {
+    function rulesEditorCard(title, subtitle, rulesArr, onConfirm, confirmLabel, isCohort = false) {
       const card = h("div", "card");
       card.appendChild(h("div", "card-title", title));
       card.appendChild(h("div", "card-sub", subtitle));
@@ -2753,16 +2753,23 @@
       card.appendChild(list);
 
       const addRow = h("div", "add-rule-row");
-      addRow.innerHTML =
-        '<select class="select-cat"><option>Diagnosis</option><option>Demographics</option><option>Enrollment</option><option>Treatment</option><option>Exclusion</option><option>Custom</option></select>' +
-        '<input type="text" placeholder="Describe an additional business rule…">' +
-        '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      if (isCohort) {
+        addRow.innerHTML =
+          '<select class="select-cat"><option>Diagnosis</option><option>Demographics</option><option>Enrollment</option><option>Treatment</option><option>Exclusion</option><option>Custom</option></select>' +
+          '<input type="text" placeholder="Describe an additional business rule…">' +
+          '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      } else {
+        addRow.innerHTML =
+          '<input type="text" placeholder="Describe an additional business rule…">' +
+          '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      }
       const addBtn = addRow.querySelector("button");
       const addInput = addRow.querySelector("input");
-      const addSelect = addRow.querySelector("select");
+      const addSelect = isCohort ? addRow.querySelector("select") : null;
       addBtn.onclick = () => {
         if (!addInput.value.trim()) return;
-        rulesArr.push({ id: cid(), category: addSelect.value, text: addInput.value.trim(), active: true });
+        const category = isCohort ? addSelect.value : "Custom";
+        rulesArr.push({ id: cid(), category: category, text: addInput.value.trim(), active: true });
         addInput.value = "";
         renderRows();
       };
@@ -2987,7 +2994,8 @@
         "AI-suggested starting point. Add, edit, or disable rules to match your definition.",
         STATE.cohortRuleset,
         (activeRules) => runCohortAnalysis(STATE.cohortRunNum || 1),
-        "Confirm rules & continue"
+        "Confirm rules & continue",
+        true
       ));
       return wrap;
     }
@@ -3245,7 +3253,8 @@
         "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
         rulesArr,
         (activeRules) => runAnalysis(key),
-        "Confirm rules & continue"
+        "Confirm rules & continue",
+        false
       ));
       return wrap;
     }
