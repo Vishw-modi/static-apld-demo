@@ -3229,35 +3229,9 @@
       renderStepper(3, STATE.completedAnalyses);
       const meta = ANALYSIS_META[key];
 
-      if (key === "switch") {
-        await aiSay("Let's configure the parameters for the Switch Analysis first. What observation window would you like to use for tracking patient switching post-index (eg 12/18/24 Months)?", 900);
-
-        const chooseWindow = async (months) => {
-          STATE.switchWindow = months + " months";
-          await aiSay(`I've set the switch observation window to <b>${months} months</b> based on your input. Here are the suggested business rules for this switch analysis — please review them on the right.`, 800);
-          const rulesArr = getAnalysisRules(key);
-          renderPanel(analysisRulesPanel(key, rulesArr));
-        };
-
-        setChips([]);
-
-        freeTextHandler = (val) => {
-          let months = 12;
-          const valLower = val.toLowerCase();
-          if (valLower.includes("6") || valLower.includes("six")) {
-            months = 6;
-          } else if (valLower.includes("18") || valLower.includes("eighteen")) {
-            months = 18;
-          } else if (valLower.includes("24") || valLower.includes("twenty")) {
-            months = 24;
-          }
-          chooseWindow(months);
-        };
-      } else {
-        await aiSay(meta.ackText, 900);
-        const rulesArr = getAnalysisRules(key);
-        renderPanel(analysisRulesPanel(key, rulesArr));
-      }
+      await aiSay(meta.ackText, 900);
+      const rulesArr = getAnalysisRules(key);
+      renderPanel(analysisRulesPanel(key, rulesArr));
     }
 
     function analysisRulesPanel(key, rulesArr) {
