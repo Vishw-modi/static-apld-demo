@@ -1740,6 +1740,19 @@
       transform: translateX(-50%) translateY(-6px);
     }
 
+    .summary-section {
+      margin-bottom: 28px;
+    }
+    .section-header {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--navy-900);
+      margin: 24px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border-strong);
+      letter-spacing: 0.3px;
+    }
+
     .final-hero {
       background: linear-gradient(135deg, var(--navy-900), var(--teal-700));
       color: #fff;
@@ -3523,6 +3536,69 @@
         '<div class="recap-card"><div class="rc-title">Adherence</div><div class="rc-value">' + a.pctAdherent + '%</div><div class="rc-sub">adherent (PDC ≥0.80) · mean PDC ' + a.meanPDC.toFixed(2) + '</div></div>' +
         '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">' + p.medianMonths + ' mo</div><div class="rc-sub">median · ' + p.pct12mo + '% persisting at 12 months</div></div>';
       wrap.appendChild(recap);
+
+      // Get the correct cohort data
+      const cd = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+
+      // Section 1: Cohort Definition
+      const sec1 = h("div", "summary-section");
+      sec1.appendChild(h("h3", "section-header", "1. Patient Cohort Construction"));
+      sec1.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final cohort.", stages: cd.funnel }));
+      wrap.appendChild(sec1);
+
+      // Section 2: Switch Dynamics
+      const sec2 = h("div", "summary-section");
+      sec2.appendChild(h("h3", "section-header", "2. Switch Dynamics"));
+      sec2.appendChild(sankeyChart({
+        title: "Where patients go after their index therapy",
+        subtitle: "Flow from index drug class to 12-month outcome. Ribbon width = patient count.",
+        left: s.classes.map(c => ({ label: c.label, value: c.total, color: c.color })),
+        right: [
+          { label: "Remained on Index Therapy", value: s.totals.remained },
+          { label: "Switched to Another Class", value: s.totals.switched },
+          { label: "Discontinued, No Further Therapy", value: s.totals.discontinued }
+        ],
+        links: [
+          { fromIdx: 0, toIdx: 0, value: s.classes[0].remained, color: s.classes[0].color },
+          { fromIdx: 0, toIdx: 1, value: s.classes[0].switched, color: s.classes[0].color },
+          { fromIdx: 0, toIdx: 2, value: s.classes[0].discontinued, color: s.classes[0].color },
+          { fromIdx: 1, toIdx: 0, value: s.classes[1].remained, color: s.classes[1].color },
+          { fromIdx: 1, toIdx: 1, value: s.classes[1].switched, color: s.classes[1].color },
+          { fromIdx: 1, toIdx: 2, value: s.classes[1].discontinued, color: s.classes[1].color },
+          { fromIdx: 2, toIdx: 0, value: s.classes[2].remained, color: s.classes[2].color },
+          { fromIdx: 2, toIdx: 1, value: s.classes[2].switched, color: s.classes[2].color },
+          { fromIdx: 2, toIdx: 2, value: s.classes[2].discontinued, color: s.classes[2].color },
+          { fromIdx: 3, toIdx: 0, value: s.classes[3].remained, color: s.classes[3].color },
+          { fromIdx: 3, toIdx: 1, value: s.classes[3].switched, color: s.classes[3].color },
+          { fromIdx: 3, toIdx: 2, value: s.classes[3].discontinued, color: s.classes[3].color },
+          { fromIdx: 4, toIdx: 0, value: s.classes[4].remained, color: s.classes[4].color },
+          { fromIdx: 4, toIdx: 1, value: s.classes[4].switched, color: s.classes[4].color },
+          { fromIdx: 4, toIdx: 2, value: s.classes[4].discontinued, color: s.classes[4].color }
+        ]
+      }));
+      sec2.appendChild(pairsTable({ title: "Top switch destinations", subtitle: "Most common drug-to-drug moves among switchers.", rows: s.topPairs }));
+      wrap.appendChild(sec2);
+
+      // Section 3: Medication Adherence (PDC)
+      const sec3 = h("div", "summary-section");
+      sec3.appendChild(h("h3", "section-header", "3. Medication Adherence (PDC)"));
+      sec3.appendChild(barChart({
+        title: "Adherence rate by drug class",
+        subtitle: "% of patients adherent (PDC ≥0.80), by index drug class.",
+        unit: "pct",
+        data: a.byClass
+      }));
+      wrap.appendChild(sec3);
+
+      // Section 4: Therapy Persistence
+      const sec4 = h("div", "summary-section");
+      sec4.appendChild(h("h3", "section-header", "4. Therapy Persistence"));
+      sec4.appendChild(kmChart({
+        title: "Time-to-discontinuation, by drug class",
+        subtitle: "% of patients still on therapy over time (Kaplan–Meier style persistence curve).",
+        months: p.months, series: p.series
+      }));
+      wrap.appendChild(sec4);
 
       const card = h("div", "card");
       card.innerHTML = '<div class="card-title">Suggested next steps</div><ul style="font-size:13px;color:var(--ink-secondary);line-height:1.7;padding-left:20px;margin:0;">' +
