@@ -2835,7 +2835,7 @@
       for (let i = 0; i < rows.length; i++) {
         rows[i].classList.add("active");
         rows[i].querySelector(".pdot").innerHTML = "<div class='spin'></div>";
-        await sleep(520);
+        await sleep(720);
         rows[i].classList.remove("active"); rows[i].classList.add("done");
         rows[i].querySelector(".pdot").innerHTML = "✓";
         fill.style.width = (((i + 1) / rows.length) * 100) + "%";
