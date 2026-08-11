@@ -2469,7 +2469,7 @@
       const legend = h("div", "chart-legend"); legend.style.flexDirection = "column"; legend.style.marginTop = "0";
       opts.data.forEach((d, i) => {
         const li = h("div", "legend-item");
-        li.innerHTML = '<span class="legend-swatch" style="background:' + resolveColor(d.color || ("var(--series-" + (i + 1) + ")")) + '"></span> ' + d.label + ' — <b>' + d.value.toFixed(1) + '%</b>';
+        li.innerHTML = '<span class="legend-swatch" style="background:' + resolveColor(d.color || ("var(--series-" + (i + 1) + ")")) + '"></span> ' + d.label + ' <b style="margin-left: 8px;">' + d.value.toFixed(1) + '%</b>';
         legend.appendChild(li);
       });
       row.appendChild(legend);
