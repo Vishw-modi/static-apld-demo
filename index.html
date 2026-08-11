@@ -2898,7 +2898,7 @@
       grid.appendChild(barChart({ title: "Payer type", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       grid.appendChild(barChart({ title: "Region", unit: "pct", data: d.region.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       wrap.appendChild(grid);
-      wrap.appendChild(barChart({ title: "Line of therapy at index", subtitle: "Treatment status observed at the index diagnosis.", unit: "pct", data: d.lot.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+
 
       if (runNum === 1) {
         const callout = h("div", "callout");
