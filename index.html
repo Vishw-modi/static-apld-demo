@@ -3297,10 +3297,10 @@
       const bar = h("div", "analysis-tabs");
       ["switch", "adherence", "persistence"].forEach(k => {
         const done = STATE.completedAnalyses.includes(k);
+        if (!done) return;
         const tab = h("div", "a-tab" + (k === activeKey ? " on" : ""));
-        tab.innerHTML = (done ? '<span class="check">✓</span>' : '') + ANALYSIS_META[k].label;
-        if (done) tab.onclick = () => showAnalysisResults(k);
-        else tab.style.opacity = "0.4";
+        tab.innerHTML = '<span class="check">✓</span>' + ANALYSIS_META[k].label;
+        tab.onclick = () => showAnalysisResults(k);
         bar.appendChild(tab);
       });
       return bar;
