@@ -2860,7 +2860,13 @@
 
       const grid = h("div", "chart-grid-2");
       grid.appendChild(donutChart({ title: "Gender", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
-      grid.appendChild(barChart({ title: "Age band", unit: "pct", data: d.age.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      const maxAgeObj = d.age.reduce((prev, curr) => (curr.value > prev.value) ? curr : prev, d.age[0]);
+      grid.appendChild(donutChart({ 
+        title: "Age band", 
+        data: d.age.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })),
+        centerLabel: maxAgeObj.label,
+        centerSub: "Largest segment"
+      }));
       grid.appendChild(barChart({ title: "Payer type", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       grid.appendChild(barChart({ title: "Region", unit: "pct", data: d.region.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
       wrap.appendChild(grid);
