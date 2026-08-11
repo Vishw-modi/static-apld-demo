@@ -3230,7 +3230,7 @@
       const meta = ANALYSIS_META[key];
 
       if (key === "switch") {
-        await aiSay("Let's configure the parameters for the Switch Analysis first. What observation window would you like to use for tracking patient switching post-index?", 900);
+        await aiSay("Let's configure the parameters for the Switch Analysis first. What observation window would you like to use for tracking patient switching post-index (eg 12/18/24 Months)?", 900);
 
         const chooseWindow = async (months) => {
           STATE.switchWindow = months + " months";
@@ -3246,6 +3246,8 @@
           const valLower = val.toLowerCase();
           if (valLower.includes("6") || valLower.includes("six")) {
             months = 6;
+          } else if (valLower.includes("18") || valLower.includes("eighteen")) {
+            months = 18;
           } else if (valLower.includes("24") || valLower.includes("twenty")) {
             months = 24;
           }
