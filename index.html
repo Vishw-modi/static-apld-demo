@@ -1098,6 +1098,28 @@
       margin-bottom: 8px;
     }
 
+    .rule-row.suggested {
+      background: var(--teal-050) !important;
+      border: 1.5px solid var(--teal-500) !important;
+      box-shadow: 0 4px 12px rgba(14, 124, 134, 0.12);
+      position: relative;
+    }
+
+    .rule-row.suggested::after {
+      content: "Suggested Tightening";
+      position: absolute;
+      top: -8px;
+      right: 12px;
+      background: var(--teal-600);
+      color: #fff;
+      font-size: 8.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
     .rule-row.inactive {
       opacity: 0.45;
     }
@@ -1976,9 +1998,14 @@
 
     const COHORT_RULES_V2_PATCH = (rules) => {
       const r = rules.map(x => ({ ...x }));
-      const dx = r.find(x => x.category === "Diagnosis");
-      if (dx) dx.text = "At least 2 medical claims with ICD-10 L40.0 or L40.9, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
-      r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: true });
+      const dx = r.find(x => x.category === "Diagnosis" && x.text.includes("ICD-10 L40.0"));
+      if (dx) {
+        dx.text = "At least 2 medical claims with ICD-10 L40.0 or L40.9, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
+        dx.isSuggestion = true;
+      }
+      if (!r.some(x => x.text.includes("competing eczema"))) {
+        r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: true, isSuggestion: true });
+      }
       return r;
     };
 
@@ -2556,7 +2583,7 @@
       function renderRows() {
         list.innerHTML = "";
         rulesArr.forEach(rule => {
-          const row = h("div", "rule-row" + (rule.active ? "" : " inactive"));
+          const row = h("div", "rule-row" + (rule.active ? "" : " inactive") + (rule.isSuggestion ? " suggested" : ""));
           const tag = h("div", "rule-tag", rule.category);
           const text = h("div", "rule-text");
           text.contentEditable = "true";
@@ -2711,6 +2738,7 @@
       setChips([]);
       renderStepper(0, []);
       await aiSay("Got it — let's define your <b>Plaque Psoriasis (PsO)</b> patient cohort from claims. Based on standard real-world-evidence criteria for PsO, here's a starting set of business rules on the right. Feel free to edit the wording, toggle any rule off, or add your own by typing in the chat — then confirm when you're happy with it.", 900);
+      STATE.cohortRunNum = 1;
       STATE.cohortRuleset = COHORT_RULES_V1();
       renderPanel(cohortRulesPanel());
       
@@ -2793,7 +2821,7 @@
         "Suggested business rules — PsO cohort",
         "AI-suggested starting point. Add, edit, or disable rules to match your definition.",
         STATE.cohortRuleset,
-        (activeRules) => runCohortAnalysis(1),
+        (activeRules) => runCohortAnalysis(STATE.cohortRunNum || 1),
         "Confirm rules & continue"
       ));
       return wrap;
@@ -2810,14 +2838,14 @@
           "Confirmed business rules — PsO cohort",
           activeRules.length + " active rules will be applied.",
           activeRules,
-          () => runCohortAnalysis(1),
+          () => runCohortAnalysis(STATE.cohortRunNum || 1),
           () => renderPanel(cohortRulesPanel())
         ));
         return wrap;
       })());
       await aiSay("Here's the cohort definition, aligned: adults 18+ with ≥2 claims for plaque psoriasis, continuously enrolled, with evidence of PsO-directed treatment within 90 days, indexed between Jan 2023–Dec 2025 — excluding PsA-only and pregnancy claims. Ready to run this against the claims database?", 1000);
-      setChips([{ label: "▶ Run Analysis", primary: true, onClick: () => { runCohortAnalysis(1); } }]);
-      freeTextHandler = () => runCohortAnalysis(1);
+      setChips([{ label: "▶ Run Analysis", primary: true, onClick: () => { runCohortAnalysis(STATE.cohortRunNum || 1); } }]);
+      freeTextHandler = () => runCohortAnalysis(STATE.cohortRunNum || 1);
     }
 
     async function runCohortAnalysis(runNum) {
@@ -2921,8 +2949,10 @@
     async function acceptTightening() {
       setChips([]); freeTextHandler = null;
       userSay("Apply the suggested tightening and re-run.");
+      STATE.cohortRunNum = 2;
       STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset);
-      await runCohortAnalysis(2);
+      renderPanel(cohortRulesPanel());
+      toast("Review the suggested rule changes (highlighted in teal) and confirm to re-run.");
     }
 
     /* ============================================================
@@ -2998,7 +3028,36 @@
       freeTextHandler = () => startAnalysisFlow("switch");
     }
 
+    function getAnalysisRules(key) {
+      if (!STATE["rules_" + key]) {
+        STATE["rules_" + key] = ANALYSIS_META[key].rules();
+      }
+      return STATE["rules_" + key];
+    }
 
+    function applyTightenedRules(key) {
+      STATE["tightened_" + key] = true;
+      const rules = getAnalysisRules(key);
+      if (key === "switch") {
+        if (!rules.some(r => r.text.includes("overlapping fills"))) {
+          rules.push({ id: cid(), category: "Exclusion", text: "Exclude overlapping fills for two drug classes lasting <14 days (sample/bridge fill)", active: true, isSuggestion: true });
+          rules.push({ id: cid(), category: "Exclusion", text: "Exclude biosimilar molecule switches (e.g., Humira → Hadlima) from switch definition", active: true, isSuggestion: true });
+          rules.push({ id: cid(), category: "Exclusion", text: "Require at least two claims for the new drug class within 90 days to confirm a switch", active: true, isSuggestion: true });
+        }
+      } else if (key === "adherence") {
+        if (!rules.some(r => r.text.includes("mail-order fills"))) {
+          rules.push({ id: cid(), category: "Exclusion", text: "Exclude mail-order fills with >30 days supply from standard PDC calculation", active: true, isSuggestion: true });
+          rules.push({ id: cid(), category: "Exclusion", text: "Allow adherence tracking to continue across switches rather than excluding them", active: true, isSuggestion: true });
+        }
+      } else if (key === "persistence") {
+        if (!rules.some(r => r.text.includes("data cutoff"))) {
+          rules.push({ id: cid(), category: "Censoring", text: "Censor patients whose last fill is within 30 days of data cutoff", active: true, isSuggestion: true });
+          rules.push({ id: cid(), category: "Exclusion", text: "Treat same-molecule biosimilar switches as ongoing persistence rather than discontinuation", active: true, isSuggestion: true });
+        }
+      }
+      renderPanel(analysisRulesPanel(key, rules));
+      toast("Review the new suggested rules (highlighted in teal) and confirm to re-run.");
+    }
 
     async function startAnalysisFlow(key) {
       setChips([]); freeTextHandler = null;
@@ -3011,33 +3070,25 @@
         const chooseWindow = async (months) => {
           STATE.switchWindow = months + " months";
           await aiSay(`I've set the switch observation window to <b>${months} months</b> based on your input. Here are the suggested business rules for this switch analysis — please review them on the right.`, 800);
-          const rulesArr = meta.rules();
+          const rulesArr = getAnalysisRules(key);
           renderPanel(analysisRulesPanel(key, rulesArr));
         };
         
-        setChips([
-          { label: "Use standard 12-month window", primary: true, onClick: () => { userSay("Use standard 12-month window"); chooseWindow(12); } },
-          { label: "Use a shorter 6-month window", muted: true, onClick: () => { userSay("Use a shorter 6-month window"); chooseWindow(6); } },
-          { label: "Use a longer 24-month window", muted: true, onClick: () => { userSay("Use a longer 24-month window"); chooseWindow(24); } }
-        ]);
+        setChips([]);
         
         freeTextHandler = (val) => {
-          const num = parseInt(val.replace(/\D/g, ""), 10);
-          if (num && [6, 12, 24].includes(num)) {
-            chooseWindow(num);
-          } else {
-            aiSay("I can configure a 6-month, 12-month, or 24-month switch window. Which one would you prefer?", 400).then(() => {
-              setChips([
-                { label: "Use standard 12-month window", primary: true, onClick: () => { userSay("Use standard 12-month window"); chooseWindow(12); } },
-                { label: "Use a shorter 6-month window", muted: true, onClick: () => { userSay("Use a shorter 6-month window"); chooseWindow(6); } },
-                { label: "Use a longer 24-month window", muted: true, onClick: () => { userSay("Use a longer 24-month window"); chooseWindow(24); } }
-              ]);
-            });
+          let months = 12;
+          const valLower = val.toLowerCase();
+          if (valLower.includes("6") || valLower.includes("six")) {
+            months = 6;
+          } else if (valLower.includes("24") || valLower.includes("twenty")) {
+            months = 24;
           }
+          chooseWindow(months);
         };
       } else {
         await aiSay(meta.ackText, 900);
-        const rulesArr = meta.rules();
+        const rulesArr = getAnalysisRules(key);
         renderPanel(analysisRulesPanel(key, rulesArr));
       }
     }
@@ -3071,7 +3122,7 @@
           activeRules.length + " active rules will be applied.",
           activeRules,
           () => runAnalysis(key),
-          () => renderPanel(analysisRulesPanel(key, ANALYSIS_META[key].rules()))
+          () => renderPanel(analysisRulesPanel(key, getAnalysisRules(key)))
         ));
         return wrap;
       })());
@@ -3182,12 +3233,11 @@
       /* ---- wire edge-case buttons ---- */
       if (!tightened) {
         document.getElementById("btn-analysis-tighten").onclick = () => {
-          STATE["tightened_" + key] = true;
           userSay("Apply the suggested tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
-          runAnalysis(key);
+          applyTightenedRules(key);
         };
         document.getElementById("btn-analysis-adjust").onclick = () => {
-          renderPanel(analysisRulesPanel(key, ANALYSIS_META[key].rules()));
+          renderPanel(analysisRulesPanel(key, getAnalysisRules(key)));
           toast("Manual editing re-opened — adjust and confirm to re-run.");
         };
         document.getElementById("btn-analysis-keep").onclick = () => {
@@ -3208,10 +3258,10 @@
       if (!tightened) {
         aiSay(msg + " I found a few edge cases worth reviewing — see the callout on the right.", 1000).then(() => {
           setChips([
-            { label: "Apply suggested tightening & re-run", primary: true, onClick: () => { STATE["tightened_" + key] = true; userSay("Apply the suggested tightening and re-run."); runAnalysis(key); } },
+            { label: "Apply suggested tightening & re-run", primary: true, onClick: () => { userSay("Apply the suggested tightening and re-run."); applyTightenedRules(key); } },
             { label: "Keep as-is, continue", muted: true, onClick: () => { STATE["tightened_" + key] = true; showAnalysisResults(key); } }
           ]);
-          freeTextHandler = () => { STATE["tightened_" + key] = true; userSay("Apply the suggested tightening and re-run."); runAnalysis(key); };
+          freeTextHandler = () => { userSay("Apply the suggested tightening and re-run."); applyTightenedRules(key); };
         });
       } else {
         aiSay(msg + " The tightened result set looks clean — ready to move on.", 1000).then(() => {
