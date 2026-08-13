@@ -2143,15 +2143,19 @@
       { id: cid(), category: "Exclusion", text: "Exclude patients with a pregnancy-related claim during the observation window", active: true }
     ]);
 
-    const COHORT_RULES_V2_PATCH = (rules) => {
+    const COHORT_RULES_V2_PATCH = (rules, toggles) => {
       const r = rules.map(x => ({ ...x }));
+      const t = toggles || { tightenDx: true, excludeEczema: true };
+      
       const dx = r.find(x => x.category === "Diagnosis" && x.text.includes("ICD-10 L40.0"));
       if (dx) {
         dx.text = "At least 2 medical claims with ICD-10 L40.0 or L40.9, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
         dx.isSuggestion = true;
+        dx.active = t.tightenDx;
       }
+      
       if (!r.some(x => x.text.includes("competing eczema"))) {
-        r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: true, isSuggestion: true });
+        r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: t.excludeEczema, isSuggestion: true });
       }
       return r;
     };
@@ -3098,16 +3102,41 @@
 
 
       if (runNum === 1) {
+        if (!STATE.edgeToggles) STATE.edgeToggles = { tightenDx: true, excludeEczema: true };
         const callout = h("div", "callout");
         callout.innerHTML =
           '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
-          '<ul>' +
-          '<li><b>6,830 patients (3.7%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed, independently-verified diagnosis.</li>' +
-          '<li><b>4,920 patients (2.7%)</b> carry a co-occurring eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index — a common source of miscoding between the two conditions.</li>' +
-          '<li><b>3,610 patients (2.0%)</b> show a &gt;180 day enrollment gap immediately around index — likely incomplete data capture rather than a genuine break in coverage; not clearly actionable, so we\'d leave the enrollment rule as-is.</li>' +
-          '</ul>' +
+          '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">' +
+            '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+              '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+                '<b>6,830 patients (3.7%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
+              '</div>' +
+              '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+                '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+                  '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+                  '<div id="tgl-dx" class="toggle' + (STATE.edgeToggles.tightenDx ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+                '</div>' +
+                '<div style="font-size:12px; line-height:1.4;">Require claims to be ≥30 days apart, from two different provider visits</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+              '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+                '<b>4,920 patients (2.7%)</b> carry a co-occurring eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index — a common source of mismiscoding.' +
+              '</div>' +
+              '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+                '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+                  '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+                  '<div id="tgl-eczema" class="toggle' + (STATE.edgeToggles.excludeEczema ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+                '</div>' +
+                '<div style="font-size:12px; line-height:1.4;">Exclude patients with competing eczema / atopic dermatitis diagnosis</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="font-size:13px; line-height:1.5;">' +
+              '<b>3,610 patients (2.0%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
+            '</div>' +
+          '</div>' +
           '<div class="btn-row">' +
-          '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply suggested tightening & re-run</button>' +
+          '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply selected tightening & re-run</button>' +
           '<button class="link-btn" id="btn-manual-adjust">Adjust rules myself</button>' +
           '<button class="link-btn" id="btn-keep-asis">Keep as-is, continue</button>' +
           '</div>';
@@ -3124,12 +3153,28 @@
       renderPanel(wrap);
 
       if (runNum === 1) {
+        const tglDx = document.getElementById("tgl-dx");
+        tglDx.onclick = () => {
+          STATE.edgeToggles.tightenDx = !STATE.edgeToggles.tightenDx;
+          tglDx.className = "toggle" + (STATE.edgeToggles.tightenDx ? " on" : "");
+        };
+        const tglEczema = document.getElementById("tgl-eczema");
+        tglEczema.onclick = () => {
+          STATE.edgeToggles.excludeEczema = !STATE.edgeToggles.excludeEczema;
+          tglEczema.className = "toggle" + (STATE.edgeToggles.excludeEczema ? " on" : "");
+        };
+
         document.getElementById("btn-accept-tighten").onclick = () => acceptTightening();
-        document.getElementById("btn-manual-adjust").onclick = () => { STATE.cohortRuleset = COHORT_RULES_V1(); renderPanel(cohortRulesPanel()); toast("Manual editing re-opened — adjust and confirm to re-run."); };
+        document.getElementById("btn-manual-adjust").onclick = () => { 
+          STATE.cohortRuleset = COHORT_RULES_V1(); 
+          STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset, STATE.edgeToggles);
+          renderPanel(cohortRulesPanel()); 
+          toast("Manual editing re-opened — adjust and confirm to re-run."); 
+        };
         document.getElementById("btn-keep-asis").onclick = () => proceedToBusinessQuestion();
-        aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the suggested rule changes and re-run?", 900).then(() => {
+        aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the selected rule changes and re-run?", 900).then(() => {
           setChips([
-            { label: "Apply suggested tightening & re-run", primary: true, onClick: acceptTightening },
+            { label: "Apply selected tightening & re-run", primary: true, onClick: acceptTightening },
             { label: "Keep as-is, continue", muted: true, onClick: proceedToBusinessQuestion }
           ]);
           freeTextHandler = acceptTightening;
