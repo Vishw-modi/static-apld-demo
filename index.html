@@ -3044,6 +3044,28 @@
       STATE.cohortRunNum = runNum;
       const d = runNum === 1 ? DATA.cohortV1 : DATA.cohortV2;
       const prev = runNum === 2 ? DATA.cohortV1 : null;
+      
+      // Sync dynamic rules to funnel labels
+      if (STATE.cohortRuleset) {
+        const demoRule = STATE.cohortRuleset.find(r => r.category === "Demographics");
+        if (demoRule) {
+          const ageMatch = demoRule.text.match(/Age\s*[≥>=]?\s*(\d+)/i) || demoRule.text.match(/(\d+)\s*years/i);
+          if (ageMatch) {
+            const ageStage = d.funnel.find(f => f.label.toLowerCase().includes("age"));
+            if (ageStage) ageStage.label = `Age ≥ ${ageMatch[1]} at index`;
+          }
+        }
+        
+        const txRule = STATE.cohortRuleset.find(r => r.category === "Treatment");
+        if (txRule) {
+          const dayMatch = txRule.text.match(/within\s*(\d+)\s*days/i);
+          if (dayMatch) {
+            const txStage = d.funnel.find(f => f.label.toLowerCase().includes("treatment evidence"));
+            if (txStage) txStage.label = `Treatment evidence within ${dayMatch[1]} days`;
+          }
+        }
+      }
+
       renderStepper(runNum === 1 ? 0 : 1, []);
 
       const wrap = h("div");
