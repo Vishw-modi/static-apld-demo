@@ -3192,7 +3192,7 @@
       setChips([]); freeTextHandler = null;
       userSay("Apply the suggested tightening and re-run.");
       STATE.cohortRunNum = 2;
-      STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset);
+      STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset, STATE.edgeToggles);
       renderPanel(cohortRulesPanel());
       toast("Review the suggested rule changes (highlighted in teal) and confirm to re-run.");
     }
