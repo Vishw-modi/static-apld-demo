@@ -3277,26 +3277,36 @@
       return STATE["rules_" + key];
     }
 
+    function syncEdgeTogglesToRules(key) {
+      const rules = getAnalysisRules(key);
+      const tg = STATE["edgeToggles_" + key] || { t1: true, t2: true, t3: true };
+      
+      const updateRule = (category, text, active) => {
+        let r = rules.find(x => x.text === text);
+        if (!r) {
+          rules.push({ id: cid(), category: category, text: text, active: active, isSuggestion: true });
+        } else {
+          r.active = active;
+        }
+      };
+
+      if (key === "switch") {
+        updateRule("Exclusion", "Exclude overlapping fills for two drug classes lasting <14 days (sample/bridge fill)", tg.t1);
+        updateRule("Exclusion", "Exclude biosimilar molecule switches (e.g., Humira → Hadlima) from switch definition", tg.t2);
+        updateRule("Exclusion", "Require at least two claims for the new drug class within 90 days to confirm a switch", tg.t3);
+      } else if (key === "adherence") {
+        updateRule("Exclusion", "Exclude mail-order fills with >30 days supply from standard PDC calculation", tg.t1);
+        updateRule("Exclusion", "Allow adherence tracking to continue across switches rather than excluding them", tg.t2);
+      } else if (key === "persistence") {
+        updateRule("Censoring", "Censor patients whose last fill is within 30 days of data cutoff", tg.t1);
+        updateRule("Exclusion", "Treat same-molecule biosimilar switches as ongoing persistence rather than discontinuation", tg.t2);
+      }
+      return rules;
+    }
+
     function applyTightenedRules(key) {
       STATE["tightened_" + key] = true;
-      const rules = getAnalysisRules(key);
-      if (key === "switch") {
-        if (!rules.some(r => r.text.includes("overlapping fills"))) {
-          rules.push({ id: cid(), category: "Exclusion", text: "Exclude overlapping fills for two drug classes lasting <14 days (sample/bridge fill)", active: true, isSuggestion: true });
-          rules.push({ id: cid(), category: "Exclusion", text: "Exclude biosimilar molecule switches (e.g., Humira → Hadlima) from switch definition", active: true, isSuggestion: true });
-          rules.push({ id: cid(), category: "Exclusion", text: "Require at least two claims for the new drug class within 90 days to confirm a switch", active: true, isSuggestion: true });
-        }
-      } else if (key === "adherence") {
-        if (!rules.some(r => r.text.includes("mail-order fills"))) {
-          rules.push({ id: cid(), category: "Exclusion", text: "Exclude mail-order fills with >30 days supply from standard PDC calculation", active: true, isSuggestion: true });
-          rules.push({ id: cid(), category: "Exclusion", text: "Allow adherence tracking to continue across switches rather than excluding them", active: true, isSuggestion: true });
-        }
-      } else if (key === "persistence") {
-        if (!rules.some(r => r.text.includes("data cutoff"))) {
-          rules.push({ id: cid(), category: "Censoring", text: "Censor patients whose last fill is within 30 days of data cutoff", active: true, isSuggestion: true });
-          rules.push({ id: cid(), category: "Exclusion", text: "Treat same-molecule biosimilar switches as ongoing persistence rather than discontinuation", active: true, isSuggestion: true });
-        }
-      }
+      const rules = syncEdgeTogglesToRules(key);
       renderPanel(analysisRulesPanel(key, rules));
       toast("Review the new suggested rules (highlighted in teal) and confirm to re-run.");
     }
@@ -3389,34 +3399,57 @@
 
       /* ---- edge-case callout (mirrors cohort pattern) ---- */
       const tightened = STATE["tightened_" + key];
+      let cases = [];
       if (!tightened) {
-        const callout = h("div", "callout");
-        let bullets = "";
-        if (key === "switch") {
-          const s = DATA.switch;
-          bullets =
-            '<li><b>2,340 patients (2.4%)</b> had overlapping fills for two drug classes lasting &lt;14 days — likely a sample/bridge fill rather than a genuine augmentation, which could inflate the reported switch count.</li>' +
-            '<li><b>1,870 patients (1.9%)</b> "switched" to a biosimilar of their index drug (e.g., Humira → Hadlima). Under the current rules this counts as a switch because the NDC changed, but it is not a true MOA switch.</li>' +
-            '<li><b>980 patients (1.0%)</b> have a single pharmacy claim for the new drug with no subsequent refills — potentially a never-started prescription or data lag rather than a completed switch.</li>';
-        } else if (key === "adherence") {
-          bullets =
-            '<li><b>3,150 patients (3.4%)</b> have only mail-order fills with 90-day supplies — standard PDC methodology can over-count adherence when days-supply &gt;30 days, inflating the "adherent" share.</li>' +
-            '<li><b>2,410 patients (2.6%)</b> switched drug class mid-period but kept taking the new drug consistently — counting them as non-adherent to the index drug is technically correct but may misrepresent their overall treatment engagement.</li>' +
-            '<li><b>1,180 patients (1.3%)</b> have a single 90-day fill with no refills — PDC appears adequate but likely represents a trial-and-abandon rather than true adherence.</li>';
-        } else {
-          bullets =
-            '<li><b>2,780 patients (4.8%)</b> have their last fill within 30 days of the data-cutoff date — censoring is correct, but the short tail creates uncertainty in their true persistence trajectory.</li>' +
-            '<li><b>1,640 patients (2.8%)</b> switched to a biosimilar of the same molecule mid-episode (e.g., Humira → Hadlima) and triggered a false discontinuation under the 60-day gap rule.</li>' +
-            '<li><b>920 patients (1.6%)</b> have a &gt;60 day gap explained by a prior-authorization delay (PA resubmission claim within 30 days of gap end) — likely still persistent but flagged as discontinued.</li>';
+        if (!STATE["edgeToggles_" + key]) {
+          STATE["edgeToggles_" + key] = { t1: true, t2: true, t3: true };
         }
-        callout.innerHTML =
-          '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
-          '<ul>' + bullets + '</ul>' +
-          '<div class="btn-row">' +
-          '<button class="btn btn-tealsolid" id="btn-analysis-tighten">Apply suggested tightening &amp; re-run</button>' +
+        if (key === "switch") {
+          cases = [
+            { text: '<b>2,340 patients (2.4%)</b> had overlapping fills for two drug classes lasting &lt;14 days — likely a sample/bridge fill rather than a genuine augmentation, which could inflate the reported switch count.', rule: 'Exclude overlapping fills for two drug classes lasting <14 days (sample/bridge fill)', id: 't1' },
+            { text: '<b>1,870 patients (1.9%)</b> "switched" to a biosimilar of their index drug (e.g., Humira → Hadlima). Under the current rules this counts as a switch because the NDC changed, but it is not a true MOA switch.', rule: 'Exclude biosimilar molecule switches (e.g., Humira → Hadlima) from switch definition', id: 't2' },
+            { text: '<b>980 patients (1.0%)</b> have a single pharmacy claim for the new drug with no subsequent refills — potentially a never-started prescription or data lag rather than a completed switch.', rule: 'Require at least two claims for the new drug class within 90 days to confirm a switch', id: 't3' }
+          ];
+        } else if (key === "adherence") {
+          cases = [
+            { text: '<b>3,150 patients (3.4%)</b> have only mail-order fills with 90-day supplies — standard PDC methodology can over-count adherence when days-supply &gt;30 days, inflating the "adherent" share.', rule: 'Exclude mail-order fills with >30 days supply from standard PDC calculation', id: 't1' },
+            { text: '<b>2,410 patients (2.6%)</b> switched drug class mid-period but kept taking the new drug consistently — counting them as non-adherent to the index drug is technically correct but may misrepresent their overall treatment engagement.', rule: 'Allow adherence tracking to continue across switches rather than excluding them', id: 't2' },
+            { text: '<b>1,180 patients (1.3%)</b> have a single 90-day fill with no refills — PDC appears adequate but likely represents a trial-and-abandon rather than true adherence.', rule: null }
+          ];
+        } else {
+          cases = [
+            { text: '<b>2,780 patients (4.8%)</b> have their last fill within 30 days of the data-cutoff date — censoring is correct, but the short tail creates uncertainty in their true persistence trajectory.', rule: 'Censor patients whose last fill is within 30 days of data cutoff', id: 't1' },
+            { text: '<b>1,640 patients (2.8%)</b> switched to a biosimilar of the same molecule mid-episode (e.g., Humira → Hadlima) and triggered a false discontinuation under the 60-day gap rule.', rule: 'Treat same-molecule biosimilar switches as ongoing persistence rather than discontinuation', id: 't2' },
+            { text: '<b>920 patients (1.6%)</b> have a &gt;60 day gap explained by a prior-authorization delay (PA resubmission claim within 30 days of gap end) — likely still persistent but flagged as discontinued.', rule: null }
+          ];
+        }
+        
+        const callout = h("div", "callout");
+        let html = '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>';
+        html += '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">';
+        cases.forEach(c => {
+          if (c.rule) {
+            html += '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+                      '<div style="flex:1; font-size:13px; line-height:1.5;">' + c.text + '</div>' +
+                      '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+                        '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+                          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+                          '<div id="tgl-' + key + '-' + c.id + '" class="toggle' + (STATE["edgeToggles_"+key][c.id] ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+                        '</div>' +
+                        '<div style="font-size:12px; line-height:1.4;">' + c.rule + '</div>' +
+                      '</div>' +
+                    '</div>';
+          } else {
+            html += '<div style="font-size:13px; line-height:1.5;">' + c.text + '</div>';
+          }
+        });
+        html += '</div>';
+        html += '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-analysis-tighten">Apply selected tightening &amp; re-run</button>' +
           '<button class="link-btn" id="btn-analysis-adjust">Adjust rules myself</button>' +
           '<button class="link-btn" id="btn-analysis-keep">Keep as-is, continue</button>' +
           '</div>';
+        callout.innerHTML = html;
         wrap.appendChild(callout);
       }
 
@@ -3445,12 +3478,21 @@
 
       /* ---- wire edge-case buttons ---- */
       if (!tightened) {
+        cases.filter(c => c.rule).forEach(c => {
+          const el = document.getElementById("tgl-" + key + "-" + c.id);
+          el.onclick = () => {
+            STATE["edgeToggles_"+key][c.id] = !STATE["edgeToggles_"+key][c.id];
+            el.className = "toggle" + (STATE["edgeToggles_"+key][c.id] ? " on" : "");
+          };
+        });
+
         document.getElementById("btn-analysis-tighten").onclick = () => {
-          userSay("Apply the suggested tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
+          userSay("Apply the selected tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
           applyTightenedRules(key);
         };
         document.getElementById("btn-analysis-adjust").onclick = () => {
-          renderPanel(analysisRulesPanel(key, getAnalysisRules(key)));
+          const rules = syncEdgeTogglesToRules(key);
+          renderPanel(analysisRulesPanel(key, rules));
           toast("Manual editing re-opened — adjust and confirm to re-run.");
         };
         document.getElementById("btn-analysis-keep").onclick = () => {
@@ -3469,10 +3511,10 @@
       if (!tightened) {
         aiSay(msg + " I found a few edge cases worth reviewing — see the callout on the right.", 1000).then(() => {
           setChips([
-            { label: "Apply suggested tightening & re-run", primary: true, onClick: () => { userSay("Apply the suggested tightening and re-run."); applyTightenedRules(key); } },
+            { label: "Apply selected tightening & re-run", primary: true, onClick: () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); } },
             { label: "Keep as-is, continue", muted: true, onClick: () => { STATE["tightened_" + key] = true; showAnalysisResults(key); } }
           ]);
-          freeTextHandler = () => { userSay("Apply the suggested tightening and re-run."); applyTightenedRules(key); };
+          freeTextHandler = () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); };
         });
       } else {
         aiSay(msg + " The tightened result set looks clean — ready to move on.", 1000).then(() => {
