@@ -3091,8 +3091,37 @@
 
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition — " + d.label));
-      wrap.appendChild(h("div", "panel-title", "Cohort summary"));
-      wrap.appendChild(h("div", "panel-subtitle", "High-level view of the qualifying PsO patient population, the attrition funnel, and key distributions."));
+      
+      const titleRow = h("div");
+      titleRow.style.display = "flex";
+      titleRow.style.justifyContent = "space-between";
+      titleRow.style.alignItems = "flex-end";
+      titleRow.style.marginBottom = "16px";
+      
+      const titleWrap = h("div");
+      const title = h("div", "panel-title", "Cohort summary");
+      title.style.marginBottom = "4px";
+      const sub = h("div", "panel-subtitle", "High-level view of the qualifying PsO patient population, the attrition funnel, and key distributions.");
+      sub.style.marginBottom = "0";
+      titleWrap.appendChild(title);
+      titleWrap.appendChild(sub);
+      
+      const exportBtn = h("button", "btn btn-outline", "Export Data");
+      exportBtn.id = "btn-export-cohort-top";
+      exportBtn.style.border = "1px solid var(--primary)";
+      exportBtn.style.color = "var(--primary)";
+      exportBtn.style.background = "transparent";
+      exportBtn.style.padding = "6px 12px";
+      exportBtn.style.borderRadius = "6px";
+      exportBtn.style.fontSize = "13px";
+      exportBtn.style.fontWeight = "600";
+      exportBtn.style.cursor = "pointer";
+      exportBtn.onclick = () => downloadDummyExcel();
+      
+      titleRow.appendChild(titleWrap);
+      titleRow.appendChild(exportBtn);
+      
+      wrap.appendChild(titleRow);
 
       const stats = [
         { label: "Final cohort", value: fmt(d.kpis.total), sub: prev ? "vs " + fmt(prev.kpis.total) + " in initial run" : "patients", delta: prev ? (d.kpis.total < prev.kpis.total ? "▼ " + pct(prev.kpis.total - d.kpis.total, prev.kpis.total) + "%" : "▲") : null, deltaGood: null },
@@ -3156,7 +3185,6 @@
           '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply selected tightening & re-run</button>' +
           '<button class="link-btn" id="btn-manual-adjust">Adjust rules myself</button>' +
           '<button class="link-btn" id="btn-keep-asis">Keep as-is, continue</button>' +
-          '<button class="btn btn-outline" id="btn-export-cohort-1" style="border:1px solid var(--primary); color:var(--primary); background:transparent; margin-left:auto; cursor:pointer; border-radius:6px; padding:8px 16px; font-weight:600;">Export Data</button>' +
           '</div>';
         wrap.appendChild(callout);
       } else {
@@ -3166,7 +3194,6 @@
           '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the diagnosis spacing/provider rule and excluding competing eczema diagnoses removed <b>21,840 patients (‑11.8%)</b> of likely rule-outs and miscoded records, without materially shifting the demographic mix.</div>' +
           '<div class="btn-row">' +
           '<button class="btn btn-tealsolid" id="btn-accept-cohort">Accept this cohort & continue</button>' +
-          '<button id="btn-export-cohort-2" style="border:1px solid var(--primary); color:var(--primary); background:transparent; padding:8px 16px; border-radius:6px; font-size:13.5px; font-weight:600; cursor:pointer; margin-left:auto;">Export Data</button>' +
           '</div>';
         wrap.appendChild(callout);
       }
@@ -3193,7 +3220,6 @@
           toast("Manual editing re-opened — adjust and confirm to re-run."); 
         };
         document.getElementById("btn-keep-asis").onclick = () => proceedToBusinessQuestion();
-        document.getElementById("btn-export-cohort-1").onclick = () => downloadDummyExcel();
         aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the selected rule changes and re-run?", 900).then(() => {
           setChips([
             { label: "Apply selected tightening & re-run", primary: true, onClick: acceptTightening },
@@ -3203,7 +3229,6 @@
         });
       } else {
         document.getElementById("btn-accept-cohort").onclick = () => proceedToBusinessQuestion();
-        document.getElementById("btn-export-cohort-2").onclick = () => downloadDummyExcel();
         aiSay("The refined cohort of <b>" + fmt(DATA.cohortV2.kpis.total) + " patients</b> looks solid — tighter diagnosis logic and de-duplication removed likely rule-outs without skewing the demographics. Happy to lock this in?", 900).then(() => {
           setChips([{ label: "Accept this cohort & continue", primary: true, onClick: proceedToBusinessQuestion }]);
           freeTextHandler = proceedToBusinessQuestion;
