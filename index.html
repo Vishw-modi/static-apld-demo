@@ -791,6 +791,7 @@
       justify-content: center;
       transition: background 0.15s, color 0.15s;
     }
+
     .collapse-toggle-btn:hover {
       background: #f1f3f5;
       color: var(--ink-primary);
@@ -814,13 +815,15 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.12);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.12);
       transition: background 0.2s, padding-left 0.2s;
     }
+
     .chat-expand-btn:hover {
       background: var(--teal-600);
       padding-left: 18px;
     }
+
     .chat-expand-btn.hidden {
       display: none !important;
     }
@@ -917,7 +920,7 @@
     .bubble {
       background: #ffffff;
       border: 1px solid var(--border);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       border-radius: 12px;
       border-top-left-radius: 4px;
       padding: 10px 13px;
@@ -1207,15 +1210,17 @@
       padding: 8px 12px;
       outline: none;
       min-height: 20px;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
       transition: all 0.2s;
     }
+
     .rule-text:hover {
       border-color: #94a3b8;
     }
+
     .rule-text:focus {
       border-color: var(--teal-500);
-      box-shadow: 0 0 0 3px rgba(0, 163, 155, 0.15), inset 0 1px 2px rgba(0,0,0,0.03);
+      box-shadow: 0 0 0 3px rgba(0, 163, 155, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.03);
     }
 
     .toggle {
@@ -1749,6 +1754,7 @@
     .summary-section {
       margin-bottom: 28px;
     }
+
     .section-header {
       font-size: 14.5px;
       font-weight: 600;
@@ -1919,7 +1925,8 @@
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg> Build Cohort First</div>
+                </svg> Build Cohort First
+              </div>
               <div
                 style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1941,7 +1948,8 @@
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg> Build Cohort First</div>
+                </svg> Build Cohort First
+              </div>
               <div
                 style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1961,7 +1969,8 @@
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg> Build Cohort First</div>
+                </svg> Build Cohort First
+              </div>
               <div
                 style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2029,7 +2038,10 @@
             </div>
           </div>
           <button id="btn-collapse-chat" class="collapse-toggle-btn" title="Collapse Chat" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
         </div>
         <div id="chat-messages"></div>
@@ -2049,7 +2061,10 @@
 
   <!-- Floating chat expand button -->
   <button id="btn-expand-chat" class="chat-expand-btn hidden" title="Expand Chat" type="button">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
     <span>APLD Assistant</span>
   </button>
 
@@ -2140,9 +2155,9 @@
 
     const COHORT_RULES_V1 = () => ([
       { id: cid(), category: "Diagnosis", text: "At least 2 medical claims with ICD-10 L40.0 (Psoriasis vulgaris) or L40.9 (Psoriasis, unspecified) on different dates within a 12-month period", active: true },
+      { id: cid(), category: "Index Date", text: "Date of the first qualifying PsO diagnosis claim, between Jan 2023 and Dec 2025", active: true },
       { id: cid(), category: "Demographics", text: "Age ≥ 18 years as of index date", active: true },
       { id: cid(), category: "Enrollment", text: "Continuous medical & pharmacy enrollment for ≥ 6 months pre-index and ≥ 12 months post-index", active: true },
-      { id: cid(), category: "Index Date", text: "Date of the first qualifying PsO diagnosis claim, between Jan 2023 and Dec 2025", active: true },
       { id: cid(), category: "Treatment", text: "At least one pharmacy or medical claim for a topical, oral systemic, or biologic PsO therapy within 90 days of index", active: true },
       { id: cid(), category: "Exclusion", text: "Exclude patients with only a psoriatic arthritis code (L40.5) and no plaque psoriasis code", active: true },
       { id: cid(), category: "Exclusion", text: "Exclude patients with a pregnancy-related claim during the observation window", active: true }
@@ -2151,14 +2166,14 @@
     const COHORT_RULES_V2_PATCH = (rules, toggles) => {
       const r = rules.map(x => ({ ...x }));
       const t = toggles || { tightenDx: true, excludeEczema: true };
-      
+
       const dx = r.find(x => x.category === "Diagnosis" && x.text.includes("ICD-10 L40.0"));
       if (dx) {
         dx.text = "At least 2 medical claims with ICD-10 L40.0 or L40.9, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
         dx.isSuggestion = true;
         dx.active = t.tightenDx;
       }
-      
+
       if (!r.some(x => x.text.includes("competing eczema"))) {
         r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: t.excludeEczema, isSuggestion: true });
       }
@@ -2166,14 +2181,18 @@
     };
 
     const SWITCH_RULES = () => {
-      const windowStr = STATE.switchWindow || "12 months";
       return [
-        { id: cid(), category: "Index Therapy", text: "First claim for a systemic PsO therapy (biologic or oral systemic) within the confirmed cohort — defines the index drug and drug class", active: true },
-        { id: cid(), category: "Drug Classes", text: "Track 5 classes: TNF inhibitors, IL-17 inhibitors, IL-23 inhibitors, IL-12/23 inhibitor, Oral systemics", active: true },
-        { id: cid(), category: "Switch Definition", text: "A claim for a different drug class within 90 days of the index drug's last supply end, with no further index-drug claim in the following 60 days", active: true },
-        { id: cid(), category: "Switch Window", text: windowStr + " post-index", active: true },
-        { id: cid(), category: "Restart Logic", text: "If the gap before the new claim exceeds 180 days, classify as a restart rather than a switch", active: true },
-        { id: cid(), category: "Augmentation Logic", text: "If the index drug claim continues concurrently with the new drug for more than 60 days, classify as augmentation rather than a switch", active: true }
+        { id: cid(), category: "Market Basket", text: "Track 5 classes: TNF, IL-17, IL-23, IL-12/23, Oral", active: true },
+        { id: cid(), category: "Continuity Threshold", text: "90 days threshold shared by Continuing / Discontinued / Restart", active: true },
+        { id: cid(), category: "Switch Window", text: "90 days post prior-therapy supply end", active: true },
+        { id: cid(), category: "Augmentation Overlap", text: "60+ days concurrent claim, not a switch", active: true },
+        { id: cid(), category: "Index Treatment", text: "First claim episode for Skyrizi (IL-23 inhibitor) within the confirmed cohort", active: true },
+        { id: cid(), category: "New Patients", text: "No market-basket therapy (biologic or oral systemic) in the 12 months prior — topical-only history counts as New", active: true },
+        { id: cid(), category: "Continuing", text: "Same-class refill with a gap ≤ 90 days since the prior fill's supply end", active: true },
+        { id: cid(), category: "Switch", text: "A different-class market-basket claim within 90 days of the prior therapy's supply end", active: true },
+        { id: cid(), category: "Augmentation", text: "Prior-class claim overlaps the new claim by a user-defined threshold (default 60+ days) — AI consolidates this into the Switch call above as an add-on, not a replacement", active: true },
+        { id: cid(), category: "Discontinued", text: "Gap > 90 days, no further market-basket claim through end of follow-up", active: true },
+        { id: cid(), category: "Restart", text: "Gap > 90 days, followed by a later Skyrizi claim — resumption, not New or a Switch", active: true }
       ];
     };
 
@@ -2197,10 +2216,17 @@
     ============================================================ */
     const ANALYSIS_META = {
       switch: {
-        label: "Switch Analysis", rules: SWITCH_RULES,
-        pipeline: ["Extracting index therapy claims", "Identifying subsequent claims per patient", "Applying switch / augmentation / restart logic", "Aggregating drug-to-drug flows", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>switch analysis</b> — how we'll define an index drug, a true switch (vs. augmentation or restart), and the measurement window. Edit as needed, then run.",
-        confirmText: "To summarize: we'll track the 5 major PsO drug classes, define a switch as a new-class claim within 90 days of the index drug's supply end (with no further index-drug claim after), separate out restarts (&gt;180‑day gaps) and augmentation (concurrent use &gt;60 days), over a 12‑month window. Ready to run?"
+        label: "Source of Business", rules: SWITCH_RULES,
+        pipeline: [
+          "Extracting Skyrizi NBRx claims by quarter",
+          "Classifying each fill: new-to-brand, switch-in, continuing, or restart",
+          "Applying augmentation / discontinuation / restart edge-case logic",
+          "Aggregating quarterly source-of-business mix (NBRx and total active base)",
+          "Building the switch in/out view by class",
+          "Rendering results"
+        ],
+        ackText: "Here are suggested business rules for the <b>Source of Business analysis</b> — including market basket, thresholds, and classification logic. Edit as needed, then run.",
+        confirmText: "To summarize: we'll classify every Skyrizi fill into New-to-Market, Continuing, Switch, Augmentation, Discontinued, or Restart based on your confirmed business rules. Ready to run?"
       },
       adherence: {
         label: "Compliance Analysis", rules: ADHERENCE_RULES,
@@ -3070,7 +3096,7 @@
       STATE.cohortRunNum = runNum;
       const d = runNum === 1 ? DATA.cohortV1 : DATA.cohortV2;
       const prev = runNum === 2 ? DATA.cohortV1 : null;
-      
+
       // Sync dynamic rules to funnel labels
       if (STATE.cohortRuleset) {
         const demoRule = STATE.cohortRuleset.find(r => r.category === "Demographics");
@@ -3081,7 +3107,7 @@
             if (ageStage) ageStage.label = `Age ≥ ${ageMatch[1]} at index`;
           }
         }
-        
+
         const txRule = STATE.cohortRuleset.find(r => r.category === "Treatment");
         if (txRule) {
           const dayMatch = txRule.text.match(/within\s*(\d+)\s*days/i);
@@ -3096,13 +3122,13 @@
 
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition — " + d.label));
-      
+
       const titleRow = h("div");
       titleRow.style.display = "flex";
       titleRow.style.justifyContent = "space-between";
       titleRow.style.alignItems = "flex-end";
       titleRow.style.marginBottom = "16px";
-      
+
       const titleWrap = h("div");
       const title = h("div", "panel-title", "Cohort summary");
       title.style.marginBottom = "4px";
@@ -3110,7 +3136,7 @@
       sub.style.marginBottom = "0";
       titleWrap.appendChild(title);
       titleWrap.appendChild(sub);
-      
+
       const exportBtn = h("button", "btn btn-outline", "Export Data");
       exportBtn.id = "btn-export-cohort-top";
       exportBtn.style.border = "1px solid var(--primary)";
@@ -3122,10 +3148,10 @@
       exportBtn.style.fontWeight = "600";
       exportBtn.style.cursor = "pointer";
       exportBtn.onclick = () => downloadDummyExcel();
-      
+
       titleRow.appendChild(titleWrap);
       titleRow.appendChild(exportBtn);
-      
+
       wrap.appendChild(titleRow);
 
       const stats = [
@@ -3158,33 +3184,33 @@
         callout.innerHTML =
           '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
           '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">' +
-            '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
-              '<div style="flex:1; font-size:13px; line-height:1.5;">' +
-                '<b>6,830 patients (3.7%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
-              '</div>' +
-              '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
-                '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
-                  '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
-                  '<div id="tgl-dx" class="toggle' + (STATE.edgeToggles.tightenDx ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
-                '</div>' +
-                '<div style="font-size:12px; line-height:1.4;">Require claims to be ≥30 days apart, from two different provider visits</div>' +
-              '</div>' +
-            '</div>' +
-            '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
-              '<div style="flex:1; font-size:13px; line-height:1.5;">' +
-                '<b>4,920 patients (2.7%)</b> carry a co-occurring eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index — a common source of mismiscoding.' +
-              '</div>' +
-              '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
-                '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
-                  '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
-                  '<div id="tgl-eczema" class="toggle' + (STATE.edgeToggles.excludeEczema ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
-                '</div>' +
-                '<div style="font-size:12px; line-height:1.4;">Exclude patients with competing eczema / atopic dermatitis diagnosis</div>' +
-              '</div>' +
-            '</div>' +
-            '<div style="font-size:13px; line-height:1.5;">' +
-              '<b>3,610 patients (2.0%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
-            '</div>' +
+          '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+          '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+          '<b>6,830 patients (3.7%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
+          '</div>' +
+          '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+          '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+          '<div id="tgl-dx" class="toggle' + (STATE.edgeToggles.tightenDx ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+          '</div>' +
+          '<div style="font-size:12px; line-height:1.4;">Require claims to be ≥30 days apart, from two different provider visits</div>' +
+          '</div>' +
+          '</div>' +
+          '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+          '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+          '<b>4,920 patients (2.7%)</b> carry a co-occurring eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index — a common source of mismiscoding.' +
+          '</div>' +
+          '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+          '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+          '<div id="tgl-eczema" class="toggle' + (STATE.edgeToggles.excludeEczema ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+          '</div>' +
+          '<div style="font-size:12px; line-height:1.4;">Exclude patients with competing eczema / atopic dermatitis diagnosis</div>' +
+          '</div>' +
+          '</div>' +
+          '<div style="font-size:13px; line-height:1.5;">' +
+          '<b>3,610 patients (2.0%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
+          '</div>' +
           '</div>' +
           '<div class="btn-row">' +
           '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply selected tightening & re-run</button>' +
@@ -3218,11 +3244,11 @@
         };
 
         document.getElementById("btn-accept-tighten").onclick = () => acceptTightening();
-        document.getElementById("btn-manual-adjust").onclick = () => { 
-          STATE.cohortRuleset = COHORT_RULES_V1(); 
+        document.getElementById("btn-manual-adjust").onclick = () => {
+          STATE.cohortRuleset = COHORT_RULES_V1();
           STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset, STATE.edgeToggles);
-          renderPanel(cohortRulesPanel()); 
-          toast("Manual editing re-opened — adjust and confirm to re-run."); 
+          renderPanel(cohortRulesPanel());
+          toast("Manual editing re-opened — adjust and confirm to re-run.");
         };
         document.getElementById("btn-keep-asis").onclick = () => proceedToBusinessQuestion();
         aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the selected rule changes and re-run?", 900).then(() => {
@@ -3256,6 +3282,192 @@
     async function proceedToBusinessQuestion() {
       setChips([]); freeTextHandler = null;
       renderStepper(2, STATE.completedAnalyses);
+      const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      
+      renderBusinessQuestionPromptPanel();
+
+      await aiSay("Great — your PsO cohort of <b>" + fmt(finalCohort.kpis.total) + " patients</b> is locked in. What business question would you like to explore next?", 900);
+
+      const scenarioText = "Skyrizi's market share has plateaued the last couple of quarters, and a few competitors have entered the IL-23 space in parallel. I want to understand where the business is actually coming from right now and what's going on with current patient dynamics.";
+
+      setChips([
+        { label: "Describe market share plateau scenario", primary: true, onClick: () => handleBusinessQuestionPrompt(scenarioText) }
+      ]);
+      freeTextHandler = (text) => handleBusinessQuestionPrompt(text || scenarioText);
+    }
+
+    function renderBusinessQuestionPromptPanel() {
+      const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
+      wrap.appendChild(h("div", "panel-title", "What business question would you like to explore next?"));
+      wrap.appendChild(h("div", "panel-subtitle", "Your PsO cohort is confirmed. Tell the assistant what you're trying to figure out next."));
+      
+      const card = h("div", "card");
+      card.innerHTML = '<div class="card-title">Confirmed cohort</div><div class="card-sub" style="margin-bottom:0;"><b>' + fmt(finalCohort.kpis.total) + '</b> plaque psoriasis patients, indexed Jan 2023–Dec 2025, ready for downstream analysis.</div>';
+      wrap.appendChild(card);
+
+      const scenarioText = "Skyrizi's market share has plateaued the last couple of quarters, and a few competitors have entered the IL-23 space in parallel. I want to understand where the business is actually coming from right now and what's going on with current patient dynamics.";
+
+      const promptCard = h("div", "card");
+      promptCard.style.marginTop = "20px";
+      promptCard.style.padding = "24px";
+      promptCard.style.background = "#ffffff";
+      promptCard.style.border = "1px solid var(--border)";
+      promptCard.style.borderRadius = "12px";
+
+      promptCard.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,163,155,0.12); display:flex; align-items:center; justify-content:center; color:var(--teal-600); font-weight:700; font-size:13px;">AI</div>
+          <div style="font-weight:700; font-size:14.5px; color:var(--navy-900);">Ask a Business Question</div>
+        </div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:14px;">
+          Type your business scenario or question below to start the analysis. The assistant will guide you through the relevant metrics.
+        </div>
+        <textarea id="main-prompt-input" rows="4" style="width:100%; padding:14px 16px; font-family:var(--font-sans); font-size:14px; color:var(--navy-900); line-height:1.5; background:#ffffff; border:1.5px solid #cbd5e1; border-radius:8px; outline:none; resize:vertical; box-sizing:border-box; margin-bottom:16px; box-shadow:inset 0 1px 2px rgba(0,0,0,0.04); transition:border-color 0.2s, box-shadow 0.2s;" placeholder="Type your business scenario or question here... (e.g., Skyrizi's market share has plateaued, I want to understand where the business is coming from...)" onfocus="this.style.borderColor='var(--teal-600)'; this.style.boxShadow='0 0 0 3px rgba(13,148,136,0.15)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.04)';"></textarea>
+        
+        <div style="display:flex; justify-content:flex-end; align-items:center;">
+          <button id="btn-submit-main-prompt" class="btn btn-tealsolid" style="padding:10px 20px; font-size:13.5px; font-weight:600; cursor:pointer;">
+            Submit Question &rarr;
+          </button>
+        </div>
+      `;
+
+      wrap.appendChild(promptCard);
+      renderPanel(wrap);
+
+      const txtArea = document.getElementById("main-prompt-input");
+
+      document.getElementById("btn-submit-main-prompt").onclick = () => {
+        const val = txtArea.value.trim();
+        handleBusinessQuestionPrompt(val || scenarioText);
+      };
+    }
+
+    async function handleBusinessQuestionPrompt(customPrompt) {
+      setChips([]); freeTextHandler = null;
+      const prompt = customPrompt || "Skyrizi's market share has plateaued the last couple of quarters, and a few competitors have entered the IL-23 space in parallel. I want to understand where the business is actually coming from right now and what's going on with current patient dynamics.";
+      userSay(prompt);
+
+      await aiSay("Got it. A plateau can mean a few different things — new demand slowing, patients switching in from elsewhere masking that slowdown, or patients leaving faster than new ones arrive. I'd recommend starting with a Source of Business analysis: it splits Skyrizi's patient volume into new-to-market, switch-in, continuing, and restart, which tells us which of those is actually moving.", 1000);
+
+      startAnalysisFlow("switch");
+    }
+
+    function renderQuickLookPanel() {
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
+      wrap.appendChild(h("div", "panel-title", "Quick look — straight from the cohort"));
+      wrap.appendChild(h("div", "panel-subtitle", "No business rules applied yet — this is a fast pull of Skyrizi's active-patient trend within your confirmed cohort, just to see whether there's really a plateau."));
+
+      const kpiGrid = h("div");
+      kpiGrid.style.display = "grid";
+      kpiGrid.style.gridTemplateColumns = "repeat(4, 1fr)";
+      kpiGrid.style.gap = "12px";
+      kpiGrid.style.marginBottom = "20px";
+      kpiGrid.innerHTML = `
+        <div class="card" style="margin-bottom:0; padding:14px 16px;">
+          <div style="font-size:10.5px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px;">ACTIVE SKYRIZI PATIENTS</div>
+          <div style="font-size:22px; font-weight:800; color:var(--navy-900); line-height:1.2;">7,400</div>
+          <div style="font-size:11.5px; color:var(--ink-muted); margin-top:4px;">Q2-25</div>
+        </div>
+        <div class="card" style="margin-bottom:0; padding:14px 16px;">
+          <div style="font-size:10.5px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px;">GROWTH, LAST 4 QUARTERS</div>
+          <div style="font-size:22px; font-weight:800; color:var(--navy-900); line-height:1.2;">2.8%</div>
+          <div style="font-size:11.5px; color:var(--ink-muted); margin-top:4px;">vs Q2-24</div>
+        </div>
+        <div class="card" style="margin-bottom:0; padding:14px 16px;">
+          <div style="font-size:10.5px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px;">GROWTH, PRIOR 4 QUARTERS</div>
+          <div style="font-size:22px; font-weight:800; color:var(--navy-900); line-height:1.2;">14.3%</div>
+          <div style="font-size:11.5px; color:var(--ink-muted); margin-top:4px;">vs Q2-23</div>
+        </div>
+        <div class="card" style="margin-bottom:0; padding:14px 16px;">
+          <div style="font-size:10.5px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px;">SHARE OF PSO COHORT ON SKYRIZI</div>
+          <div style="font-size:22px; font-weight:800; color:var(--navy-900); line-height:1.2;">4.0%</div>
+          <div style="font-size:11.5px; color:var(--ink-muted); margin-top:4px;">Q2-25</div>
+        </div>
+      `;
+      wrap.appendChild(kpiGrid);
+
+      const chartCard = h("div", "card");
+      chartCard.style.marginBottom = "20px";
+      chartCard.style.padding = "20px";
+      chartCard.innerHTML = `
+        <div style="font-weight:700; font-size:14.5px; color:var(--navy-900); margin-bottom:2px;">Skyrizi active patients, by quarter</div>
+        <div style="font-size:12.5px; color:var(--ink-muted); margin-bottom:16px;">Pulled directly from the confirmed cohort — total patients with any Skyrizi activity that quarter.</div>
+        <div style="width:100%; overflow-x:auto;">
+          <svg viewBox="0 0 680 200" style="width:100%; height:auto; display:block; font-family:var(--font-sans);">
+            <!-- Gridlines & Y-Axis Labels -->
+            <line x1="60" y1="30" x2="660" y2="30" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="50" y="34" font-size="11" fill="var(--ink-muted)" text-anchor="end">7652</text>
+            
+            <line x1="60" y1="100" x2="660" y2="100" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="50" y="104" font-size="11" fill="var(--ink-muted)" text-anchor="end">6700</text>
+            
+            <line x1="60" y1="170" x2="660" y2="170" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="50" y="174" font-size="11" fill="var(--ink-muted)" text-anchor="end">5748</text>
+
+            <!-- Line Path -->
+            <path d="M 85,170 L 148,142 L 211,111 L 274,91 L 337,79 L 400,66 L 463,58 L 526,54 L 589,52 L 652,51" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            
+            <!-- Data Dots -->
+            <circle cx="85" cy="170" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="148" cy="142" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="211" cy="111" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="274" cy="91" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="337" cy="79" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="400" cy="66" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="463" cy="58" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="526" cy="54" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="589" cy="52" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+            <circle cx="652" cy="51" r="4.5" fill="var(--primary)" stroke="#fff" stroke-width="2"/>
+
+            <!-- X-Axis Labels -->
+            <text x="85" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q1-23</text>
+            <text x="148" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q2-23</text>
+            <text x="211" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q3-23</text>
+            <text x="274" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q4-23</text>
+            <text x="337" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q1-24</text>
+            <text x="400" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q2-24</text>
+            <text x="463" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q3-24</text>
+            <text x="526" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q4-24</text>
+            <text x="589" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q1-25</text>
+            <text x="652" y="192" font-size="11" fill="var(--ink-muted)" text-anchor="middle">Q2-25</text>
+          </svg>
+        </div>
+        <div style="font-size:12px; color:var(--ink-muted); margin-top:14px; line-height:1.4;">
+          Growth has clearly slowed — but a flattening total doesn't say whether that's fewer new patients starting, more patients leaving, or both. That needs a full Source of Business run.
+        </div>
+      `;
+      wrap.appendChild(chartCard);
+
+      const bottomCard = h("div", "card");
+      bottomCard.style.marginBottom = "0";
+      bottomCard.style.padding = "20px";
+      bottomCard.innerHTML = `
+        <div style="font-weight:700; font-size:14.5px; color:var(--navy-900); margin-bottom:4px;">Run the full Source of Business / Switch Analysis?</div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:16px;">This will classify every Skyrizi fill as New to Market, Continuing, a Switch, Augmentation, Discontinued, or a Restart, using business rules you can review first.</div>
+        <button class="btn btn-tealsolid" id="btn-run-sob-analysis" style="font-weight:600; padding:10px 18px; font-size:13.5px; cursor:pointer;">Configure & Run Switch Analysis &rarr;</button>
+      `;
+      wrap.appendChild(bottomCard);
+      renderPanel(wrap);
+
+      document.getElementById('btn-run-sob-analysis').onclick = () => {
+        const scenarioText = "Skyrizi's market share has plateaued the last couple of quarters, and a few competitors have entered the IL-23 space in parallel. I want to understand where the business is actually coming from right now and what's going on with current patient dynamics.";
+        handleRunSourceOfBusiness(scenarioText);
+      };
+    }
+
+    async function handleRunSourceOfBusiness(customPrompt) {
+      setChips([]); freeTextHandler = null;
+      const prompt = customPrompt || "Skyrizi's market share has plateaued the last couple of quarters, and a few competitors have entered the IL-23 space in parallel. I want to understand where the business is actually coming from right now and what's going on with current patient dynamics.";
+      userSay(prompt);
+      renderAvailableAnalysesPanel();
+      await aiSay("Got it. A plateau can mean a few different things — new demand slowing, patients switching in from elsewhere masking that slowdown, or patients leaving faster than new ones arrive. I'd recommend starting with a <b>Source of Business analysis</b>: it splits Skyrizi's patient volume into new-to-market, switch-in, continuing, and restart, which will help frame the other analyses.", 1000);
+      acknowledgeScenario();
+    }
+
+    function renderAvailableAnalysesPanel() {
       const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
@@ -3301,15 +3513,6 @@
       document.getElementById('btn-start-persistence').addEventListener('mouseenter', function () { this.style.borderColor = 'var(--teal-600)'; this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'; });
       document.getElementById('btn-start-persistence').addEventListener('mouseleave', function () { this.style.borderColor = 'var(--border)'; this.style.boxShadow = 'var(--shadow-sm)'; });
       document.getElementById('btn-start-persistence').onclick = () => { userSay("Let's start with persistence analysis."); startAnalysisFlow("persistence"); };
-
-      await aiSay("Great — your PsO cohort of <b>" + fmt(finalCohort.kpis.total) + " patients</b> is locked in. What business question would you like to explore next?", 900);
-
-      const scenario = "Our client markets an IL-23 inhibitor in the PsO space. New-to-brand starts have plateaued over the last two quarters even as a newer competitor launched. Leadership wants to know: are existing patients switching to competing therapies, how compliant are patients once they start therapy, and how long do they typically persist before discontinuing — to figure out if the plateau is a switching problem, a compliance problem, or both.";
-
-      setChips([
-        { label: "Describe the switching/compliance/persistence scenario", primary: true, onClick: () => { userSay(scenario); acknowledgeScenario(); } }
-      ]);
-      freeTextHandler = () => acknowledgeScenario();
     }
 
     async function acknowledgeScenario() {
@@ -3333,7 +3536,7 @@
     function syncEdgeTogglesToRules(key) {
       const rules = getAnalysisRules(key);
       const tg = STATE["edgeToggles_" + key] || { t1: true, t2: true, t3: true };
-      
+
       const updateRule = (category, text, active) => {
         let r = rules.find(x => x.text === text);
         if (!r) {
@@ -3379,16 +3582,251 @@
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
       wrap.appendChild(h("div", "panel-title", meta.label + " — business rules"));
-      wrap.appendChild(h("div", "panel-subtitle", "Defined for the PsO systemic-therapy population within your confirmed cohort."));
+      wrap.appendChild(h("div", "panel-subtitle", key === "switch" ? "How every new Skyrizi fill gets classified — a priority cascade, checked top to bottom, not independent filters." : "Defined for the PsO systemic-therapy population within your confirmed cohort."));
+      
+      const confirmLabel = key === "switch" ? "Confirm rules & preview on sample patients" : "Confirm rules & continue";
+      const confirmHandler = key === "switch" 
+        ? (activeRules) => handleConfirmRulesAndPreview(activeRules)
+        : (activeRules) => runAnalysis(key);
+
       wrap.appendChild(rulesEditorCard(
         "Suggested business rules — " + meta.label,
         "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
         rulesArr,
-        (activeRules) => runAnalysis(key),
-        "Confirm rules & continue",
+        confirmHandler,
+        confirmLabel,
         false
       ));
       return wrap;
+    }
+
+    async function handleConfirmRulesAndPreview(activeRules) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis — Source of Business"));
+      wrap.appendChild(h("div", "panel-title", "Sampling patient claims & testing business rules…"));
+      wrap.appendChild(h("div", "panel-subtitle", "Drawing sample patient claims to verify classification logic before running on complete database."));
+      
+      const loaderCard = h("div", "card");
+      loaderCard.style.padding = "44px 20px";
+      loaderCard.style.textAlign = "center";
+      loaderCard.innerHTML = `
+        <div class="spinner" style="margin:0 auto 16px; border:3px solid var(--border); border-top-color:var(--teal-600); width:32px; height:32px; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+        <div style="font-size:14px; font-weight:700; color:var(--navy-900);">Classifying sample patient claims…</div>
+        <div style="font-size:12px; color:var(--ink-muted); margin-top:4px;">Evaluating business rules against sample patient claim episodes</div>
+      `;
+      wrap.appendChild(loaderCard);
+      renderPanel(wrap);
+
+      await sleep(900);
+
+      renderSamplePreviewPanel(activeRules);
+    }
+
+    function renderSamplePreviewPanel(activeRules) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "STEP 3 · DEEP-DIVE ANALYSIS — SOURCE OF BUSINESS"));
+      wrap.appendChild(h("div", "panel-title", "Sample preview — does the logic look right?"));
+      wrap.appendChild(h("div", "panel-subtitle", "These sample patients are drawn from a random sample of claims data, so we can sanity-check the rules before running them against the complete claims database — shown as each patient's claim-episode history."));
+
+      const containerCard = h("div", "card");
+      containerCard.appendChild(h("div", "card-title", "Sample patients, classified by the rules above"));
+      containerCard.appendChild(h("div", "card-sub", "One example per outcome: New to Market, Switch, Continuing, and Restart. The Skyrizi claim episode being classified is highlighted, with the SoB flag it receives."));
+
+      const samplesList = h("div");
+      samplesList.style.marginTop = "16px";
+      samplesList.innerHTML = `
+        <!-- PT-10482 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-10482
+              <span style="background:#10b981; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">NEW TO MARKET</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            First systemic therapy: <b style="color:var(--navy-900);">2024-03-14 (Skyrizi — first claim on record)</b> &nbsp;&nbsp; Skyrizi fill under evaluation (index date): <b style="color:var(--navy-900);">2024-03-14</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">CLASS</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f0fdf4;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #10b981;">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-03-14</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #10b981; background:#f0fdf4; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#065f46; display:flex; align-items:center; gap:8px;">
+            <span style="background:#10b981; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">SOB</span>
+            <span><b>New to Market</b> — No market-basket claim of any kind in the 12-month lookback — Skyrizi is the patient's first therapy on record.</span>
+          </div>
+        </div>
+
+        <!-- PT-30556 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-30556
+              <span style="background:#2563eb; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">SWITCH</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            First systemic therapy: <b style="color:var(--navy-900);">2021-08-20 (Humira)</b> &nbsp;&nbsp; Skyrizi fill under evaluation (index date): <b style="color:var(--navy-900);">2024-06-30</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">CLASS</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">Betamethasone dipropionate</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Topical</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2021-02-10</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2021-08-05</td>
+              </tr>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">Humira</td>
+                <td style="padding:10px; color:var(--ink-secondary);">TNF</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2021-08-20</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-04-30</td>
+              </tr>
+              <tr style="background:#eff6ff;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #2563eb;">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-06-30</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #2563eb; background:#eff6ff; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#1e40af; display:flex; align-items:center; gap:8px;">
+            <span style="background:#2563eb; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">SOB</span>
+            <span><b>Switch — from Humira (TNF)</b> — Skyrizi claim within 90 days of Humira's supply end, with no further Humira claim afterward.</span>
+          </div>
+        </div>
+
+        <!-- PT-20117 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-20117
+              <span style="background:#1e3a8a; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">CONTINUING</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            First systemic therapy: <b style="color:var(--navy-900);">2023-11-01 (Skyrizi — first claim on record)</b> &nbsp;&nbsp; Skyrizi fill under evaluation (index date): <b style="color:var(--navy-900);">2024-03-30</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">CLASS</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2023-11-01</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-01-30</td>
+              </tr>
+              <tr style="background:#f0f9ff;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #1e3a8a;">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-03-30</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #1e3a8a; background:#f0f9ff; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#1e3a8a; display:flex; align-items:center; gap:8px;">
+            <span style="background:#1e3a8a; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">SOB</span>
+            <span><b>Continuing</b> — Same-class refill, 60-day gap since prior supply end — within the 90-day continuity threshold, so this counts as Continuing, not a new NBRx event.</span>
+          </div>
+        </div>
+
+        <!-- PT-40921 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-40921
+              <span style="background:#64748b; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">RESTART</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            First systemic therapy: <b style="color:var(--navy-900);">2022-04-01 (Skyrizi — first claim on record)</b> &nbsp;&nbsp; Skyrizi fill under evaluation (index date): <b style="color:var(--navy-900);">2023-04-26</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">CLASS</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2022-04-01</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2022-09-28</td>
+              </tr>
+              <tr style="background:#f8fafc;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #64748b;">SKYRIZI</td>
+                <td style="padding:10px; color:var(--ink-secondary);">IL-23</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2023-04-26</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #64748b; background:#f8fafc; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#334155; display:flex; align-items:center; gap:8px;">
+            <span style="background:#64748b; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">SOB</span>
+            <span><b>Restart</b> — 210-day gap since the last Skyrizi claim — well over the 90-day threshold, and no other market-basket therapy in between — so this resumes as a Restart, not a Switch.</span>
+          </div>
+        </div>
+      `;
+
+      containerCard.appendChild(samplesList);
+      wrap.appendChild(containerCard);
+
+      const bottomConfirmCard = h("div", "card");
+      bottomConfirmCard.style.marginTop = "20px";
+      bottomConfirmCard.style.padding = "20px";
+      bottomConfirmCard.innerHTML = `
+        <div style="font-weight:700; font-size:15px; color:var(--navy-900); margin-bottom:4px;">Do the rules and these examples look right?</div>
+        <div style="font-size:13px; color:var(--ink-secondary); margin-bottom:16px;">If so, we'll run the same classification logic against the complete claims dataset.</div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <button class="btn btn-tealsolid" id="btn-confirm-complete-claims" style="font-weight:600; padding:10px 18px; font-size:13.5px; cursor:pointer;">Confirm & run on complete claims</button>
+          <button id="btn-back-to-sob-rules" style="background:none; border:none; color:var(--teal-700); font-weight:600; font-size:13.5px; cursor:pointer; text-decoration:none;">← Back to rules</button>
+        </div>
+      `;
+      wrap.appendChild(bottomConfirmCard);
+
+      renderPanel(wrap);
+
+      document.getElementById("btn-confirm-complete-claims").onclick = () => {
+        runAnalysis("switch");
+      };
+
+      document.getElementById("btn-back-to-sob-rules").onclick = () => {
+        renderPanel(analysisRulesPanel("switch", getAnalysisRules("switch")));
+      };
     }
 
     async function confirmAnalysisRules(key, activeRules) {
@@ -3417,8 +3855,13 @@
       setChips([]); freeTextHandler = null;
       const meta = ANALYSIS_META[key];
       const wrap = h("div");
-      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
-      wrap.appendChild(h("div", "panel-title", "Running " + meta.label.toLowerCase() + "…"));
+      if (key === "switch") {
+        wrap.appendChild(h("div", "panel-eyebrow", "STEP 3 · DEEP-DIVE ANALYSIS — SOURCE OF BUSINESS"));
+        wrap.appendChild(h("div", "panel-title", "Running source of business analysis…"));
+      } else {
+        wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+        wrap.appendChild(h("div", "panel-title", "Running " + meta.label.toLowerCase() + "…"));
+      }
       renderPanel(wrap);
       await runPipeline(wrap, meta.pipeline);
       if (!STATE.completedAnalyses.includes(key)) STATE.completedAnalyses.push(key);
@@ -3476,22 +3919,22 @@
             { text: '<b>920 patients (1.6%)</b> have a &gt;60 day gap explained by a prior-authorization delay (PA resubmission claim within 30 days of gap end) — likely still persistent but flagged as discontinued.', rule: null }
           ];
         }
-        
+
         const callout = h("div", "callout");
         let html = '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>';
         html += '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">';
         cases.forEach(c => {
           if (c.rule) {
             html += '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
-                      '<div style="flex:1; font-size:13px; line-height:1.5;">' + c.text + '</div>' +
-                      '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
-                        '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
-                          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
-                          '<div id="tgl-' + key + '-' + c.id + '" class="toggle' + (STATE["edgeToggles_"+key][c.id] ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
-                        '</div>' +
-                        '<div style="font-size:12px; line-height:1.4;">' + c.rule + '</div>' +
-                      '</div>' +
-                    '</div>';
+              '<div style="flex:1; font-size:13px; line-height:1.5;">' + c.text + '</div>' +
+              '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+              '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+              '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+              '<div id="tgl-' + key + '-' + c.id + '" class="toggle' + (STATE["edgeToggles_" + key][c.id] ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+              '</div>' +
+              '<div style="font-size:12px; line-height:1.4;">' + c.rule + '</div>' +
+              '</div>' +
+              '</div>';
           } else {
             html += '<div style="font-size:13px; line-height:1.5;">' + c.text + '</div>';
           }
@@ -3534,8 +3977,8 @@
         cases.filter(c => c.rule).forEach(c => {
           const el = document.getElementById("tgl-" + key + "-" + c.id);
           el.onclick = () => {
-            STATE["edgeToggles_"+key][c.id] = !STATE["edgeToggles_"+key][c.id];
-            el.className = "toggle" + (STATE["edgeToggles_"+key][c.id] ? " on" : "");
+            STATE["edgeToggles_" + key][c.id] = !STATE["edgeToggles_" + key][c.id];
+            el.className = "toggle" + (STATE["edgeToggles_" + key][c.id] ? " on" : "");
           };
         });
 
@@ -3582,84 +4025,460 @@
       }
     }
 
+    function showSobTooltip(e, title, sub) {
+      let tt = document.getElementById("sob-tooltip");
+      if (!tt) {
+        tt = document.createElement("div");
+        tt.id = "sob-tooltip";
+        tt.style.cssText = "position:fixed; display:none; pointer-events:none; z-index:999999; background:#000000; color:#ffffff; padding:7px 12px; border-radius:6px; font-size:12px; line-height:1.35; box-shadow:0 4px 16px rgba(0,0,0,0.5); transform:translate(-50%, -100%); margin-top:-10px; white-space:nowrap;";
+        document.body.appendChild(tt);
+      }
+      tt.innerHTML = `<div style="font-weight:700; font-size:12px; color:#ffffff;">${escapeHtml(title)}</div><div style="font-size:11px; color:#cbd5e1; margin-top:2px;">${escapeHtml(sub)}</div>`;
+      tt.style.display = "block";
+      tt.style.left = e.clientX + "px";
+      tt.style.top = e.clientY + "px";
+    }
+
+    function moveSobTooltip(e) {
+      const tt = document.getElementById("sob-tooltip");
+      if (tt && tt.style.display === "block") {
+        tt.style.left = e.clientX + "px";
+        tt.style.top = e.clientY + "px";
+      }
+    }
+
+    function hideSobTooltip() {
+      const tt = document.getElementById("sob-tooltip");
+      if (tt) tt.style.display = "none";
+    }
+
+    function sobMixStackedBarChart() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:4px;">Source of Business Mix</div>
+        <div style="font-size:12.5px; color:var(--ink-muted); margin-bottom:18px;">By quarter, % of new/moving Skyrizi activity (excludes Continuing).</div>
+        
+        <!-- Legend -->
+        <div style="display:flex; flex-wrap:wrap; gap:18px; margin-bottom:24px; font-size:12px; font-weight:600; color:var(--ink-secondary);">
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:#10b981; display:inline-block;"></span> New to Brand</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:#2563eb; display:inline-block;"></span> Switch-in from TNF</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:#f97316; display:inline-block;"></span> Switch-in from IL-17</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:#ec4899; display:inline-block;"></span> Switch-in from Oral</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:#64748b; display:inline-block;"></span> Restart</div>
+        </div>
+
+        <!-- 10 Quarters Grid -->
+        <div style="display:grid; grid-template-columns:repeat(10, 1fr); gap:12px; height:340px; border-bottom:1px solid var(--border); padding-bottom:32px; position:relative;">
+          ${[
+            { q: "Q1-23", ntb: 25, tnf: 35, il17: 15, oral: 15, res: 10 },
+            { q: "Q2-23", ntb: 24, tnf: 37, il17: 15, oral: 14, res: 10 },
+            { q: "Q3-23", ntb: 23, tnf: 39, il17: 15, oral: 13, res: 10 },
+            { q: "Q4-23", ntb: 23, tnf: 40, il17: 15, oral: 12, res: 10 },
+            { q: "Q1-24", ntb: 22, tnf: 42, il17: 15, oral: 11, res: 10 },
+            { q: "Q2-24", ntb: 22, tnf: 44, il17: 14, oral: 10, res: 10 },
+            { q: "Q3-24", ntb: 21, tnf: 45, il17: 15, oral: 9, res: 10 },
+            { q: "Q4-24", ntb: 21, tnf: 47, il17: 14, oral: 8, res: 10 },
+            { q: "Q1-25", ntb: 20, tnf: 48, il17: 15, oral: 7, res: 10 },
+            { q: "Q2-25", ntb: 20, tnf: 49, il17: 15, oral: 6, res: 10 }
+          ].map(d => `
+            <div style="display:flex; flex-direction:column; height:100%; position:relative;">
+              <div style="display:flex; flex-direction:column; flex:1; width:100%; border-radius:4px; overflow:hidden;">
+                <div onmouseover="showSobTooltip(event, '${d.q}: New to Brand', '${d.ntb}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.ntb}%; background:#10b981; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.ntb}%</div>
+                <div onmouseover="showSobTooltip(event, '${d.q}: Switch-in from TNF', '${d.tnf}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.tnf}%; background:#2563eb; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.tnf}%</div>
+                <div onmouseover="showSobTooltip(event, '${d.q}: Switch-in from IL-17', '${d.il17}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.il17}%; background:#f97316; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.il17}%</div>
+                <div onmouseover="showSobTooltip(event, '${d.q}: Switch-in from Oral', '${d.oral}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.oral}%; background:#ec4899; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.oral}%</div>
+                <div onmouseover="showSobTooltip(event, '${d.q}: Restart', '${d.res}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.res}%; background:#64748b; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.res}%</div>
+              </div>
+              <div style="position:absolute; bottom:-28px; width:100%; text-align:center; font-size:11.5px; font-weight:600; color:var(--ink-muted);">${d.q}</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      return card;
+    }
+
+    function sobMixCalloutCard() {
+      const el = h("div");
+      el.style.cssText = "border:1px solid #bbf7d0; background:#f0fdf4; border-radius:10px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:14px;";
+      el.innerHTML = `
+        <div style="width:26px; height:26px; border-radius:50%; background:#059669; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">i</div>
+        <div>
+          <div style="font-weight:700; font-size:14px; color:#065f46; margin-bottom:3px;">New to Brand is declining</div>
+          <div style="font-size:13px; color:#047857; line-height:1.4;">New-to-Brand share has fallen from <b>25% to 20%</b> of the active base since Q1-23, with Switch-in filling most of the gap.</div>
+        </div>
+      `;
+      return el;
+    }
+
+    function sobOverviewSankeyChart() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:16px;">Source of Business Overview</div>
+        
+        <div style="width:100%; overflow-x:auto;">
+          <svg viewBox="0 0 900 460" style="width:100%; max-width:900px; height:auto; display:block; font-family:sans-serif;">
+            <defs>
+              <linearGradient id="grad-ntb" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.35"/>
+              </linearGradient>
+              <linearGradient id="grad-tnf" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#2563eb" stop-opacity="0.35"/>
+              </linearGradient>
+              <linearGradient id="grad-il17" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f97316" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#f97316" stop-opacity="0.35"/>
+              </linearGradient>
+              <linearGradient id="grad-oral" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ec4899" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#ec4899" stop-opacity="0.35"/>
+              </linearGradient>
+
+              <linearGradient id="grad-out-cont" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#64748b" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#64748b" stop-opacity="0.6"/>
+              </linearGradient>
+              <linearGradient id="grad-out-tnf" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#2563eb" stop-opacity="0.6"/>
+              </linearGradient>
+              <linearGradient id="grad-out-il17" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f97316" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#f97316" stop-opacity="0.6"/>
+              </linearGradient>
+              <linearGradient id="grad-out-oral" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ec4899" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#ec4899" stop-opacity="0.6"/>
+              </linearGradient>
+              <linearGradient id="grad-out-disc" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#dc2626" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#dc2626" stop-opacity="0.6"/>
+              </linearGradient>
+            </defs>
+
+            <!-- LEFT RIBBONS -->
+            <path d="M 190 55 C 290 55, 300 55, 395 55 L 395 137 C 300 137, 290 125, 190 125 Z" fill="url(#grad-ntb)" onmouseover="showSobTooltip(event, 'New to Brand → Skyrizi', '23% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 190 145 C 290 145, 300 137, 395 137 L 395 324 C 300 324, 290 305, 190 305 Z" fill="url(#grad-tnf)" onmouseover="showSobTooltip(event, 'Switch-in from TNF → Skyrizi', '52% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 190 325 C 290 325, 300 324, 395 324 L 395 382 C 300 382, 290 385, 190 385 Z" fill="url(#grad-il17)" onmouseover="showSobTooltip(event, 'Switch-in from IL-17 → Skyrizi', '16% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 190 395 C 290 395, 300 382, 395 382 L 395 415 C 300 415, 290 425, 190 425 Z" fill="url(#grad-oral)" onmouseover="showSobTooltip(event, 'Switch-in from Oral → Skyrizi', '9% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+
+            <!-- RIGHT RIBBONS -->
+            <path d="M 495 55 C 590 55, 600 55, 695 55 L 695 271 C 600 271, 590 271, 495 271 Z" fill="url(#grad-out-cont)" onmouseover="showSobTooltip(event, 'Skyrizi → Continuing', '60% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 495 271 C 590 271, 600 290, 695 290 L 695 308 C 600 308, 590 289, 495 289 Z" fill="url(#grad-out-tnf)" onmouseover="showSobTooltip(event, 'Skyrizi → Switch-out to TNF', '5% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 495 289 C 590 289, 600 322, 695 322 L 695 344 C 600 344, 590 311, 495 311 Z" fill="url(#grad-out-il17)" onmouseover="showSobTooltip(event, 'Skyrizi → Switch-out to IL-17', '6% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 495 311 C 590 311, 600 356, 695 356 L 695 415 C 600 415, 590 401, 495 401 Z" fill="url(#grad-out-oral)" onmouseover="showSobTooltip(event, 'Skyrizi → Switch-out to Oral', '25% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+            <path d="M 495 401 C 590 401, 600 422, 695 422 L 695 430 C 600 430, 590 415, 495 415 Z" fill="url(#grad-out-disc)" onmouseover="showSobTooltip(event, 'Skyrizi → Discontinued', '4% of Skyrizi')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer; transition:opacity 0.2s;" />
+
+            <!-- LEFT NODES -->
+            <rect x="50" y="55" width="140" height="70" rx="4" fill="#10b981" onmouseover="showSobTooltip(event, 'New to Brand', '23% of Skyrizi inflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="50" y="42" font-size="12" font-weight="700" fill="#0f172a">New to Brand</text>
+            <text x="120" y="96" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">23%</text>
+
+            <rect x="50" y="145" width="140" height="160" rx="4" fill="#2563eb" onmouseover="showSobTooltip(event, 'Switch-in from TNF', '52% of Skyrizi inflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="50" y="138" font-size="12" font-weight="700" fill="#0f172a">Switch-in from TNF</text>
+            <text x="120" y="232" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">52%</text>
+
+            <rect x="50" y="325" width="140" height="60" rx="4" fill="#f97316" onmouseover="showSobTooltip(event, 'Switch-in from IL-17', '16% of Skyrizi inflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="50" y="318" font-size="12" font-weight="700" fill="#0f172a">Switch-in from IL-17</text>
+            <text x="120" y="361" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">16%</text>
+
+            <rect x="50" y="395" width="140" height="30" rx="4" fill="#ec4899" onmouseover="showSobTooltip(event, 'Switch-in from Oral', '9% of Skyrizi inflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="50" y="390" font-size="12" font-weight="700" fill="#0f172a">Switch-in from Oral</text>
+            <text x="120" y="415" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">9%</text>
+
+            <!-- CENTER NODE -->
+            <rect x="395" y="55" width="100" height="360" rx="10" fill="#0f2942" onmouseover="showSobTooltip(event, 'Skyrizi', '100% Index Drug (7,400 active patients)')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="445" y="230" font-size="16" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">Skyrizi</text>
+            <text x="445" y="252" font-size="13" font-weight="700" fill="#ffffff" text-opacity="0.9" text-anchor="middle" style="pointer-events:none;">100%</text>
+
+            <!-- RIGHT NODES -->
+            <rect x="695" y="55" width="140" height="216" rx="4" fill="#78716c" onmouseover="showSobTooltip(event, 'Continuing', '60% of Skyrizi outflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="835" y="42" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">Continuing</text>
+            <text x="765" y="168" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">60%</text>
+
+            <rect x="695" y="290" width="140" height="18" rx="3" fill="#2563eb" onmouseover="showSobTooltip(event, 'Switch-out to TNF', '5% of Skyrizi outflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="835" y="284" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">Switch-out to TNF</text>
+            <text x="765" y="304" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">5%</text>
+
+            <rect x="695" y="322" width="140" height="22" rx="3" fill="#f97316" onmouseover="showSobTooltip(event, 'Switch-out to IL-17', '6% of Skyrizi outflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="835" y="316" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">Switch-out to IL-17</text>
+            <text x="765" y="338" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">6%</text>
+
+            <rect x="695" y="356" width="140" height="59" rx="4" fill="#ec4899" onmouseover="showSobTooltip(event, 'Switch-out to Oral', '25% of Skyrizi outflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="835" y="350" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">Switch-out to Oral</text>
+            <text x="765" y="391" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" style="pointer-events:none;">25%</text>
+
+            <rect x="695" y="422" width="140" height="8" rx="2" fill="#dc2626" onmouseover="showSobTooltip(event, 'Discontinued', '4% of Skyrizi outflow')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="cursor:pointer;" />
+            <text x="835" y="420" font-size="12" font-weight="700" fill="#0f172a" text-anchor="end">Discontinued</text>
+          </svg>
+        </div>
+      `;
+      return card;
+    }
+
+    function sobOverviewCalloutCard() {
+      const el = h("div");
+      el.style.cssText = "border:1px solid #fde68a; background:#fffbeb; border-radius:10px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:14px;";
+      el.innerHTML = `
+        <div style="width:24px; height:24px; border-radius:6px; background:#d97706; color:#fff; font-weight:900; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">!</div>
+        <div>
+          <div style="font-weight:700; font-size:14px; color:#78350f; margin-bottom:3px;">Oral systemics is the one class moving the wrong way</div>
+          <div style="font-size:13px; color:#92400e; line-height:1.5;"><b>-16.7 pts</b> switching in from Oral (vs. 25.7% avg switch-in share) and <b>+13 pts</b> switching out to Oral (vs. 12.0% avg switch-out share) — a net negative flow for that class specifically, unlike TNF or IL-17.</div>
+        </div>
+      `;
+      return el;
+    }
+
     function switchResultsBlock() {
       const frag = document.createDocumentFragment();
-      const s = DATA.switch;
-      frag.appendChild(statTiles([
-        { label: "Systemic-therapy population", value: fmt(s.totals.population), sub: "eligible for switch analysis" },
-        { label: "Switched within 12 mo", value: pct(s.totals.switched, s.totals.population) + "%", sub: fmt(s.totals.switched) + " patients" },
-        { label: "Avg. time to switch", value: s.totals.avgDaysToSwitch + " days", sub: "≈ 6.2 months" },
-        { label: "Switched a different MOA", value: s.totals.pctMoaSwitch + "%", sub: "vs. 18% same-class" }
-      ]));
-      frag.appendChild(sankeyChart({
-        title: "Where patients go after their index therapy",
-        subtitle: "Flow from index drug class to 12-month outcome. Ribbon width = patient count.",
-        left: s.classes.map(c => ({ label: c.label, value: c.total, color: c.color })),
-        right: [
-          { label: "Remained on Index Therapy", value: s.totals.remained },
-          { label: "Switched to Another Class", value: s.totals.switched },
-          { label: "Discontinued, No Further Therapy", value: s.totals.discontinued }
-        ],
-        links: s.classes.flatMap((c, i) => [
-          { fromIdx: i, toIdx: 0, value: c.remained, color: c.color },
-          { fromIdx: i, toIdx: 1, value: c.switched, color: c.color },
-          { fromIdx: i, toIdx: 2, value: c.discontinued, color: c.color }
-        ])
-      }));
-      frag.appendChild(barChart({
-        title: "Switch rate by index drug class",
-        subtitle: "Share of each class's patients who switched to a different class within 12 months.",
-        unit: "pct",
-        data: s.classes.map(c => ({ label: c.label + " (" + c.brands + ")", value: +pct(c.switched, c.total), color: c.color }))
-      }));
-      frag.appendChild(pairsTable({ title: "Top switch destinations", subtitle: "Most common drug-to-drug moves among switchers.", rows: s.topPairs }));
+      frag.appendChild(sobMixStackedBarChart());
+      frag.appendChild(sobMixCalloutCard());
+      frag.appendChild(sobOverviewSankeyChart());
+      frag.appendChild(sobOverviewCalloutCard());
       return frag;
+    }
+
+    function complianceStatTiles() {
+      const row = h("div");
+      row.style.cssText = "display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;";
+      row.innerHTML = `
+        <div class="card" style="padding:18px 24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">SKYRIZI — COMPLIANCE RATE</div>
+          <div style="font-size:32px; font-weight:800; color:var(--navy-900); line-height:1.1; margin-bottom:4px;">58.5%</div>
+          <div style="font-size:12.5px; color:var(--ink-muted); font-weight:500;">PDC ≥0.80</div>
+        </div>
+        <div class="card" style="padding:18px 24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">BEST COMPETITOR</div>
+          <div style="font-size:26px; font-weight:800; color:var(--navy-900); line-height:1.15; margin-bottom:4px;">Sotyktu (Oral)</div>
+          <div style="font-size:12.5px; color:var(--ink-muted); font-weight:500;">74% compliant</div>
+        </div>
+      `;
+      return row;
+    }
+
+    function compliancePdcHistogramCard() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+      
+      const bins = [
+        { bin: "0.0–0.1", val: 10.0, isComp: false },
+        { bin: "0.1–0.2", val: 7.5, isComp: false },
+        { bin: "0.2–0.3", val: 6.5, isComp: false },
+        { bin: "0.3–0.4", val: 7.0, isComp: false },
+        { bin: "0.4–0.5", val: 8.5, isComp: false },
+        { bin: "0.5–0.6", val: 11.0, isComp: false },
+        { bin: "0.6–0.7", val: 15.5, isComp: false },
+        { bin: "0.7–0.8", val: 24.0, isComp: false },
+        { bin: "0.8–0.9", val: 48.0, isComp: true },
+        { bin: "0.9–1.0", val: 85.0, isComp: true }
+      ];
+
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:4px;">Distribution of Proportion of Days Covered (PDC)</div>
+        <div style="font-size:12.5px; color:var(--ink-muted); margin-bottom:24px;">Skyrizi patients — non-compliant (PDC < 0.80) vs. compliant (PDC ≥ 0.80).</div>
+
+        <!-- Histogram Bars Container -->
+        <div style="position:relative; height:260px; padding-bottom:32px; border-bottom:1px solid var(--border); display:grid; grid-template-columns:repeat(10, 1fr); gap:10px; align-items:end;">
+          <!-- Gridlines -->
+          <div style="position:absolute; top:0; left:0; right:0; border-top:1px dashed #e2e8f0; pointer-events:none;"></div>
+          <div style="position:absolute; top:33%; left:0; right:0; border-top:1px dashed #e2e8f0; pointer-events:none;"></div>
+          <div style="position:absolute; top:66%; left:0; right:0; border-top:1px dashed #e2e8f0; pointer-events:none;"></div>
+
+          ${bins.map(b => {
+            const pctHeight = (b.val / 90) * 100;
+            const bg = b.isComp ? "#10b981" : "#ef4444";
+            const label = b.isComp ? "Compliant (≥0.80)" : "Non-compliant (<0.80)";
+            return `
+              <div style="display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; position:relative; z-index:1;">
+                <div onmouseover="showSobTooltip(event, 'PDC Range: ${b.bin}', '${b.val}% of Skyrizi patients (${label})')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="width:100%; height:${pctHeight}%; background:${bg}; border-radius:6px; cursor:pointer; transition:filter 0.2s;" onmouseenter="this.style.filter='brightness(1.1)'" onmouseleave="this.style.filter='none'"></div>
+                <div style="position:absolute; bottom:-28px; font-size:11px; font-weight:600; color:var(--ink-muted); white-space:nowrap;">${b.bin}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex; gap:20px; margin-top:36px; font-size:12px; font-weight:600; color:var(--ink-secondary);">
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:2px; background:#ef4444; display:inline-block;"></span> Non-compliant (<0.80)</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:2px; background:#10b981; display:inline-block;"></span> Compliant (≥0.80)</div>
+        </div>
+      `;
+      return card;
+    }
+
+    function complianceByBrandCard() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+
+      const brands = [
+        { name: "Sotyktu (Oral)", val: 74.0, color: "#4f46e5" },
+        { name: "Cosentyx (IL-17)", val: 62.0, color: "#ea580c" },
+        { name: "Stelara (IL-12/23)", val: 60.0, color: "#d97706" },
+        { name: "Skyrizi (IL-23)", val: 58.5, color: "#0f2942" },
+        { name: "Humira (TNF)", val: 54.0, color: "#2563eb" },
+        { name: "Otezla (Oral)", val: 47.0, color: "#ec4899" }
+      ];
+
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:20px;">Compliance Rate, by Brand</div>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          ${brands.map(b => `
+            <div style="display:flex; align-items:center; gap:16px;">
+              <div style="width:140px; text-align:right; font-size:12.5px; font-weight:600; color:var(--ink-secondary); flex-shrink:0;">${b.name}</div>
+              <div style="flex:1; background:#f1f5f9; height:24px; border-radius:6px; overflow:hidden; position:relative;" onmouseover="showSobTooltip(event, '${b.name}', '${b.val}% compliant patients (PDC ≥0.80)')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()">
+                <div style="width:${b.val}%; height:100%; background:${b.color}; border-radius:6px; cursor:pointer; transition:filter 0.2s;" onmouseenter="this.style.filter='brightness(1.1)'" onmouseleave="this.style.filter='none'"></div>
+              </div>
+              <div style="width:50px; font-size:12.5px; font-weight:800; color:var(--navy-900); flex-shrink:0;">${b.val.toFixed(1)}%</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      return card;
+    }
+
+    function complianceCalloutCard() {
+      const el = h("div");
+      el.style.cssText = "border:1px solid #99f6e4; background:#f0fdfa; border-radius:10px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:14px;";
+      el.innerHTML = `
+        <div style="width:26px; height:26px; border-radius:50%; background:#0d9488; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">i</div>
+        <div>
+          <div style="font-weight:700; font-size:14px; color:#115e59; margin-bottom:3px;">Skyrizi trails compared to Orals</div>
+          <div style="font-size:13px; color:#134e4a; line-height:1.4;">Skyrizi's compliance rate (58.5%) sits below Sotyktu (Oral) (74%) — worth a closer look at what's driving the gap.</div>
+        </div>
+      `;
+      return el;
     }
 
     function adherenceResultsBlock() {
       const frag = document.createDocumentFragment();
-      const a = DATA.adherence;
-      frag.appendChild(statTiles([
-        { label: "Compliance population", value: fmt(a.population), sub: "≥2 fills, continuously enrolled" },
-        { label: "Mean PDC", value: a.meanPDC.toFixed(2), sub: "proportion of days covered" },
-        { label: "Compliant (PDC ≥0.80)", value: a.pctAdherent + "%", sub: fmt(a.population * a.pctAdherent / 100) + " patients" },
-        { label: "Non-compliant", value: a.pctNonAdherent + "%", sub: fmt(a.population * a.pctNonAdherent / 100) + " patients" }
-      ]));
-      frag.appendChild(histogram({
-        title: "Distribution of Proportion of Days Covered (PDC)",
-        subtitle: "Non-compliant (PDC < 0.80) vs. compliant (PDC ≥ 0.80).",
-        bins: a.histogram, splitIndex: 8, splitColors: ["var(--series-8)", "var(--series-3)"], splitLabels: ["Non-compliant (<0.80)", "Compliant (≥0.80)"]
-      }));
-      frag.appendChild(barChart({
-        title: "Compliance rate by drug class",
-        subtitle: "% of patients compliant (PDC ≥0.80), by index drug class.",
-        unit: "pct",
-        data: a.byClass
-      }));
-      const callout = h("div", "callout teal");
-      callout.innerHTML = '<div class="callout-head"><div class="callout-icon">i</div><b>Dosing frequency looks like a key driver</b></div><div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;">Patients on IL-23 inhibitors — typically dosed every 8–12 weeks — show materially higher compliance than those on weekly or biweekly agents. This lines up with the switch analysis: patients are moving toward less-frequently-dosed therapies.</div>';
-      frag.appendChild(callout);
+      frag.appendChild(complianceStatTiles());
+      frag.appendChild(compliancePdcHistogramCard());
+      frag.appendChild(complianceByBrandCard());
+      frag.appendChild(complianceCalloutCard());
       return frag;
+    }
+
+    function persistenceStatTiles() {
+      const row = h("div");
+      row.style.cssText = "display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;";
+      row.innerHTML = `
+        <div class="card" style="padding:18px 24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">SKYRIZI — MEDIAN PERSISTENCE</div>
+          <div style="font-size:32px; font-weight:800; color:var(--navy-900); line-height:1.1; margin-bottom:4px;">10.5 mo</div>
+          <div style="font-size:12.5px; color:var(--ink-muted); font-weight:500;">time to discontinuation</div>
+        </div>
+        <div class="card" style="padding:18px 24px;">
+          <div style="font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">BEST COMPETITOR</div>
+          <div style="font-size:26px; font-weight:800; color:var(--navy-900); line-height:1.15; margin-bottom:4px;">Sotyktu (Oral)</div>
+          <div style="font-size:12.5px; color:var(--ink-muted); font-weight:500;">15.5 mo median</div>
+        </div>
+      `;
+      return row;
+    }
+
+    function persistenceByBrandCurveCard() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+
+      const months = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+      const series = [
+        { name: "Sotyktu (Oral)", median: "15.5 mo", color: "#4f46e5", values: [100, 97, 92, 88, 84, 80, 76, 73, 69] },
+        { name: "Cosentyx (IL-17)", median: "11.2 mo", color: "#ea580c", values: [100, 88, 83, 74, 66, 59, 53, 48, 44] },
+        { name: "Skyrizi (IL-23)", median: "10.5 mo", color: "#0f2942", values: [100, 86, 80, 70, 62, 55, 49, 44, 40] },
+        { name: "Stelara (IL-12/23)", median: "9 mo", color: "#d97706", values: [100, 84, 75, 65, 55, 48, 42, 37, 33] },
+        { name: "Humira (TNF)", median: "7.8 mo", color: "#2563eb", values: [100, 84, 76, 65, 56, 49, 43, 38, 34] },
+        { name: "Otezla (Oral)", median: "6.2 mo", color: "#ec4899", values: [100, 82, 66, 54, 45, 38, 32, 27, 23] }
+      ];
+
+      const w = 850, hgt = 340, padL = 50, padR = 30, padT = 30, padB = 40;
+      const plotW = w - padL - padR;
+      const plotH = hgt - padT - padB;
+
+      let svgContent = `<svg viewBox="0 0 ${w} ${hgt}" style="width:100%; height:auto; display:block; font-family:sans-serif;">`;
+
+      // Y-axis gridlines & labels (0%, 25%, 50%, 75%, 100%)
+      [0, 25, 50, 75, 100].forEach(v => {
+        const y = padT + (1 - v / 100) * plotH;
+        svgContent += `<line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="3,3" />`;
+        svgContent += `<text x="${padL - 10}" y="${y + 4}" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="end">${v}%</text>`;
+      });
+
+      // X-axis labels (0, 3, 6, 9, 12, 15, 18, 21, 24)
+      months.forEach((m, idx) => {
+        const x = padL + (idx / (months.length - 1)) * plotW;
+        svgContent += `<text x="${x}" y="${hgt - 12}" font-size="12" font-weight="600" fill="#64748b" text-anchor="middle">${m}</text>`;
+      });
+
+      // Draw series lines and dots
+      series.forEach(s => {
+        let pathD = "";
+        const points = [];
+        s.values.forEach((v, idx) => {
+          const x = padL + (idx / (months.length - 1)) * plotW;
+          const y = padT + (1 - v / 100) * plotH;
+          pathD += (idx === 0 ? "M " : " L ") + x.toFixed(1) + " " + y.toFixed(1);
+          points.push({ x, y, v, m: months[idx] });
+        });
+
+        // Path
+        svgContent += `<path d="${pathD}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />`;
+
+        // Dots with tooltips
+        points.forEach(p => {
+          svgContent += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="${s.color}" stroke="#ffffff" stroke-width="1.5" style="cursor:pointer;" onmouseover="showSobTooltip(event, '${s.name}', 'Month ${p.m}: ${p.v}% persisting (median ${s.median})')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" />`;
+        });
+      });
+
+      svgContent += `</svg>`;
+
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:4px;">Time-to-Discontinuation, by Brand</div>
+        <div style="font-size:12.5px; color:var(--ink-muted); margin-bottom:20px;">% of patients still on therapy over time.</div>
+
+        <div style="width:100%; overflow-x:auto; margin-bottom:20px;">
+          ${svgContent}
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex; flex-wrap:wrap; gap:16px; font-size:12px; font-weight:600; color:var(--ink-secondary);">
+          ${series.map(s => `
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:10px; height:10px; border-radius:50%; background:${s.color}; display:inline-block;"></span>
+              <span>${s.name} <span style="color:var(--ink-muted); font-weight:500;">(median ${s.median})</span></span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      return card;
+    }
+
+    function persistenceCalloutCard() {
+      const el = h("div");
+      el.style.cssText = "border:1px solid #99f6e4; background:#f0fdfa; border-radius:10px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:14px;";
+      el.innerHTML = `
+        <div style="width:26px; height:26px; border-radius:50%; background:#0d9488; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">i</div>
+        <div>
+          <div style="font-weight:700; font-size:14px; color:#115e59; margin-bottom:3px;">Skyrizi trails compared to Orals</div>
+          <div style="font-size:13px; color:#134e4a; line-height:1.4;">Skyrizi's median persistence (10.5 months) sits below Sotyktu (Oral) (15.5 months) — worth checking whether the same gap shows up in day-to-day compliance.</div>
+        </div>
+      `;
+      return el;
     }
 
     function persistenceResultsBlock() {
       const frag = document.createDocumentFragment();
-      const p = DATA.persistence;
-      frag.appendChild(statTiles([
-        { label: "Median persistence", value: p.medianMonths + " mo", sub: "all systemic therapies" },
-        { label: "Persisting at 12 mo", value: p.pct12mo + "%", sub: "of the analysis population" },
-        { label: "Persisting at 24 mo", value: p.pct24mo + "%", sub: "of the analysis population" },
-        { label: "Best-performing class", value: "IL-23", sub: p.series[0].medianMonths + " mo median" }
-      ]));
-      frag.appendChild(kmChart({
-        title: "Time-to-discontinuation, by drug class",
-        subtitle: "% of patients still on therapy over time (Kaplan–Meier style persistence curve).",
-        months: p.months, series: p.series
-      }));
-      frag.appendChild(barChart({
-        title: "Median months on therapy, by drug class",
-        data: p.series.map(s => ({ label: s.label, value: s.medianMonths, color: s.color }))
-      }));
+      frag.appendChild(persistenceStatTiles());
+      frag.appendChild(persistenceByBrandCurveCard());
+      frag.appendChild(persistenceCalloutCard());
       return frag;
     }
 

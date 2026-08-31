@@ -1,0 +1,1269 @@
+
+    /* ============================================================
+       DATA
+    ============================================================ */
+    const DATA = {
+      cohortV1: {
+        label: "Initial Run",
+        kpis: { total: 184320, avgAge: 47.3, pctFemale: 58.1, avgFollowup: 14.2 },
+        funnel: [
+          { label: "Members with ≥1 PsO diagnosis claim", value: 512940 },
+          { label: "≥2 qualifying diagnosis claims", value: 398110 },
+          { label: "Age ≥ 18 at index", value: 391560 },
+          { label: "Continuous enrollment met", value: 256780 },
+          { label: "Treatment evidence within 90 days", value: 201430 },
+          { label: "Final cohort (post-exclusions)", value: 184320 }
+        ],
+        age: [{ label: "18–34", value: 14 }, { label: "35–49", value: 33 }, { label: "50–64", value: 35 }, { label: "65+", value: 18 }],
+        gender: [{ label: "Female", value: 58.1 }, { label: "Male", value: 41.9 }],
+        payer: [{ label: "Commercial", value: 61 }, { label: "Medicare", value: 24 }, { label: "Medicaid", value: 15 }],
+        region: [{ label: "South", value: 37 }, { label: "Midwest", value: 24 }, { label: "Northeast", value: 21 }, { label: "West", value: 18 }],
+        lot: [{ label: "Topical only", value: 42 }, { label: "Oral systemic", value: 18 }, { label: "Biologic — naive start", value: 31 }, { label: "Biologic — experienced", value: 9 }]
+      },
+      cohortV2: {
+        label: "Refined Run",
+        kpis: { total: 162480, avgAge: 47.6, pctFemale: 57.4, avgFollowup: 14.6 },
+        funnel: [
+          { label: "Members with ≥1 PsO diagnosis claim", value: 512940 },
+          { label: "≥2 claims, ≥30 days apart, different providers", value: 372050 },
+          { label: "Age ≥ 18 at index", value: 366110 },
+          { label: "Continuous enrollment met", value: 240920 },
+          { label: "Treatment evidence within 90 days", value: 189870 },
+          { label: "Final cohort (post-exclusions, incl. competing dx)", value: 162480 }
+        ],
+        age: [{ label: "18–34", value: 13 }, { label: "35–49", value: 33 }, { label: "50–64", value: 36 }, { label: "65+", value: 18 }],
+        gender: [{ label: "Female", value: 57.4 }, { label: "Male", value: 42.6 }],
+        payer: [{ label: "Commercial", value: 62 }, { label: "Medicare", value: 23 }, { label: "Medicaid", value: 15 }],
+        region: [{ label: "South", value: 36 }, { label: "Midwest", value: 25 }, { label: "Northeast", value: 21 }, { label: "West", value: 18 }],
+        lot: [{ label: "Topical only", value: 39 }, { label: "Oral systemic", value: 19 }, { label: "Biologic — naive start", value: 33 }, { label: "Biologic — experienced", value: 9 }]
+      },
+      switch: {
+        classes: [
+          { key: "tnf", label: "TNF inhibitors", brands: "Humira, Enbrel", color: "var(--series-1)", total: 27690, switched: 6730, discontinued: 2900, remained: 18060 },
+          { key: "il17", label: "IL-17 inhibitors", brands: "Cosentyx, Taltz", color: "var(--series-2)", total: 23740, switched: 4535, discontinued: 2260, remained: 16945 },
+          { key: "il23", label: "IL-23 inhibitors", brands: "Skyrizi, Tremfya, Ilumya", color: "var(--series-3)", total: 30660, switched: 2880, discontinued: 2330, remained: 25450 },
+          { key: "il1223", label: "IL-12/23 inhibitor", brands: "Stelara", color: "var(--series-4)", total: 8900, switched: 2000, discontinued: 890, remained: 6010 },
+          { key: "oral", label: "Oral systemics", brands: "Otezla, Sotyktu", color: "var(--series-5)", total: 7910, switched: 2065, discontinued: 1190, remained: 4655 }
+        ],
+        totals: { population: 98900, switched: 18220, remained: 71120, discontinued: 9580, avgDaysToSwitch: 187, pctMoaSwitch: 82 },
+        topPairs: [
+          { from: "Humira", fromClass: "TNF", to: "Skyrizi", toClass: "IL-23", value: 3840, color: "var(--series-1)" },
+          { from: "Enbrel", fromClass: "TNF", to: "Cosentyx", toClass: "IL-17", value: 2110, color: "var(--series-1)" },
+          { from: "Cosentyx", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1950, color: "var(--series-2)" },
+          { from: "Stelara", fromClass: "IL-12/23", to: "Tremfya", toClass: "IL-23", value: 1480, color: "var(--series-4)" },
+          { from: "Otezla", fromClass: "Oral", to: "Skyrizi", toClass: "IL-23", value: 1260, color: "var(--series-5)" },
+          { from: "Taltz", fromClass: "IL-17", to: "Skyrizi", toClass: "IL-23", value: 1120, color: "var(--series-2)" },
+          { from: "All other combinations", fromClass: "—", to: "—", toClass: "", value: 6460, color: "var(--ink-muted)" }
+        ]
+      },
+      adherence: {
+        population: 93400, meanPDC: 0.74, pctAdherent: 61.4, pctNonAdherent: 38.6,
+        histogram: [
+          { label: "0.0–0.1", value: 5400 }, { label: "0.1–0.2", value: 3100 }, { label: "0.2–0.3", value: 2200 }, { label: "0.3–0.4", value: 2600 },
+          { label: "0.4–0.5", value: 3300 }, { label: "0.5–0.6", value: 4650 }, { label: "0.6–0.7", value: 6900 }, { label: "0.7–0.8", value: 7900 },
+          { label: "0.8–0.9", value: 19850 }, { label: "0.9–1.0", value: 37500 }
+        ],
+        byClass: [
+          { label: "IL-23 inhibitors", value: 68.4, color: "var(--series-3)" },
+          { label: "IL-12/23 inhibitor", value: 61.0, color: "var(--series-4)" },
+          { label: "IL-17 inhibitors", value: 59.8, color: "var(--series-2)" },
+          { label: "TNF inhibitors", value: 55.2, color: "var(--series-1)" },
+          { label: "Oral systemics", value: 49.3, color: "var(--series-5)" }
+        ]
+      },
+      persistence: {
+        medianMonths: 9.4, pct12mo: 58, pct24mo: 34,
+        months: [0, 3, 6, 9, 12, 15, 18, 21, 24],
+        series: [
+          { label: "IL-23 inhibitors", color: "var(--series-3)", values: [100, 95, 89, 82, 76, 71, 66, 62, 58], medianMonths: 13.6 },
+          { label: "IL-17 inhibitors", color: "var(--series-2)", values: [100, 91, 81, 71, 63, 56, 50, 45, 41], medianMonths: 9.1 },
+          { label: "TNF inhibitors", color: "var(--series-1)", values: [100, 88, 76, 65, 56, 49, 43, 38, 34], medianMonths: 7.8 },
+          { label: "Oral systemics", color: "var(--series-5)", values: [100, 82, 66, 54, 45, 38, 32, 27, 23], medianMonths: 6.2 }
+        ]
+      }
+    };
+
+    const COHORT_RULES_V1 = () => ([
+      { id: cid(), category: "Diagnosis", text: "At least 2 medical claims with ICD-10 L40.0 (Psoriasis vulgaris) or L40.9 (Psoriasis, unspecified) on different dates within a 12-month period", active: true },
+      { id: cid(), category: "Demographics", text: "Age ≥ 18 years as of index date", active: true },
+      { id: cid(), category: "Enrollment", text: "Continuous medical & pharmacy enrollment for ≥ 6 months pre-index and ≥ 12 months post-index", active: true },
+      { id: cid(), category: "Index Date", text: "Date of the first qualifying PsO diagnosis claim, between Jan 2023 and Dec 2025", active: true },
+      { id: cid(), category: "Treatment", text: "At least one pharmacy or medical claim for a topical, oral systemic, or biologic PsO therapy within 90 days of index", active: true },
+      { id: cid(), category: "Exclusion", text: "Exclude patients with only a psoriatic arthritis code (L40.5) and no plaque psoriasis code", active: true },
+      { id: cid(), category: "Exclusion", text: "Exclude patients with a pregnancy-related claim during the observation window", active: true }
+    ]);
+
+    const COHORT_RULES_V2_PATCH = (rules) => {
+      const r = rules.map(x => ({ ...x }));
+      const dx = r.find(x => x.category === "Diagnosis");
+      if (dx) dx.text = "At least 2 medical claims with ICD-10 L40.0 or L40.9, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
+      r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index", active: true });
+      return r;
+    };
+
+    const SWITCH_RULES = () => ([
+      { id: cid(), category: "Index Therapy", text: "First claim for a systemic PsO therapy (biologic or oral systemic) within the confirmed cohort — defines the index drug and drug class", active: true },
+      { id: cid(), category: "Drug Classes", text: "Track 5 classes: TNF inhibitors, IL-17 inhibitors, IL-23 inhibitors, IL-12/23 inhibitor, Oral systemics", active: true },
+      { id: cid(), category: "Switch Definition", text: "A claim for a different drug class within 90 days of the index drug's last supply end, with no further index-drug claim in the following 60 days", active: true },
+      { id: cid(), category: "Switch Window", text: "12 months post-index", active: true },
+      { id: cid(), category: "Restart Logic", text: "If the gap before the new claim exceeds 180 days, classify as a restart rather than a switch", active: true },
+      { id: cid(), category: "Augmentation Logic", text: "If the index drug claim continues concurrently with the new drug for more than 60 days, classify as augmentation rather than a switch", active: true }
+    ]);
+
+    const ADHERENCE_RULES = () => ([
+      { id: cid(), category: "Metric", text: "Proportion of Days Covered (PDC) over a 12-month measurement period following index fill", active: true },
+      { id: cid(), category: "Population", text: "Patients with ≥2 fills of the index drug and continuous enrollment through the measurement period", active: true },
+      { id: cid(), category: "Adherent Threshold", text: "PDC ≥ 0.80 (PQA-aligned threshold)", active: true },
+      { id: cid(), category: "Grace Period", text: "Allow a 30-day gap between fills before treating it as a supply gap", active: true },
+      { id: cid(), category: "Handling Switches", text: "Patients who switch therapy during the measurement window are analyzed separately in the switch analysis and excluded here", active: true }
+    ]);
+
+    const PERSISTENCE_RULES = () => ([
+      { id: cid(), category: "Definition", text: "Time from index fill to discontinuation, where discontinuation = a gap ≥60 days beyond days' supply with no refill of the same or a new therapy", active: true },
+      { id: cid(), category: "Censoring", text: "Patients still on therapy at the end of data availability are censored at their last observed date", active: true },
+      { id: cid(), category: "Measurement Period", text: "Up to 24 months post-index", active: true },
+      { id: cid(), category: "Switch Handling", text: "A switch to a new drug class after discontinuation starts a new persistence episode for the new drug, not a continuation of the old one", active: true }
+    ]);
+
+    let CID = 1;
+    function cid() { return "r" + (CID++); }
+
+    /* ============================================================
+       STATE + UTIL
+    ============================================================ */
+    const STATE = { cohortRuleset: null, cohortRunNum: 0, completedAnalyses: [], businessAsked: false };
+    function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+    function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+    function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+    function pct(n, d) { return ((n / d) * 100).toFixed(1); }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._h);
+      toast._h = setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    /* ============================================================
+       CHAT ENGINE
+    ============================================================ */
+    const chatEl = document.getElementById("chat-messages");
+    const chipsEl = document.getElementById("chips-row");
+    let freeTextHandler = null;
+
+    function scrollChatBottom() { chatEl.scrollTop = chatEl.scrollHeight + 200; }
+
+    function addMessage(from, html) {
+      const div = document.createElement("div");
+      div.className = "msg msg-" + from;
+      if (from === "ai") {
+        div.innerHTML = '<div class="avatar ai-avatar">AI</div><div class="bubble">' + html + '</div>';
+      } else {
+        div.innerHTML = '<div class="bubble">' + html + '</div><div class="avatar user-avatar">U</div>';
+      }
+      chatEl.appendChild(div);
+      scrollChatBottom();
+    }
+
+    function showTyping() {
+      const t = document.createElement("div");
+      t.className = "msg msg-ai";
+      t.id = "typing-indicator";
+      t.innerHTML = '<div class="avatar ai-avatar">AI</div><div class="bubble typing-bubble"><span></span><span></span><span></span></div>';
+      chatEl.appendChild(t);
+      scrollChatBottom();
+    }
+    function hideTyping() { const t = document.getElementById("typing-indicator"); if (t) t.remove(); }
+
+    async function aiSay(html, delay) {
+      showTyping();
+      await sleep(delay === undefined ? 900 : delay);
+      hideTyping();
+      addMessage("ai", html);
+    }
+    function userSay(text) { addMessage("user", escapeHtml(text)); }
+
+    function setChips(list) {
+      chipsEl.innerHTML = "";
+      (list || []).forEach(c => {
+        const b = document.createElement("button");
+        b.className = "chip" + (c.primary ? " chip-primary" : "") + (c.muted ? " chip-muted" : "");
+        b.textContent = c.label;
+        b.onclick = () => { chipsEl.innerHTML = ""; freeTextHandler = null; c.onClick(); };
+        chipsEl.appendChild(b);
+      });
+    }
+
+    document.getElementById("chat-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("chat-input");
+      const val = input.value.trim();
+      if (!val) return;
+      userSay(val);
+      input.value = "";
+      chipsEl.innerHTML = "";
+      if (freeTextHandler) { const fn = freeTextHandler; freeTextHandler = null; fn(); }
+      else { toast("Noted — continuing with the guided walkthrough."); }
+    });
+
+    /* ============================================================
+       RIGHT PANEL RENDERING
+    ============================================================ */
+    const panelInner = document.getElementById("panel-inner");
+    function renderPanel(nodeOrHtml) {
+      panelInner.classList.remove("panel-inner");
+      void panelInner.offsetWidth;
+      panelInner.classList.add("panel-inner");
+      if (typeof nodeOrHtml === "string") { panelInner.innerHTML = nodeOrHtml; }
+      else { panelInner.innerHTML = ""; panelInner.appendChild(nodeOrHtml); }
+      document.getElementById("right-panel").scrollTop = 0;
+    }
+    function h(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+
+    /* ============================================================
+       STEPPER
+    ============================================================ */
+    const STEPS = ["Define Cohort", "Refine Cohort", "Business Question", "Deep-Dive Analysis", "Summary"];
+    function renderStepper(activeIdx, subDone) {
+      const wrap = document.getElementById("stepper");
+      wrap.innerHTML = "";
+      STEPS.forEach((label, i) => {
+        if (i > 0) { wrap.appendChild(h("div", "step-line" + (i <= activeIdx ? " done" : ""))); }
+        const s = h("div", "step" + (i < activeIdx ? " done" : i === activeIdx ? " active" : ""));
+        let dotContent = (i < activeIdx) ? "✓" : (i + 1);
+        s.innerHTML = '<div class="dot">' + dotContent + '</div><span>' + label + '</span>';
+        if (i === 3) {
+          const sb = h("div", "sub-badges");
+          ["switch", "adherence", "persistence"].forEach(k => {
+            sb.appendChild(h("div", "sub-badge" + ((subDone || []).includes(k) ? " done" : "")));
+          });
+          s.appendChild(sb);
+        }
+        wrap.appendChild(s);
+      });
+    }
+
+    /* ============================================================
+       CHART BUILDERS (inline SVG)
+    ============================================================ */
+    function resolveColor(c) {
+      if (c && c.startsWith("var(")) {
+        const varName = c.slice(4, -1).trim();
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || "#999";
+      }
+      return c;
+    }
+
+    function statTiles(items) {
+      const wrap = h("div", "stat-row");
+      items.forEach(it => {
+        const t = h("div", "stat-tile");
+        let deltaHtml = "";
+        if (it.delta) {
+          const cls = it.deltaGood === false ? "down-bad" : (it.deltaGood ? "up-good" : "neutral");
+          deltaHtml = '<span class="delta ' + cls + '">' + it.delta + '</span> ';
+        }
+        t.innerHTML = '<div class="label">' + it.label + '</div><div class="value">' + it.value + '</div><div class="sub">' + deltaHtml + (it.sub || "") + '</div>';
+        wrap.appendChild(t);
+      });
+      return wrap;
+    }
+
+    function makeTooltip() {
+      let tt = document.getElementById("shared-chart-tooltip");
+      if (!tt) { tt = h("div", "chart-tooltip"); tt.id = "shared-chart-tooltip"; document.body.appendChild(tt); }
+      return tt;
+    }
+    function showTooltip(evt, html) {
+      const tt = makeTooltip();
+      tt.innerHTML = html;
+      tt.style.left = (evt.clientX + 14) + "px";
+      tt.style.top = (evt.clientY + 14) + "px";
+      tt.classList.add("show");
+    }
+    function moveTooltip(evt) { const tt = makeTooltip(); tt.style.left = (evt.clientX + 14) + "px"; tt.style.top = (evt.clientY + 14) + "px"; }
+    function hideTooltip() { const tt = makeTooltip(); tt.classList.remove("show"); }
+
+    function barChart(opts) {
+      // opts: {title, subtitle, data:[{label,value,color}], unit, maxValue}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const max = opts.maxValue || Math.max(...opts.data.map(d => d.value)) * 1.08;
+      const rows = h("div");
+      opts.data.forEach(d => {
+        const row = h("div", "bar-row");
+        const wPct = Math.max((d.value / max) * 100, 2);
+        const color = resolveColor(d.color || "var(--series-1)");
+        row.innerHTML =
+          '<div class="blabel">' + d.label + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + wPct + '%; background:' + color + '"></div></div>' +
+          '<div class="bar-value">' + (opts.unit === "pct" ? d.value.toFixed(1) + "%" : fmt(d.value)) + '</div>';
+        const track = row.querySelector(".bar-fill");
+        track.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + d.label + '</b><br>' + (opts.unit === "pct" ? d.value.toFixed(1) + "%" : fmt(d.value) + " patients")));
+        track.addEventListener("mouseleave", hideTooltip);
+        rows.appendChild(row);
+      });
+      card.appendChild(rows);
+      return card;
+    }
+
+    function donutChart(opts) {
+      // opts: {title, subtitle, data:[{label,value,color}]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const total = opts.data.reduce((a, b) => a + b.value, 0);
+      const size = 168, r = 62, cx = size / 2, cy = size / 2, sw = 26;
+      const circ = 2 * Math.PI * r;
+      let offset = 0;
+      const svgns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("width", size); svg.setAttribute("height", size);
+      svg.setAttribute("viewBox", "0 0 " + size + " " + size);
+      const bg = document.createElementNS(svgns, "circle");
+      bg.setAttribute("cx", cx); bg.setAttribute("cy", cy); bg.setAttribute("r", r);
+      bg.setAttribute("fill", "none"); bg.setAttribute("stroke", "var(--grid)"); bg.setAttribute("stroke-width", sw);
+      svg.appendChild(bg);
+      opts.data.forEach((d, i) => {
+        const frac = d.value / total;
+        const dash = frac * circ;
+        const seg = document.createElementNS(svgns, "circle");
+        seg.setAttribute("cx", cx); seg.setAttribute("cy", cy); seg.setAttribute("r", r);
+        seg.setAttribute("fill", "none");
+        seg.setAttribute("stroke", resolveColor(d.color || ("var(--series-" + (i + 1) + ")")));
+        seg.setAttribute("stroke-width", sw);
+        seg.setAttribute("stroke-dasharray", dash + " " + (circ - dash));
+        seg.setAttribute("stroke-dashoffset", -offset);
+        seg.setAttribute("transform", "rotate(-90 " + cx + " " + cy + ")");
+        seg.style.cursor = "pointer";
+        seg.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + d.label + '</b><br>' + d.value.toFixed(1) + "%"));
+        seg.addEventListener("mouseleave", hideTooltip);
+        svg.appendChild(seg);
+        offset += dash;
+      });
+      const label = document.createElementNS(svgns, "text");
+      label.setAttribute("x", cx); label.setAttribute("y", cy - 2);
+      label.setAttribute("text-anchor", "middle"); label.setAttribute("font-size", "18"); label.setAttribute("font-weight", "750");
+      label.setAttribute("fill", "var(--ink-primary)");
+      label.textContent = opts.centerLabel || (opts.data[0] ? opts.data[0].value.toFixed(0) + "%" : "");
+      svg.appendChild(label);
+      if (opts.centerSub) {
+        const sub = document.createElementNS(svgns, "text");
+        sub.setAttribute("x", cx); sub.setAttribute("y", cy + 16);
+        sub.setAttribute("text-anchor", "middle"); sub.setAttribute("font-size", "9.5"); sub.setAttribute("fill", "var(--ink-muted)");
+        sub.textContent = opts.centerSub;
+        svg.appendChild(sub);
+      }
+      const row = h("div"); row.style.display = "flex"; row.style.gap = "18px"; row.style.alignItems = "center";
+      const svgWrap = h("div"); svgWrap.appendChild(svg);
+      row.appendChild(svgWrap);
+      const legend = h("div", "chart-legend"); legend.style.flexDirection = "column"; legend.style.marginTop = "0";
+      opts.data.forEach((d, i) => {
+        const li = h("div", "legend-item");
+        li.innerHTML = '<span class="legend-swatch" style="background:' + resolveColor(d.color || ("var(--series-" + (i + 1) + ")")) + '"></span> ' + d.label + ' — <b>' + d.value.toFixed(1) + '%</b>';
+        legend.appendChild(li);
+      });
+      row.appendChild(legend);
+      card.appendChild(row);
+      return card;
+    }
+
+    function funnelChart(opts) {
+      // opts: {title, subtitle, stages:[{label,value}]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const stages = opts.stages;
+      const max = stages[0].value;
+      const seqSteps = ["--seq-250", "--seq-300", "--seq-350", "--seq-450", "--seq-550", "--seq-600"];
+      const wrap = h("div");
+      stages.forEach((s, i) => {
+        const wPct = Math.max((s.value / max) * 100, 8);
+        const dropPct = i === 0 ? null : (100 - (s.value / stages[i - 1].value) * 100).toFixed(1);
+        const row = h("div"); row.style.marginBottom = "10px";
+        const color = "var(" + seqSteps[Math.min(i, seqSteps.length - 1)] + ")";
+        row.innerHTML =
+          '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-secondary);margin-bottom:3px;">' +
+          '<span>' + s.label + '</span>' +
+          '<span><b style="color:var(--ink-primary)">' + fmt(s.value) + '</b>' + (dropPct ? '  <span style="color:var(--critical)">(&minus;' + dropPct + '%)</span>' : '') + '</span>' +
+          '</div>' +
+          '<div class="bar-track" style="height:26px;"><div class="bar-fill" style="width:' + wPct + '%; background:' + resolveColor(color) + '"></div></div>';
+        wrap.appendChild(row);
+      });
+      card.appendChild(wrap);
+      return card;
+    }
+
+    function histogram(opts) {
+      // opts:{title, subtitle, bins:[{label,value}], splitIndex, splitColors:[a,b], splitLabels:[a,b]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const max = Math.max(...opts.bins.map(b => b.value));
+      const w = 560, hgt = 190, barW = w / opts.bins.length - 8;
+      const svgns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("viewBox", "0 0 " + w + " " + (hgt + 30));
+      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt + 30);
+      [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+        const y = hgt - f * hgt;
+        const line = document.createElementNS(svgns, "line");
+        line.setAttribute("x1", 0); line.setAttribute("x2", w); line.setAttribute("y1", y); line.setAttribute("y2", y);
+        line.setAttribute("class", "gridline");
+        svg.appendChild(line);
+      });
+      opts.bins.forEach((b, i) => {
+        const bh = (b.value / max) * hgt;
+        const x = i * (w / opts.bins.length) + 4;
+        const y = hgt - bh;
+        const color = opts.splitIndex !== undefined ? (i >= opts.splitIndex ? opts.splitColors[1] : opts.splitColors[0]) : "var(--series-1)";
+        const rect = document.createElementNS(svgns, "rect");
+        rect.setAttribute("x", x); rect.setAttribute("y", y); rect.setAttribute("width", barW); rect.setAttribute("height", Math.max(bh, 2));
+        rect.setAttribute("rx", 3); rect.setAttribute("fill", resolveColor(color));
+        rect.style.cursor = "pointer";
+        rect.addEventListener("mousemove", (e) => showTooltip(e, '<b>PDC ' + b.label + '</b><br>' + fmt(b.value) + " patients"));
+        rect.addEventListener("mouseleave", hideTooltip);
+        svg.appendChild(rect);
+        const lbl = document.createElementNS(svgns, "text");
+        lbl.setAttribute("x", x + barW / 2); lbl.setAttribute("y", hgt + 16);
+        lbl.setAttribute("text-anchor", "middle"); lbl.setAttribute("class", "axis-label");
+        lbl.textContent = b.label;
+        svg.appendChild(lbl);
+      });
+      card.appendChild(svg);
+      if (opts.splitLabels) {
+        const leg = h("div", "chart-legend");
+        leg.innerHTML = '<div class="legend-item"><span class="legend-swatch" style="background:' + resolveColor(opts.splitColors[0]) + '"></span>' + opts.splitLabels[0] + '</div>' +
+          '<div class="legend-item"><span class="legend-swatch" style="background:' + resolveColor(opts.splitColors[1]) + '"></span>' + opts.splitLabels[1] + '</div>';
+        card.appendChild(leg);
+      }
+      return card;
+    }
+
+    function kmChart(opts) {
+      // opts:{title, subtitle, months:[...], series:[{label,color,values}]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const w = 640, hgt = 230, padL = 34, padB = 24, padT = 10, padR = 10;
+      const plotW = w - padL - padR, plotH = hgt - padT - padB;
+      const svgns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("viewBox", "0 0 " + w + " " + hgt);
+      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt);
+      [0, 25, 50, 75, 100].forEach(v => {
+        const y = padT + plotH - (v / 100) * plotH;
+        const line = document.createElementNS(svgns, "line");
+        line.setAttribute("x1", padL); line.setAttribute("x2", w - padR); line.setAttribute("y1", y); line.setAttribute("y2", y);
+        line.setAttribute("class", "gridline");
+        svg.appendChild(line);
+        const lbl = document.createElementNS(svgns, "text");
+        lbl.setAttribute("x", padL - 8); lbl.setAttribute("y", y + 3); lbl.setAttribute("text-anchor", "end"); lbl.setAttribute("class", "axis-label");
+        lbl.textContent = v + "%";
+        svg.appendChild(lbl);
+      });
+      opts.months.forEach((m, i) => {
+        const x = padL + (i / (opts.months.length - 1)) * plotW;
+        const lbl = document.createElementNS(svgns, "text");
+        lbl.setAttribute("x", x); lbl.setAttribute("y", hgt - 6); lbl.setAttribute("text-anchor", "middle"); lbl.setAttribute("class", "axis-label");
+        lbl.textContent = m;
+        svg.appendChild(lbl);
+      });
+      opts.series.forEach(s => {
+        let d = "";
+        const pts = [];
+        s.values.forEach((v, i) => {
+          const x = padL + (i / (opts.months.length - 1)) * plotW;
+          const y = padT + plotH - (v / 100) * plotH;
+          d += (i === 0 ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+          pts.push([x, y, v]);
+        });
+        const path = document.createElementNS(svgns, "path");
+        path.setAttribute("d", d.trim()); path.setAttribute("fill", "none");
+        path.setAttribute("stroke", resolveColor(s.color)); path.setAttribute("stroke-width", "2.5");
+        path.setAttribute("stroke-linejoin", "round"); path.setAttribute("stroke-linecap", "round");
+        svg.appendChild(path);
+        pts.forEach(p => {
+          const dot = document.createElementNS(svgns, "circle");
+          dot.setAttribute("cx", p[0]); dot.setAttribute("cy", p[1]); dot.setAttribute("r", "4");
+          dot.setAttribute("fill", resolveColor(s.color)); dot.setAttribute("stroke", "#fff"); dot.setAttribute("stroke-width", "1.5");
+          dot.style.cursor = "pointer";
+          dot.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + s.label + '</b><br>' + p[2] + '% on therapy'));
+          dot.addEventListener("mouseleave", hideTooltip);
+          svg.appendChild(dot);
+        });
+      });
+      card.appendChild(svg);
+      const leg = h("div", "chart-legend");
+      opts.series.forEach(s => {
+        leg.appendChild(h("div", "legend-item", '<span class="legend-swatch" style="background:' + resolveColor(s.color) + '"></span>' + s.label + ' <span style="color:var(--ink-muted)">(median ' + s.medianMonths + ' mo)</span>'));
+      });
+      card.appendChild(leg);
+      return card;
+    }
+
+    function sankeyChart(opts) {
+      // opts:{title, subtitle, left:[{label,value,color}], right:[{label,value}], links:[{fromIdx,toIdx,value,color}]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const w = 760, plotH = 340, padTop = 22, hgt = plotH + padTop, nodeW = 130, gap = 9;
+      const leftX = 6, rightX = w - 6 - nodeW;
+      const total = opts.left.reduce((a, b) => a + b.value, 0);
+      const usableH = plotH - gap * (opts.left.length - 1);
+      const usableHR = plotH - gap * (opts.right.length - 1);
+      const svgns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("viewBox", "0 0 " + w + " " + hgt);
+      svg.setAttribute("width", "100%"); svg.setAttribute("height", hgt);
+
+      function layout(nodes, usable) {
+        let y = padTop; const out = [];
+        nodes.forEach(n => {
+          const hgt2 = (n.value / total) * usable;
+          out.push({ ...n, y0: y, y1: y + hgt2 });
+          y += hgt2 + gap;
+        });
+        return out;
+      }
+      const L = layout(opts.left, usableH);
+      const R = layout(opts.right, usableHR);
+
+      // links first (behind nodes)
+      const leftCursor = L.map(() => 0);
+      const rightCursor = R.map(() => 0);
+      opts.links.forEach(lk => {
+        const ln = L[lk.fromIdx], rn = R[lk.toIdx];
+        const frac_l = lk.value / opts.left[lk.fromIdx].value;
+        const segH_l = (ln.y1 - ln.y0) * (lk.value / opts.left[lk.fromIdx].value);
+        const y0l = ln.y0 + leftCursor[lk.fromIdx];
+        const y1l = y0l + segH_l;
+        leftCursor[lk.fromIdx] += segH_l;
+
+        const segH_r = (rn.y1 - rn.y0) * (lk.value / opts.right[lk.toIdx].value);
+        const y0r = rn.y0 + rightCursor[lk.toIdx];
+        const y1r = y0r + segH_r;
+        rightCursor[lk.toIdx] += segH_r;
+
+        const x0 = leftX + nodeW, x1 = rightX;
+        const mx = (x0 + x1) / 2;
+        const d = "M" + x0 + "," + y0l + " C" + mx + "," + y0l + " " + mx + "," + y0r + " " + x1 + "," + y0r +
+          " L" + x1 + "," + y1r + " C" + mx + "," + y1r + " " + mx + "," + y1l + " " + x0 + "," + y1l + " Z";
+        const path = document.createElementNS(svgns, "path");
+        path.setAttribute("d", d);
+        path.setAttribute("fill", resolveColor(lk.color));
+        path.setAttribute("opacity", "0.45");
+        path.style.cursor = "pointer";
+        path.addEventListener("mouseenter", () => path.setAttribute("opacity", "0.75"));
+        path.addEventListener("mouseleave", (e) => { path.setAttribute("opacity", "0.45"); hideTooltip(); });
+        path.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + opts.left[lk.fromIdx].label + '</b> → <b>' + opts.right[lk.toIdx].label + '</b><br>' + fmt(lk.value) + ' patients'));
+        svg.appendChild(path);
+      });
+
+      function drawNodes(nodes, x, anchor) {
+        nodes.forEach(n => {
+          const rect = document.createElementNS(svgns, "rect");
+          rect.setAttribute("x", x); rect.setAttribute("y", n.y0); rect.setAttribute("width", nodeW); rect.setAttribute("height", Math.max(n.y1 - n.y0, 2));
+          rect.setAttribute("rx", 4); rect.setAttribute("fill", resolveColor(n.color || "var(--ink-muted)"));
+          rect.style.cursor = "pointer";
+          rect.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + n.label + '</b><br>' + fmt(n.value) + ' patients'));
+          rect.addEventListener("mouseleave", hideTooltip);
+          svg.appendChild(rect);
+          const t1 = document.createElementNS(svgns, "text");
+          t1.setAttribute("x", anchor === "start" ? x : x + nodeW);
+          t1.setAttribute("y", n.y0 - 6);
+          t1.setAttribute("text-anchor", anchor === "start" ? "start" : "end");
+          t1.setAttribute("font-size", "11.5"); t1.setAttribute("font-weight", "700"); t1.setAttribute("fill", "var(--ink-primary)");
+          t1.textContent = n.label;
+          svg.appendChild(t1);
+          const t2 = document.createElementNS(svgns, "text");
+          t2.setAttribute("x", anchor === "start" ? x : x + nodeW);
+          t2.setAttribute("y", (n.y0 + n.y1) / 2 + 4);
+          t2.setAttribute("text-anchor", anchor === "start" ? "start" : "end");
+          t2.setAttribute("font-size", "10.5"); t2.setAttribute("fill", "#fff");
+          if ((n.y1 - n.y0) > 16) {
+            t2.setAttribute("x", x + nodeW / 2); t2.setAttribute("text-anchor", "middle");
+            t2.textContent = fmt(n.value);
+            svg.appendChild(t2);
+          }
+        });
+      }
+      drawNodes(L, leftX, "start");
+      drawNodes(R, rightX, "end");
+      card.appendChild(svg);
+      return card;
+    }
+
+    function pairsTable(opts) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const tbl = h("table", "data-table");
+      let body = "<tr><th>From (index)</th><th>To (switch)</th><th>Patients</th><th>Share of switches</th></tr>";
+      const totalSwitch = DATA.switch.totals.switched;
+      opts.rows.forEach(r => {
+        body += "<tr><td><span class='tag-swatch' style='background:" + resolveColor(r.color) + "'></span>" + r.from + (r.fromClass && r.fromClass !== "—" ? " <span style='color:var(--ink-muted)'>(" + r.fromClass + ")</span>" : "") + "</td>" +
+          "<td>" + r.to + (r.toClass ? " <span style='color:var(--ink-muted)'>(" + r.toClass + ")</span>" : "") + "</td>" +
+          "<td>" + fmt(r.value) + "</td><td>" + pct(r.value, totalSwitch) + "%</td></tr>";
+      });
+      tbl.innerHTML = body;
+      card.appendChild(tbl);
+      return card;
+    }
+
+    /* ============================================================
+       RULES EDITOR COMPONENT
+    ============================================================ */
+    function rulesEditorCard(title, subtitle, rulesArr, onConfirm, confirmLabel) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", title));
+      card.appendChild(h("div", "card-sub", subtitle));
+      const list = h("div", "rules-list");
+      function renderRows() {
+        list.innerHTML = "";
+        rulesArr.forEach(rule => {
+          const row = h("div", "rule-row" + (rule.active ? "" : " inactive"));
+          const tag = h("div", "rule-tag", rule.category);
+          const text = h("div", "rule-text");
+          text.contentEditable = "true";
+          text.textContent = rule.text;
+          text.addEventListener("input", () => { rule.text = text.textContent; });
+          const tgl = h("div", "toggle" + (rule.active ? " on" : ""));
+          tgl.innerHTML = '<div class="knob"></div>';
+          tgl.onclick = () => { rule.active = !rule.active; renderRows(); };
+          const del = h("button", "icon-btn", "✕");
+          del.onclick = () => { const idx = rulesArr.indexOf(rule); rulesArr.splice(idx, 1); renderRows(); };
+          row.appendChild(tag); row.appendChild(text); row.appendChild(tgl); row.appendChild(del);
+          list.appendChild(row);
+        });
+      }
+      renderRows();
+      card.appendChild(list);
+
+      const addRow = h("div", "add-rule-row");
+      addRow.innerHTML =
+        '<select class="select-cat"><option>Diagnosis</option><option>Demographics</option><option>Enrollment</option><option>Treatment</option><option>Exclusion</option><option>Custom</option></select>' +
+        '<input type="text" placeholder="Describe an additional business rule…">' +
+        '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      const addBtn = addRow.querySelector("button");
+      const addInput = addRow.querySelector("input");
+      const addSelect = addRow.querySelector("select");
+      addBtn.onclick = () => {
+        if (!addInput.value.trim()) return;
+        rulesArr.push({ id: cid(), category: addSelect.value, text: addInput.value.trim(), active: true });
+        addInput.value = "";
+        renderRows();
+      };
+      card.appendChild(addRow);
+
+      const btnRow = h("div", "btn-row");
+      const confirmBtn = h("button", "btn btn-tealsolid", confirmLabel || "Confirm rules & continue");
+
+      confirmBtn.onclick = () => {
+        const activeRules = rulesArr.filter(r => r.active);
+        const overlay = document.getElementById('confirm-modal-overlay');
+        const tbody = document.getElementById('modal-rule-tbody');
+        const count = document.getElementById('modal-rule-count');
+
+        tbody.innerHTML = '';
+        count.textContent = activeRules.length;
+
+        activeRules.forEach(r => {
+          const tr = document.createElement('tr');
+          const tdParam = document.createElement('td');
+          tdParam.style.cssText = "padding:12px; font-size:13px; color:var(--ink-primary); font-weight:600; border-bottom:1px solid var(--border);";
+          tdParam.textContent = r.category;
+          const tdValue = document.createElement('td');
+          tdValue.style.cssText = "padding:12px; font-size:13px; color:var(--ink-secondary); border-bottom:1px solid var(--border);";
+          tdValue.textContent = r.text;
+          tr.appendChild(tdParam);
+          tr.appendChild(tdValue);
+          tbody.appendChild(tr);
+        });
+
+        overlay.style.display = 'flex';
+
+        const closeHandler = () => { overlay.style.display = 'none'; };
+        document.getElementById('close-modal-btn').onclick = closeHandler;
+        document.getElementById('cancel-modal-btn').onclick = closeHandler;
+
+        document.getElementById('confirm-modal-btn').onclick = () => {
+          overlay.style.display = 'none';
+          onConfirm(activeRules);
+        };
+      };
+
+      btnRow.appendChild(confirmBtn);
+      card.appendChild(btnRow);
+      return card;
+    }
+
+    function reviewRunCard(title, subtitle, activeRules, onRun, onEdit) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", title));
+      card.appendChild(h("div", "card-sub", subtitle));
+      const ul = h("ul", "review-list");
+      activeRules.forEach(r => {
+        const li = h("li");
+        li.innerHTML = '<span class="rule-tag">' + r.category + '</span><span>' + r.text + '</span>';
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+      const btnRow = h("div", "btn-row");
+      const runBtn = h("button", "btn btn-tealsolid", "▶ Run Analysis");
+      runBtn.onclick = onRun;
+      const editBtn = h("button", "link-btn", "← Edit rules");
+      editBtn.onclick = onEdit;
+      btnRow.appendChild(runBtn); btnRow.appendChild(editBtn);
+      card.appendChild(btnRow);
+      return card;
+    }
+
+    /* ============================================================
+       PIPELINE ANIMATION
+    ============================================================ */
+    async function runPipeline(container, steps) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", "Running analysis…"));
+      card.appendChild(h("div", "card-sub", "APLD is querying the claims warehouse and applying your business rules."));
+      const track = h("div", "progress-track"); const fill = h("div", "progress-fill"); track.appendChild(fill);
+      card.appendChild(track);
+      const list = h("div", "pipeline-list");
+      steps.forEach(s => list.appendChild(h("div", "pstep", "<div class='pdot'></div><div>" + s + "</div>")));
+      card.appendChild(list);
+      container.appendChild(card);
+      const rows = list.querySelectorAll(".pstep");
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].classList.add("active");
+        rows[i].querySelector(".pdot").innerHTML = "<div class='spin'></div>";
+        await sleep(520);
+        rows[i].classList.remove("active"); rows[i].classList.add("done");
+        rows[i].querySelector(".pdot").innerHTML = "✓";
+        fill.style.width = (((i + 1) / rows.length) * 100) + "%";
+      }
+      await sleep(350);
+    }
+
+    /* ============================================================
+       FLOW: LANDING -> EXPLORE
+    ============================================================ */
+    document.getElementById("btn-explore").addEventListener("click", startExplore);
+    document.getElementById("btn-watch").addEventListener("click", () => toast("This is a click-through demo - hit 'Explore' to start the walkthrough."));
+    document.getElementById("btn-home").addEventListener("click", () => {
+      if (confirm("Return to the landing page? This will restart the demo.")) location.reload();
+    });
+
+    async function startExplore() {
+      document.getElementById("view-landing").classList.add("hidden");
+      document.getElementById("view-explore").classList.remove("hidden");
+      renderStepper(0, []);
+      renderPanel(h("div", "card", "<div class='card-title'>Welcome to Explore</div><div class='card-sub' style='margin-bottom:0;'>Chat with the APLD Assistant on the left to define a patient cohort from claims data. Suggested replies will appear as chips above the message box.</div>"));
+      await sleep(300);
+      await aiSay("Hi, I'm your <b>APLD Assistant</b>. I can help you build a patient cohort from real-world claims data and then dig into the analytics that matter to your business question. What would you like to explore today?", 700);
+      offerUseCaseChips();
+    }
+
+    function offerUseCaseChips() {
+      setChips([
+        { label: "Understand the PsO market from claims data", primary: true, onClick: () => { userSay("I want to understand the PsO (plaque psoriasis) market from claims data."); goToCohortRules(); } },
+        { label: "Analyze GLP-1 switching in Type 2 Diabetes", muted: true, onClick: async () => { userSay("Analyze GLP-1 switching in Type 2 Diabetes"); await aiSay("Great question — the same assistant works the same way for any therapeutic area. For this walkthrough, let's stay focused on Psoriasis (PsO) so we can go deep end-to-end.", 700); setChips([{ label: "Continue with the PsO market", primary: true, onClick: () => { userSay("Continue with the PsO market"); goToCohortRules(); } }]); } },
+        { label: "Build an oncology adherence cohort", muted: true, onClick: async () => { userSay("Build an oncology adherence cohort"); await aiSay("Noted for a future session — let's keep this walkthrough on the PsO market so we can go from cohort to insight in one pass.", 700); setChips([{ label: "Continue with the PsO market", primary: true, onClick: () => { userSay("Continue with the PsO market"); goToCohortRules(); } }]); } }
+      ]);
+      freeTextHandler = () => goToCohortRules();
+    }
+
+    /* ============================================================
+       FLOW: COHORT DEFINITION
+    ============================================================ */
+    async function goToCohortRules() {
+      setChips([]); freeTextHandler = null;
+      renderStepper(0, []);
+      await aiSay("Got it — let's define your <b>Plaque Psoriasis (PsO)</b> patient cohort from claims. Based on standard real-world-evidence criteria for PsO, here's a starting set of business rules on the right. Feel free to edit the wording, toggle any rule off, or add your own — then confirm when you're happy with it.", 900);
+      STATE.cohortRuleset = COHORT_RULES_V1();
+      renderPanel(cohortRulesPanel());
+    }
+
+    function cohortRulesPanel() {
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition"));
+      wrap.appendChild(h("div", "panel-title", "Define the PsO patient cohort"));
+      wrap.appendChild(h("div", "panel-subtitle", "These rules translate your business question into inclusion/exclusion logic the platform can run against 214M covered lives of claims data."));
+      wrap.appendChild(rulesEditorCard(
+        "Suggested business rules — PsO cohort",
+        "AI-suggested starting point. Add, edit, or disable rules to match your definition.",
+        STATE.cohortRuleset,
+        (activeRules) => runCohortAnalysis(1),
+        "Confirm rules & continue"
+      ));
+      return wrap;
+    }
+
+    async function confirmCohortRules(activeRules) {
+      setChips([]);
+      renderPanel((() => {
+        const wrap = h("div");
+        wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition"));
+        wrap.appendChild(h("div", "panel-title", "Review & run"));
+        wrap.appendChild(h("div", "panel-subtitle", "Here is the finalized rule set. Run it against the claims warehouse, or go back and adjust."));
+        wrap.appendChild(reviewRunCard(
+          "Confirmed business rules — PsO cohort",
+          activeRules.length + " active rules will be applied.",
+          activeRules,
+          () => runCohortAnalysis(1),
+          () => renderPanel(cohortRulesPanel())
+        ));
+        return wrap;
+      })());
+      await aiSay("Here's the cohort definition, aligned: adults 18+ with ≥2 claims for plaque psoriasis, continuously enrolled, with evidence of PsO-directed treatment within 90 days, indexed between Jan 2023–Dec 2025 — excluding PsA-only and pregnancy claims. Ready to run this against the claims database?", 1000);
+      setChips([{ label: "▶ Run Analysis", primary: true, onClick: () => { runCohortAnalysis(1); } }]);
+      freeTextHandler = () => runCohortAnalysis(1);
+    }
+
+    async function runCohortAnalysis(runNum) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition"));
+      wrap.appendChild(h("div", "panel-title", runNum === 1 ? "Running cohort query…" : "Re-running with tightened rules…"));
+      renderPanel(wrap);
+      await runPipeline(wrap, [
+        "Querying 214M covered lives",
+        "Applying diagnosis & demographic criteria",
+        "Verifying continuous enrollment",
+        "Confirming treatment evidence within 90 days",
+        "Applying exclusion rules",
+        "Aggregating final cohort"
+      ]);
+      showCohortResults(runNum);
+    }
+
+    function showCohortResults(runNum) {
+      STATE.cohortRunNum = runNum;
+      const d = runNum === 1 ? DATA.cohortV1 : DATA.cohortV2;
+      const prev = runNum === 2 ? DATA.cohortV1 : null;
+      renderStepper(runNum === 1 ? 0 : 1, []);
+
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition — " + d.label));
+      wrap.appendChild(h("div", "panel-title", "Cohort summary"));
+      wrap.appendChild(h("div", "panel-subtitle", "High-level view of the qualifying PsO patient population, the attrition funnel, and key distributions."));
+
+      const stats = [
+        { label: "Final cohort", value: fmt(d.kpis.total), sub: prev ? "vs " + fmt(prev.kpis.total) + " in initial run" : "patients", delta: prev ? (d.kpis.total < prev.kpis.total ? "▼ " + pct(prev.kpis.total - d.kpis.total, prev.kpis.total) + "%" : "▲") : null, deltaGood: null },
+        { label: "Avg. age", value: d.kpis.avgAge + " yrs", sub: "at index date" },
+        { label: "% Female", value: d.kpis.pctFemale + "%", sub: "of cohort" },
+        { label: "Avg. follow-up", value: d.kpis.avgFollowup + " mo", sub: "post-index" }
+      ];
+      wrap.appendChild(statTiles(stats));
+
+      wrap.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final analysis-ready cohort.", stages: d.funnel }));
+
+      const grid = h("div", "chart-grid-2");
+      grid.appendChild(donutChart({ title: "Gender", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
+      grid.appendChild(barChart({ title: "Age band", unit: "pct", data: d.age.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      grid.appendChild(barChart({ title: "Payer type", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      grid.appendChild(barChart({ title: "Region", unit: "pct", data: d.region.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      wrap.appendChild(grid);
+      wrap.appendChild(barChart({ title: "Line of therapy at index", subtitle: "Treatment status observed at the index diagnosis.", unit: "pct", data: d.lot.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+
+      if (runNum === 1) {
+        const callout = h("div", "callout");
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
+          '<ul>' +
+          '<li><b>6,830 patients (3.7%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed, independently-verified diagnosis.</li>' +
+          '<li><b>4,920 patients (2.7%)</b> carry a co-occurring eczema / atopic dermatitis diagnosis (ICD-10 L20.x) within 90 days of index — a common source of miscoding between the two conditions.</li>' +
+          '<li><b>3,610 patients (2.0%)</b> show a &gt;180 day enrollment gap immediately around index — likely incomplete data capture rather than a genuine break in coverage; not clearly actionable, so we\'d leave the enrollment rule as-is.</li>' +
+          '</ul>' +
+          '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply suggested tightening & re-run</button>' +
+          '<button class="link-btn" id="btn-manual-adjust">Adjust rules myself</button>' +
+          '<button class="link-btn" id="btn-keep-asis">Keep as-is, continue</button>' +
+          '</div>';
+        wrap.appendChild(callout);
+      } else {
+        const callout = h("div", "callout teal");
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">✓</div><b>This looks like a clean, analysis-ready cohort</b></div>' +
+          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the diagnosis spacing/provider rule and excluding competing eczema diagnoses removed <b>21,840 patients (‑11.8%)</b> of likely rule-outs and miscoded records, without materially shifting the demographic mix.</div>' +
+          '<div class="btn-row"><button class="btn btn-tealsolid" id="btn-accept-cohort">Accept this cohort & continue</button></div>';
+        wrap.appendChild(callout);
+      }
+
+      renderPanel(wrap);
+
+      if (runNum === 1) {
+        document.getElementById("btn-accept-tighten").onclick = () => acceptTightening();
+        document.getElementById("btn-manual-adjust").onclick = () => { STATE.cohortRuleset = COHORT_RULES_V1(); renderPanel(cohortRulesPanel()); toast("Manual editing re-opened — adjust and confirm to re-run."); };
+        document.getElementById("btn-keep-asis").onclick = () => proceedToBusinessQuestion();
+        aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the suggested rule changes and re-run?", 900).then(() => {
+          setChips([
+            { label: "Apply suggested tightening & re-run", primary: true, onClick: acceptTightening },
+            { label: "Keep as-is, continue", muted: true, onClick: proceedToBusinessQuestion }
+          ]);
+          freeTextHandler = acceptTightening;
+        });
+      } else {
+        document.getElementById("btn-accept-cohort").onclick = () => proceedToBusinessQuestion();
+        aiSay("The refined cohort of <b>" + fmt(DATA.cohortV2.kpis.total) + " patients</b> looks solid — tighter diagnosis logic and de-duplication removed likely rule-outs without skewing the demographics. Happy to lock this in?", 900).then(() => {
+          setChips([{ label: "Accept this cohort & continue", primary: true, onClick: proceedToBusinessQuestion }]);
+          freeTextHandler = proceedToBusinessQuestion;
+        });
+      }
+    }
+
+    async function acceptTightening() {
+      setChips([]); freeTextHandler = null;
+      userSay("Apply the suggested tightening and re-run.");
+      STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset);
+      await runCohortAnalysis(2);
+    }
+
+    /* ============================================================
+       FLOW: BUSINESS QUESTION
+    ============================================================ */
+    async function proceedToBusinessQuestion() {
+      setChips([]); freeTextHandler = null;
+      renderStepper(2, STATE.completedAnalyses);
+      const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
+      wrap.appendChild(h("div", "panel-title", "Cohort locked — what's the business question?"));
+      wrap.appendChild(h("div", "panel-subtitle", "Your PsO cohort is confirmed. Tell the assistant what you're trying to figure out next."));
+      const card = h("div", "card");
+      card.innerHTML = '<div class="card-title">Confirmed cohort</div><div class="card-sub" style="margin-bottom:0;"><b>' + fmt(finalCohort.kpis.total) + '</b> plaque psoriasis patients, indexed Jan 2023–Dec 2025, ready for downstream analysis.</div>';
+      wrap.appendChild(card);
+
+      const actionsWrap = h("div");
+      actionsWrap.style.marginTop = "24px";
+      actionsWrap.innerHTML = `
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px; color:var(--ink-primary);">Available Analyses</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+      <div class="card" id="btn-start-switch" style="cursor:pointer; margin-bottom:0; padding:20px; transition:all 0.2s; border:1px solid var(--border);">
+        <div style="font-weight:700; font-size:14.5px; color:var(--navy-900); margin-bottom:4px;">Switch Analysis</div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:12px;">Track patient switching between therapies</div>
+        <div style="color:var(--teal-600); font-size:13px; font-weight:600; display:flex; align-items:center; gap:4px;">Configure &amp; Run &rarr;</div>
+      </div>
+      <div class="card" id="btn-start-adherence" style="cursor:pointer; margin-bottom:0; padding:20px; transition:all 0.2s; border:1px solid var(--border);">
+        <div style="font-weight:700; font-size:14.5px; color:var(--navy-900); margin-bottom:4px;">Adherence Analysis</div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:12px;">Measure how consistently patients take therapy</div>
+        <div style="color:var(--teal-600); font-size:13px; font-weight:600; display:flex; align-items:center; gap:4px;">Configure &amp; Run &rarr;</div>
+      </div>
+      <div class="card" id="btn-start-persistence" style="cursor:pointer; margin-bottom:0; padding:20px; transition:all 0.2s; border:1px solid var(--border);">
+        <div style="font-weight:700; font-size:14.5px; color:var(--navy-900); margin-bottom:4px;">Persistence Analysis</div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:12px;">Understand how long patients stay on therapy</div>
+        <div style="color:var(--teal-600); font-size:13px; font-weight:600; display:flex; align-items:center; gap:4px;">Configure &amp; Run &rarr;</div>
+      </div>
+    </div>
+        `;
+      wrap.appendChild(actionsWrap);
+      renderPanel(wrap);
+
+      document.getElementById('btn-start-switch').addEventListener('mouseenter', function () { this.style.borderColor = 'var(--teal-600)'; this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'; });
+      document.getElementById('btn-start-switch').addEventListener('mouseleave', function () { this.style.borderColor = 'var(--border)'; this.style.boxShadow = 'var(--shadow-sm)'; });
+      document.getElementById('btn-start-switch').onclick = () => { userSay("Let's start with switch analysis."); startAnalysisFlow("switch"); };
+
+      document.getElementById('btn-start-adherence').addEventListener('mouseenter', function () { this.style.borderColor = 'var(--teal-600)'; this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'; });
+      document.getElementById('btn-start-adherence').addEventListener('mouseleave', function () { this.style.borderColor = 'var(--border)'; this.style.boxShadow = 'var(--shadow-sm)'; });
+      document.getElementById('btn-start-adherence').onclick = () => { userSay("Let's start with adherence analysis."); startAnalysisFlow("adherence"); };
+
+      document.getElementById('btn-start-persistence').addEventListener('mouseenter', function () { this.style.borderColor = 'var(--teal-600)'; this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'; });
+      document.getElementById('btn-start-persistence').addEventListener('mouseleave', function () { this.style.borderColor = 'var(--border)'; this.style.boxShadow = 'var(--shadow-sm)'; });
+      document.getElementById('btn-start-persistence').onclick = () => { userSay("Let's start with persistence analysis."); startAnalysisFlow("persistence"); };
+
+      await aiSay("Great — your PsO cohort of <b>" + fmt(finalCohort.kpis.total) + " patients</b> is locked in. What business question would you like to explore next?", 900);
+
+      const scenario = "Our client markets an IL-23 inhibitor in the PsO space. New-to-brand starts have plateaued over the last two quarters even as a newer competitor launched. Leadership wants to know: are existing patients switching to competing therapies, how adherent are patients once they start therapy, and how long do they typically persist before discontinuing — to figure out if the plateau is a switching problem, an adherence problem, or both.";
+
+      setChips([
+        { label: "Describe the switching/adherence/persistence scenario", primary: true, onClick: () => { userSay(scenario); acknowledgeScenario(); } }
+      ]);
+      freeTextHandler = () => acknowledgeScenario();
+    }
+
+    async function acknowledgeScenario() {
+      setChips([]); freeTextHandler = null;
+      await aiSay("That's really three connected analyses: <ul><li><b>Switch</b> — are patients moving from your brand to competing therapies, and which ones?</li><li><b>Adherence</b> — among patients who stay on therapy, how consistently are they taking it?</li><li><b>Persistence</b> — how long do patients typically remain on a given therapy before discontinuing?</li></ul>I'd recommend starting with <b>switch analysis</b> — understanding where patients are going will help frame the other two. Sound good?", 1200);
+      setChips([
+        { label: "Start with Switch analysis (recommended)", primary: true, onClick: () => { userSay("Let's start with switch analysis."); startAnalysisFlow("switch"); } },
+        { label: "Start with Adherence instead", muted: true, onClick: () => { userSay("Let's start with adherence instead."); startAnalysisFlow("adherence"); } },
+        { label: "Start with Persistence instead", muted: true, onClick: () => { userSay("Let's start with persistence instead."); startAnalysisFlow("persistence"); } }
+      ]);
+      freeTextHandler = () => startAnalysisFlow("switch");
+    }
+
+    /* ============================================================
+       FLOW: SWITCH / ADHERENCE / PERSISTENCE (shared shell)
+    ============================================================ */
+    const ANALYSIS_META = {
+      switch: {
+        label: "Switch Analysis", rules: SWITCH_RULES,
+        pipeline: ["Extracting index therapy claims", "Identifying subsequent claims per patient", "Applying switch / augmentation / restart logic", "Aggregating drug-to-drug flows", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>switch analysis</b> — how we'll define an index drug, a true switch (vs. augmentation or restart), and the measurement window. Edit as needed, then run.",
+        confirmText: "To summarize: we'll track the 5 major PsO drug classes, define a switch as a new-class claim within 90 days of the index drug's supply end (with no further index-drug claim after), separate out restarts (&gt;180‑day gaps) and augmentation (concurrent use &gt;60 days), over a 12‑month window. Ready to run?"
+      },
+      adherence: {
+        label: "Adherence Analysis", rules: ADHERENCE_RULES,
+        pipeline: ["Extracting pharmacy fill history", "Calculating Proportion of Days Covered (PDC)", "Applying grace periods & switch exclusions", "Classifying adherent vs. non-adherent", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>adherence analysis</b> — using Proportion of Days Covered (PDC) with the standard PQA-aligned 0.80 threshold. Edit as needed, then run.",
+        confirmText: "To summarize: adherence will be measured as PDC over 12 months post-index, on patients with ≥2 fills and continuous enrollment, using a 30‑day grace period, with PDC ≥0.80 counted as adherent. Ready to run?"
+      },
+      persistence: {
+        label: "Persistence Analysis", rules: PERSISTENCE_RULES,
+        pipeline: ["Extracting therapy episodes", "Detecting discontinuation gaps (≥60 days)", "Applying censoring for patients still on therapy", "Building time-to-discontinuation curves", "Rendering results"],
+        ackText: "Here are suggested business rules for the <b>persistence analysis</b> — how we'll define discontinuation, censoring, and how switches interact with persistence episodes. Edit as needed, then run.",
+        confirmText: "To summarize: persistence runs up to 24 months post-index, discontinuation = a ≥60‑day gap with no refill, patients still active at data cutoff are censored, and a post-discontinuation switch starts a fresh episode for the new drug. Ready to run?"
+      }
+    };
+
+    async function startAnalysisFlow(key) {
+      setChips([]); freeTextHandler = null;
+      renderStepper(3, STATE.completedAnalyses);
+      const meta = ANALYSIS_META[key];
+      await aiSay(meta.ackText, 900);
+      const rulesArr = meta.rules();
+      renderPanel(analysisRulesPanel(key, rulesArr));
+    }
+
+    function analysisRulesPanel(key, rulesArr) {
+      const meta = ANALYSIS_META[key];
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+      wrap.appendChild(h("div", "panel-title", meta.label + " — business rules"));
+      wrap.appendChild(h("div", "panel-subtitle", "Defined for the PsO systemic-therapy population within your confirmed cohort."));
+      wrap.appendChild(rulesEditorCard(
+        "Suggested business rules — " + meta.label,
+        "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
+        rulesArr,
+        (activeRules) => runAnalysis(key),
+        "Confirm rules & continue"
+      ));
+      return wrap;
+    }
+
+    async function confirmAnalysisRules(key, activeRules) {
+      const meta = ANALYSIS_META[key];
+      setChips([]);
+      renderPanel((() => {
+        const wrap = h("div");
+        wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+        wrap.appendChild(h("div", "panel-title", meta.label + " — review & run"));
+        wrap.appendChild(h("div", "panel-subtitle", "Here is the finalized rule set. Run it, or go back and adjust."));
+        wrap.appendChild(reviewRunCard(
+          "Confirmed business rules — " + meta.label,
+          activeRules.length + " active rules will be applied.",
+          activeRules,
+          () => runAnalysis(key),
+          () => renderPanel(analysisRulesPanel(key, ANALYSIS_META[key].rules()))
+        ));
+        return wrap;
+      })());
+      await aiSay(meta.confirmText, 900);
+      setChips([{ label: "▶ Run Analysis", primary: true, onClick: () => runAnalysis(key) }]);
+      freeTextHandler = () => runAnalysis(key);
+    }
+
+    async function runAnalysis(key) {
+      setChips([]); freeTextHandler = null;
+      const meta = ANALYSIS_META[key];
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+      wrap.appendChild(h("div", "panel-title", "Running " + meta.label.toLowerCase() + "…"));
+      renderPanel(wrap);
+      await runPipeline(wrap, meta.pipeline);
+      if (!STATE.completedAnalyses.includes(key)) STATE.completedAnalyses.push(key);
+      showAnalysisResults(key);
+    }
+
+    function analysisTabsBar(activeKey) {
+      const bar = h("div", "analysis-tabs");
+      ["switch", "adherence", "persistence"].forEach(k => {
+        const done = STATE.completedAnalyses.includes(k);
+        const tab = h("div", "a-tab" + (k === activeKey ? " on" : ""));
+        tab.innerHTML = (done ? '<span class="check">✓</span>' : '') + ANALYSIS_META[k].label;
+        if (done) tab.onclick = () => showAnalysisResults(k);
+        else tab.style.opacity = "0.4";
+        bar.appendChild(tab);
+      });
+      return bar;
+    }
+
+    function showAnalysisResults(key) {
+      renderStepper(3, STATE.completedAnalyses);
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+      wrap.appendChild(h("div", "panel-title", ANALYSIS_META[key].label + " results"));
+      wrap.appendChild(h("div", "panel-subtitle", "Behind the scenes, APLD ran the confirmed rules across the systemic-therapy population within your PsO cohort."));
+      wrap.appendChild(analysisTabsBar(key));
+
+      if (key === "switch") wrap.appendChild(switchResultsBlock());
+      if (key === "adherence") wrap.appendChild(adherenceResultsBlock());
+      if (key === "persistence") wrap.appendChild(persistenceResultsBlock());
+
+      const remaining = ["switch", "adherence", "persistence"].filter(k => !STATE.completedAnalyses.includes(k));
+      const nextCard = h("div", "card");
+      if (remaining.length) {
+        nextCard.innerHTML = '<div class="card-title">What\'s next?</div><div class="card-sub" style="margin-bottom:14px;">You can look at another analysis on this same cohort, or wrap up with a combined summary.</div>';
+        const row = h("div", "btn-row");
+        remaining.forEach(k => {
+          const b = h("button", "btn btn-outline", "Run " + ANALYSIS_META[k].label);
+          b.onclick = () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); };
+          row.appendChild(b);
+        });
+        nextCard.appendChild(row);
+      } else {
+        nextCard.innerHTML = '<div class="card-title">All three analyses complete</div><div class="card-sub" style="margin-bottom:14px;">Switch, adherence, and persistence have all been run on this cohort. Ready for a combined summary tying it back to the original business question?</div>';
+        const row = h("div", "btn-row");
+        const b = h("button", "btn btn-tealsolid", "Generate combined summary");
+        b.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+        row.appendChild(b);
+        nextCard.appendChild(row);
+      }
+      wrap.appendChild(nextCard);
+      renderPanel(wrap);
+
+      const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
+      let msg = "";
+      if (key === "switch") msg = "Switch analysis is done: <b>" + pct(s.totals.switched, s.totals.population) + "%</b> of patients on a systemic PsO therapy switched classes within 12 months, averaging <b>" + s.totals.avgDaysToSwitch + " days</b> to switch. TNF inhibitors show the highest switch rate; IL-23 inhibitors the lowest.";
+      if (key === "adherence") msg = "Adherence analysis is done: mean PDC is <b>" + a.meanPDC + "</b>, with <b>" + a.pctAdherent + "%</b> of patients adherent (PDC ≥0.80). Adherence tracks closely with dosing frequency — less-frequently-dosed IL-23 inhibitors lead.";
+      if (key === "persistence") msg = "Persistence analysis is done: median time on therapy is <b>" + p.medianMonths + " months</b>, with <b>" + p.pct12mo + "%</b> of patients still on therapy at 12 months and <b>" + p.pct24mo + "%</b> at 24 months. IL-23 inhibitors again lead; oral systemics trail.";
+      aiSay(msg, 1000).then(() => {
+        if (remaining.length) {
+          setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); } })));
+          freeTextHandler = () => startAnalysisFlow(remaining[0]);
+        } else {
+          setChips([{ label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
+          freeTextHandler = () => showFinalSummary();
+        }
+      });
+    }
+
+    function switchResultsBlock() {
+      const frag = document.createDocumentFragment();
+      const s = DATA.switch;
+      frag.appendChild(statTiles([
+        { label: "Systemic-therapy population", value: fmt(s.totals.population), sub: "eligible for switch analysis" },
+        { label: "Switched within 12 mo", value: pct(s.totals.switched, s.totals.population) + "%", sub: fmt(s.totals.switched) + " patients" },
+        { label: "Avg. time to switch", value: s.totals.avgDaysToSwitch + " days", sub: "≈ 6.2 months" },
+        { label: "Switched a different MOA", value: s.totals.pctMoaSwitch + "%", sub: "vs. 18% same-class" }
+      ]));
+      frag.appendChild(sankeyChart({
+        title: "Where patients go after their index therapy",
+        subtitle: "Flow from index drug class to 12-month outcome. Ribbon width = patient count.",
+        left: s.classes.map(c => ({ label: c.label, value: c.total, color: c.color })),
+        right: [
+          { label: "Remained on Index Therapy", value: s.totals.remained },
+          { label: "Switched to Another Class", value: s.totals.switched },
+          { label: "Discontinued, No Further Therapy", value: s.totals.discontinued }
+        ],
+        links: s.classes.flatMap((c, i) => [
+          { fromIdx: i, toIdx: 0, value: c.remained, color: c.color },
+          { fromIdx: i, toIdx: 1, value: c.switched, color: c.color },
+          { fromIdx: i, toIdx: 2, value: c.discontinued, color: c.color }
+        ])
+      }));
+      frag.appendChild(barChart({
+        title: "Switch rate by index drug class",
+        subtitle: "Share of each class's patients who switched to a different class within 12 months.",
+        unit: "pct",
+        data: s.classes.map(c => ({ label: c.label + " (" + c.brands + ")", value: +pct(c.switched, c.total), color: c.color }))
+      }));
+      frag.appendChild(pairsTable({ title: "Top switch destinations", subtitle: "Most common drug-to-drug moves among switchers.", rows: s.topPairs }));
+      return frag;
+    }
+
+    function adherenceResultsBlock() {
+      const frag = document.createDocumentFragment();
+      const a = DATA.adherence;
+      frag.appendChild(statTiles([
+        { label: "Adherence population", value: fmt(a.population), sub: "≥2 fills, continuously enrolled" },
+        { label: "Mean PDC", value: a.meanPDC.toFixed(2), sub: "proportion of days covered" },
+        { label: "Adherent (PDC ≥0.80)", value: a.pctAdherent + "%", sub: fmt(a.population * a.pctAdherent / 100) + " patients" },
+        { label: "Non-adherent", value: a.pctNonAdherent + "%", sub: fmt(a.population * a.pctNonAdherent / 100) + " patients" }
+      ]));
+      frag.appendChild(histogram({
+        title: "Distribution of Proportion of Days Covered (PDC)",
+        subtitle: "Non-adherent (PDC < 0.80) vs. adherent (PDC ≥ 0.80).",
+        bins: a.histogram, splitIndex: 8, splitColors: ["var(--series-8)", "var(--series-3)"], splitLabels: ["Non-adherent (<0.80)", "Adherent (≥0.80)"]
+      }));
+      frag.appendChild(barChart({
+        title: "Adherence rate by drug class",
+        subtitle: "% of patients adherent (PDC ≥0.80), by index drug class.",
+        unit: "pct",
+        data: a.byClass
+      }));
+      const callout = h("div", "callout teal");
+      callout.innerHTML = '<div class="callout-head"><div class="callout-icon">i</div><b>Dosing frequency looks like a key driver</b></div><div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;">Patients on IL-23 inhibitors — typically dosed every 8–12 weeks — show materially higher adherence than those on weekly or biweekly agents. This lines up with the switch analysis: patients are moving toward less-frequently-dosed therapies.</div>';
+      frag.appendChild(callout);
+      return frag;
+    }
+
+    function persistenceResultsBlock() {
+      const frag = document.createDocumentFragment();
+      const p = DATA.persistence;
+      frag.appendChild(statTiles([
+        { label: "Median persistence", value: p.medianMonths + " mo", sub: "all systemic therapies" },
+        { label: "Persisting at 12 mo", value: p.pct12mo + "%", sub: "of the analysis population" },
+        { label: "Persisting at 24 mo", value: p.pct24mo + "%", sub: "of the analysis population" },
+        { label: "Best-performing class", value: "IL-23", sub: p.series[0].medianMonths + " mo median" }
+      ]));
+      frag.appendChild(kmChart({
+        title: "Time-to-discontinuation, by drug class",
+        subtitle: "% of patients still on therapy over time (Kaplan–Meier style persistence curve).",
+        months: p.months, series: p.series
+      }));
+      frag.appendChild(barChart({
+        title: "Median months on therapy, by drug class",
+        data: p.series.map(s => ({ label: s.label, value: s.medianMonths, color: s.color }))
+      }));
+      return frag;
+    }
+
+    /* ============================================================
+       FINAL SUMMARY
+    ============================================================ */
+    async function showFinalSummary() {
+      setChips([]); freeTextHandler = null;
+      renderStepper(4, STATE.completedAnalyses);
+      const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 4 · Summary"));
+      wrap.appendChild(h("div", "panel-title", "Putting it together"));
+      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort, switch, adherence, and persistence — tied back to the original business question."));
+
+      const hero = h("div", "final-hero");
+      hero.innerHTML = '<h3>Is the plateau a switching problem, an adherence problem, or both?</h3><p>Patients are indeed moving away from older, more frequently-dosed therapies (TNF inhibitors) toward IL-23 inhibitors — driven by both lower persistence and lower adherence on weekly/biweekly agents. IL-23 inhibitors lead on every measure: lowest switch-away rate (' + pct(s.classes[2].switched, s.classes[2].total) + '%), highest adherence (' + a.byClass[0].value + '%), and the longest median persistence (' + p.series[0].medianMonths + ' months). This points to a broader market shift toward less-frequently-dosed, higher-persistence therapies — not a brand-specific access issue.</p>';
+      wrap.appendChild(hero);
+
+      const recap = h("div", "recap-grid");
+      recap.innerHTML =
+        '<div class="recap-card"><div class="rc-title">Switch</div><div class="rc-value">' + pct(s.totals.switched, s.totals.population) + '%</div><div class="rc-sub">switched classes within 12 months · avg ' + s.totals.avgDaysToSwitch + ' days</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Adherence</div><div class="rc-value">' + a.pctAdherent + '%</div><div class="rc-sub">adherent (PDC ≥0.80) · mean PDC ' + a.meanPDC.toFixed(2) + '</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">' + p.medianMonths + ' mo</div><div class="rc-sub">median · ' + p.pct12mo + '% persisting at 12 months</div></div>';
+      wrap.appendChild(recap);
+
+      const card = h("div", "card");
+      card.innerHTML = '<div class="card-title">Suggested next steps</div><ul style="font-size:13px;color:var(--ink-secondary);line-height:1.7;padding-left:20px;margin:0;">' +
+        '<li>Quantify the revenue impact of TNF → IL-23 switching specifically for the client brand vs. competitor IL-23 agents.</li>' +
+        '<li>Segment persistence by payer type — commercial vs. Medicare access barriers may explain part of the oral-systemic drop-off.</li>' +
+        '<li>Stand up a quarterly refresh of this cohort to track whether the competitor launch continues to accelerate switching.</li>' +
+        '</ul>';
+      wrap.appendChild(card);
+
+      const btnRow = h("div", "btn-row");
+      const exportBtn = h("button", "btn btn-tealsolid", "Export summary (PDF)");
+      exportBtn.onclick = () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.");
+      const restartBtn = h("button", "btn btn-outline", "Start a new analysis");
+      restartBtn.onclick = () => { if (confirm("Restart the demo from the landing page?")) location.reload(); };
+      btnRow.appendChild(exportBtn); btnRow.appendChild(restartBtn);
+      wrap.appendChild(btnRow);
+
+      renderPanel(wrap);
+      await aiSay("Here's the combined picture across cohort, switch, adherence, and persistence — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
+      setChips([
+        { label: "Export summary (PDF)", primary: true, onClick: () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.") },
+        { label: "Start a new analysis", muted: true, onClick: () => { if (confirm("Restart the demo from the landing page?")) location.reload(); } }
+      ]);
+    }
+  
