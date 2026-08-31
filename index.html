@@ -2225,20 +2225,20 @@
           "Building the switch in/out view by class",
           "Rendering results"
         ],
-        ackText: "Here are suggested business rules for the <b>Source of Business analysis</b> — including market basket, thresholds, and classification logic. Edit as needed, then run.",
+        ackText: "Here are suggested business rules for the <b>Source of Business (SoB) analysis</b> — how we'll classify each new Skyrizi fill as new-to-brand, continuing, a switch-in, or a restart. Edit as needed.",
         confirmText: "To summarize: we'll classify every Skyrizi fill into New-to-Market, Continuing, Switch, Augmentation, Discontinued, or Restart based on your confirmed business rules. Ready to run?"
       },
       adherence: {
         label: "Compliance Analysis", rules: ADHERENCE_RULES,
         pipeline: ["Extracting pharmacy fill history", "Calculating Proportion of Days Covered (PDC)", "Applying grace periods & switch exclusions", "Classifying compliant vs. non-compliant", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>compliance analysis</b> — using Proportion of Days Covered (PDC) with the standard PQA-aligned 0.80 threshold. Edit as needed, then run.",
-        confirmText: "To summarize: compliance will be measured as PDC over 12 months post-index, on patients with ≥2 fills and continuous enrollment, using a 30‑day grace period, with PDC ≥0.80 counted as compliant. Ready to run?"
+        ackText: "Here are suggested business rules for the <b>compliance analysis</b> — using Proportion of Days Covered (PDC) with the standard PQA-aligned 0.80 threshold, compared against Skyrizi's market competitors. Edit as needed, then run.",
+        confirmText: "To summarize: compliance will be measured as PDC over 12 months post-index, on patients with ≥2 fills and continuous enrollment, using a 30-day grace period, with PDC ≥0.80 counted as compliant — shown by brand, so Skyrizi can be compared directly against the rest of the market. Ready to run?"
       },
       persistence: {
         label: "Persistence Analysis", rules: PERSISTENCE_RULES,
         pipeline: ["Extracting therapy episodes", "Detecting discontinuation gaps (≥60 days)", "Applying censoring for patients still on therapy", "Building time-to-discontinuation curves", "Rendering results"],
-        ackText: "Here are suggested business rules for the <b>persistence analysis</b> — how we'll define discontinuation, censoring, and how switches interact with persistence episodes. Edit as needed, then run.",
-        confirmText: "To summarize: persistence runs up to 24 months post-index, discontinuation = a ≥60‑day gap with no refill, patients still active at data cutoff are censored, and a post-discontinuation switch starts a fresh episode for the new drug. Ready to run?"
+        ackText: "Here are suggested business rules for the <b>persistence analysis</b> — how we'll define discontinuation, censoring, and how switches interact with persistence episodes, compared against Skyrizi's market competitors. Edit as needed, then run.",
+        confirmText: "To summarize: persistence runs up to 24 months post-index, discontinuation = a ≥60-day gap with no refill, patients still active at data cutoff are censored, and a post-discontinuation switch starts a fresh episode for the new drug — shown by brand, so Skyrizi can be compared directly against the rest of the market. Ready to run?"
       }
     };
 
@@ -3821,12 +3821,19 @@
       renderPanel(wrap);
 
       document.getElementById("btn-confirm-complete-claims").onclick = () => {
+        userSay("Confirm & run on complete claims.");
         runAnalysis("switch");
       };
 
       document.getElementById("btn-back-to-sob-rules").onclick = () => {
         renderPanel(analysisRulesPanel("switch", getAnalysisRules("switch")));
       };
+
+      aiSay("All four look right: a treatment-naive start, a clean TNF→IL-23 switch, a stable continuer, and a simple restart after a long gap. These are built from a sample of claims data to confirm the rules work as intended — if they look good to you, I'll run this same logic against the complete claims dataset.", 900);
+      setChips([
+        { label: "Confirm & run on complete claims.", primary: true, onClick: () => { userSay("Confirm & run on complete claims."); runAnalysis("switch"); } }
+      ]);
+      freeTextHandler = () => { userSay("Confirm & run on complete claims."); runAnalysis("switch"); };
     }
 
     async function confirmAnalysisRules(key, activeRules) {
@@ -3957,7 +3964,8 @@
         const row = h("div", "btn-row");
         remaining.forEach(k => {
           const b = h("button", "btn btn-outline", "Run " + ANALYSIS_META[k].label);
-          b.onclick = () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); };
+          const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
+          b.onclick = () => { userSay(sayText); startAnalysisFlow(k); };
           row.appendChild(b);
         });
         nextCard.appendChild(row);
@@ -4000,9 +4008,9 @@
 
       const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
       let msg = "";
-      if (key === "switch") msg = "Switch analysis is done: <b>" + pct(s.totals.switched, s.totals.population) + "%</b> of patients on a systemic PsO therapy switched classes within 12 months, averaging <b>" + s.totals.avgDaysToSwitch + " days</b> to switch. TNF inhibitors show the highest switch rate; IL-23 inhibitors the lowest.";
-      if (key === "adherence") msg = "Compliance analysis is done: mean PDC is <b>" + a.meanPDC.toFixed(2) + "</b>, with <b>" + a.pctAdherent + "%</b> of patients compliant (PDC ≥0.80). Compliance tracks closely with dosing frequency — less-frequently-dosed IL-23 inhibitors lead.";
-      if (key === "persistence") msg = "Persistence analysis is done: median time on therapy is <b>" + p.medianMonths + " months</b>, with <b>" + p.pct12mo + "%</b> of patients still on therapy at 12 months and <b>" + p.pct24mo + "%</b> at 24 months. IL-23 inhibitors again lead; oral systemics trail.";
+      if (key === "switch") msg = "Source of Business is done — see the insight and recommendation at the bottom of the results.";
+      if (key === "adherence") msg = "Compliance is done — see the insight and recommendation at the bottom of the results.";
+      if (key === "persistence") msg = "Persistence is done — see the insight and recommendation at the bottom of the results.";
 
       if (!tightened) {
         aiSay(msg + " I found a few edge cases worth reviewing — see the callout on the right.", 1000).then(() => {
@@ -4015,7 +4023,7 @@
       } else {
         aiSay(msg + " The tightened result set looks clean — ready to move on.", 1000).then(() => {
           if (remaining.length) {
-            setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { userSay("Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); startAnalysisFlow(k); } })));
+            setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); userSay(sayText); startAnalysisFlow(k); } })));
             freeTextHandler = () => startAnalysisFlow(remaining[0]);
           } else {
             setChips([{ label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
@@ -4492,7 +4500,7 @@
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 4 · Summary"));
       wrap.appendChild(h("div", "panel-title", "Putting it together"));
-      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort, switch, compliance, and persistence — tied back to the original business question."));
+      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort, source of business, compliance, and persistence — tied back to the original business question."));
 
       const hero = h("div", "final-hero");
       hero.innerHTML = '<h3>Is the plateau a switching problem, a compliance problem, or both?</h3><p>Patients are indeed moving away from older, more frequently-dosed therapies (TNF inhibitors) toward IL-23 inhibitors — driven by both lower persistence and lower compliance on weekly/biweekly agents. IL-23 inhibitors lead on every measure: lowest switch-away rate (' + pct(s.classes[2].switched, s.classes[2].total) + '%), highest compliance (' + a.byClass[0].value + '%), and the longest median persistence (' + p.series[0].medianMonths + ' months). This points to a broader market shift toward less-frequently-dosed, higher-persistence therapies — not a brand-specific access issue.</p>';
@@ -4500,9 +4508,9 @@
 
       const recap = h("div", "recap-grid");
       recap.innerHTML =
-        '<div class="recap-card"><div class="rc-title">Switch</div><div class="rc-value">' + pct(s.totals.switched, s.totals.population) + '%</div><div class="rc-sub">switched classes within 12 months · avg ' + s.totals.avgDaysToSwitch + ' days</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Compliance</div><div class="rc-value">' + a.pctAdherent + '%</div><div class="rc-sub">compliant (PDC ≥0.80) · mean PDC ' + a.meanPDC.toFixed(2) + '</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">' + p.medianMonths + ' mo</div><div class="rc-sub">median · ' + p.pct12mo + '% persisting at 12 months</div></div>';
+        '<div class="recap-card"><div class="rc-title">Source of Business</div><div class="rc-value">52%</div><div class="rc-sub">switch-in share from TNF · 23% New to Brand</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Compliance</div><div class="rc-value">58.5%</div><div class="rc-sub">compliant (PDC ≥0.80) · Sotyktu leads at 74%</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">10.5 mo</div><div class="rc-sub">median persistence · Sotyktu leads at 15.5 mo</div></div>';
       wrap.appendChild(recap);
 
       // Get the correct cohort data
@@ -4514,46 +4522,24 @@
       sec1.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final cohort.", stages: cd.funnel }));
       wrap.appendChild(sec1);
 
-      // Section 2: Switch Dynamics
+      // Section 2: Source of Business
       const sec2 = h("div", "summary-section");
-      sec2.appendChild(h("h3", "section-header", "2. Switch Dynamics"));
-      sec2.appendChild(sankeyChart({
-        title: "Where patients go after their index therapy",
-        subtitle: "Flow from index drug class to 12-month outcome. Ribbon width = patient count.",
-        left: s.classes.map(c => ({ label: c.label, value: c.total, color: c.color })),
-        right: [
-          { label: "Remained on Index Therapy", value: s.totals.remained },
-          { label: "Switched to Another Class", value: s.totals.switched },
-          { label: "Discontinued, No Further Therapy", value: s.totals.discontinued }
-        ],
-        links: s.classes.flatMap((c, i) => [
-          { fromIdx: i, toIdx: 0, value: c.remained, color: c.color },
-          { fromIdx: i, toIdx: 1, value: c.switched, color: c.color },
-          { fromIdx: i, toIdx: 2, value: c.discontinued, color: c.color }
-        ])
-      }));
-      sec2.appendChild(pairsTable({ title: "Top switch destinations", subtitle: "Most common drug-to-drug moves among switchers.", rows: s.topPairs }));
+      sec2.appendChild(h("h3", "section-header", "2. Source of Business"));
+      sec2.appendChild(sobMixStackedBarChart());
+      sec2.appendChild(sobOverviewSankeyChart());
       wrap.appendChild(sec2);
 
       // Section 3: Medication Compliance (PDC)
       const sec3 = h("div", "summary-section");
       sec3.appendChild(h("h3", "section-header", "3. Medication Compliance (PDC)"));
-      sec3.appendChild(barChart({
-        title: "Compliance rate by drug class",
-        subtitle: "% of patients compliant (PDC ≥0.80), by index drug class.",
-        unit: "pct",
-        data: a.byClass
-      }));
+      sec3.appendChild(compliancePdcHistogramCard());
+      sec3.appendChild(complianceByBrandCard());
       wrap.appendChild(sec3);
 
       // Section 4: Therapy Persistence
       const sec4 = h("div", "summary-section");
       sec4.appendChild(h("h3", "section-header", "4. Therapy Persistence"));
-      sec4.appendChild(kmChart({
-        title: "Time-to-discontinuation, by drug class",
-        subtitle: "% of patients still on therapy over time (Kaplan–Meier style persistence curve).",
-        months: p.months, series: p.series
-      }));
+      sec4.appendChild(persistenceByBrandCurveCard());
       wrap.appendChild(sec4);
 
       const card = h("div", "card");
@@ -4573,7 +4559,7 @@
       wrap.appendChild(btnRow);
 
       renderPanel(wrap);
-      await aiSay("Here's the combined picture across cohort, switch, compliance, and persistence — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
+      await aiSay("Here's the combined picture across cohort, source of business, compliance, and persistence — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
       setChips([
         { label: "Export summary (PDF)", primary: true, onClick: () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.") },
         { label: "Start a new analysis", muted: true, onClick: () => { if (confirm("Restart the demo from the landing page?")) location.reload(); } }
