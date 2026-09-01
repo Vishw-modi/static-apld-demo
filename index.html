@@ -1223,6 +1223,22 @@
       box-shadow: 0 0 0 3px rgba(0, 163, 155, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.03);
     }
 
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin: 0 3px;
+      vertical-align: middle;
+      line-height: 1.3;
+      box-shadow: 0 1px 2px rgba(3, 105, 161, 0.08);
+    }
+
     .toggle {
       position: relative;
       width: 36px;
@@ -2182,10 +2198,7 @@
 
     const SWITCH_RULES = () => {
       return [
-        { id: cid(), category: "Market Basket", text: "Track 5 classes: TNF, IL-17, IL-23, IL-12/23, Oral", active: true },
-        { id: cid(), category: "Continuity Threshold", text: "90 days threshold shared by Continuing / Discontinued / Restart", active: true },
-        { id: cid(), category: "Switch Window", text: "90 days post prior-therapy supply end", active: true },
-        { id: cid(), category: "Augmentation Overlap", text: "60+ days concurrent claim, not a switch", active: true },
+        { id: cid(), category: "Market Basket", text: "Market basket therapies: TNF, IL-17, IL-23, IL-12/23, Oral", active: true },
         { id: cid(), category: "Index Treatment", text: "First claim episode for Skyrizi (IL-23 inhibitor) within the confirmed cohort", active: true },
         { id: cid(), category: "New Patients", text: "No market-basket therapy (biologic or oral systemic) in the 12 months prior — topical-only history counts as New", active: true },
         { id: cid(), category: "Continuing", text: "Same-class refill with a gap ≤ 90 days since the prior fill's supply end", active: true },
@@ -2760,6 +2773,17 @@
       return card;
     }
 
+    function highlightCodesInHtml(text) {
+      if (!text) return "";
+      let safe = escapeHtml(text);
+      // Regex for medical/clinical codes like ICD-10 L40.0 (Psoriasis vulgaris), L40.9 (Psoriasis, unspecified), ICD-10 L40.0, L40.0, L40.9, L40.5, ICD-10 L20.x, L20.x, PDC ≥ 0.80, etc.
+      const regex = /(ICD-10\s+[A-Z]\d{2}\.[\d\w]+(?:\s*\([^)]+\))?|[A-Z]\d{2}\.[\d\w]+(?:\s*\([^)]+\))?|ICD-10\s+[A-Z]\d{2}(?:\.[\d\w]+)?|ICD-10\s+[A-Z]\d{2}\.[x\d]+|PDC\s*≥\s*0\.\d+)/gi;
+
+      return safe.replace(regex, (match) => {
+        return `<span class="code-badge">${match}</span>`;
+      });
+    }
+
     /* ============================================================
        RULES EDITOR COMPONENT
     ============================================================ */
@@ -2775,8 +2799,12 @@
           const tag = h("div", "rule-tag", rule.category);
           const text = h("div", "rule-text");
           text.contentEditable = "true";
-          text.textContent = rule.text;
-          text.addEventListener("input", () => { rule.text = text.textContent; });
+          text.innerHTML = highlightCodesInHtml(rule.text);
+          text.addEventListener("input", () => { rule.text = text.innerText; });
+          text.addEventListener("blur", () => {
+            rule.text = text.innerText;
+            text.innerHTML = highlightCodesInHtml(rule.text);
+          });
           const tgl = h("div", "toggle" + (rule.active ? " on" : ""));
           tgl.innerHTML = '<div class="knob"></div>';
           tgl.onclick = () => { rule.active = !rule.active; renderRows(); };
@@ -2831,7 +2859,7 @@
           tdParam.textContent = r.category;
           const tdValue = document.createElement('td');
           tdValue.style.cssText = "padding:12px; font-size:13px; color:var(--ink-secondary); border-bottom:1px solid var(--border);";
-          tdValue.textContent = r.text;
+          tdValue.innerHTML = highlightCodesInHtml(r.text);
           tr.appendChild(tdParam);
           tr.appendChild(tdValue);
           tbody.appendChild(tr);
@@ -2861,7 +2889,7 @@
       const ul = h("ul", "review-list");
       activeRules.forEach(r => {
         const li = h("li");
-        li.innerHTML = '<span class="rule-tag">' + r.category + '</span><span>' + r.text + '</span>';
+        li.innerHTML = '<span class="rule-tag">' + r.category + '</span><span>' + highlightCodesInHtml(r.text) + '</span>';
         ul.appendChild(li);
       });
       card.appendChild(ul);
@@ -3283,7 +3311,7 @@
       setChips([]); freeTextHandler = null;
       renderStepper(2, STATE.completedAnalyses);
       const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
-      
+
       renderBusinessQuestionPromptPanel();
 
       await aiSay("Great — your PsO cohort of <b>" + fmt(finalCohort.kpis.total) + " patients</b> is locked in. What business question would you like to explore next?", 900);
@@ -3302,7 +3330,7 @@
       wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
       wrap.appendChild(h("div", "panel-title", "What business question would you like to explore next?"));
       wrap.appendChild(h("div", "panel-subtitle", "Your PsO cohort is confirmed. Tell the assistant what you're trying to figure out next."));
-      
+
       const card = h("div", "card");
       card.innerHTML = '<div class="card-title">Confirmed cohort</div><div class="card-sub" style="margin-bottom:0;"><b>' + fmt(finalCohort.kpis.total) + '</b> plaque psoriasis patients, indexed Jan 2023–Dec 2025, ready for downstream analysis.</div>';
       wrap.appendChild(card);
@@ -3583,9 +3611,9 @@
       wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
       wrap.appendChild(h("div", "panel-title", meta.label + " — business rules"));
       wrap.appendChild(h("div", "panel-subtitle", key === "switch" ? "How every new Skyrizi fill gets classified — a priority cascade, checked top to bottom, not independent filters." : "Defined for the PsO systemic-therapy population within your confirmed cohort."));
-      
+
       const confirmLabel = key === "switch" ? "Confirm rules & preview on sample patients" : "Confirm rules & continue";
-      const confirmHandler = key === "switch" 
+      const confirmHandler = key === "switch"
         ? (activeRules) => handleConfirmRulesAndPreview(activeRules)
         : (activeRules) => runAnalysis(key);
 
@@ -3606,7 +3634,7 @@
       wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis — Source of Business"));
       wrap.appendChild(h("div", "panel-title", "Sampling patient claims & testing business rules…"));
       wrap.appendChild(h("div", "panel-subtitle", "Drawing sample patient claims to verify classification logic before running on complete database."));
-      
+
       const loaderCard = h("div", "card");
       loaderCard.style.padding = "44px 20px";
       loaderCard.style.textAlign = "center";
@@ -3959,22 +3987,66 @@
 
       const remaining = ["switch", "adherence", "persistence"].filter(k => !STATE.completedAnalyses.includes(k));
       const nextCard = h("div", "card");
-      if (remaining.length) {
-        nextCard.innerHTML = '<div class="card-title">What\'s next?</div><div class="card-sub" style="margin-bottom:14px;">You can look at another analysis on this same cohort, or wrap up with a combined summary.</div>';
-        const row = h("div", "btn-row");
-        remaining.forEach(k => {
-          const b = h("button", "btn btn-outline", "Run " + ANALYSIS_META[k].label);
-          const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
-          b.onclick = () => { userSay(sayText); startAnalysisFlow(k); };
-          row.appendChild(b);
-        });
-        nextCard.appendChild(row);
-      } else {
+      if (remaining.length === 0) {
         nextCard.innerHTML = '<div class="card-title">All three analyses complete</div><div class="card-sub" style="margin-bottom:14px;">Switch, compliance, and persistence have all been run on this cohort. Ready for a combined summary tying it back to the original business question?</div>';
         const row = h("div", "btn-row");
         const b = h("button", "btn btn-tealsolid", "Generate combined summary");
         b.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
         row.appendChild(b);
+        nextCard.appendChild(row);
+      } else if (key === "switch" && remaining.includes("persistence")) {
+        nextCard.innerHTML = `
+          <div class="card-title" style="display:flex; align-items:center; gap:8px;">
+            <span style="background:rgba(0,163,155,0.12); color:var(--teal-600); font-weight:700; font-size:11px; padding:3px 8px; border-radius:12px; letter-spacing:0.3px;">AI SUGGESTION</span>
+            What's next?
+          </div>
+          <div class="card-sub" style="margin-bottom:16px;">
+            Based on the Source of Business findings, running the <b>Persistence Analysis</b> next makes the most sense to understand patient retention and discontinuation dynamics over time.
+          </div>
+        `;
+        const row = h("div", "btn-row");
+        
+        const btnPers = h("button", "btn btn-tealsolid", "Run Persistence Analysis");
+        btnPers.onclick = () => { userSay("Let's look at persistence next."); startAnalysisFlow("persistence"); };
+        row.appendChild(btnPers);
+
+        if (remaining.includes("adherence")) {
+          const btnAdh = h("button", "btn btn-outline", "Run Compliance Analysis");
+          btnAdh.onclick = () => { userSay("Let's confirm with compliance."); startAnalysisFlow("adherence"); };
+          row.appendChild(btnAdh);
+        }
+
+        if (STATE.completedAnalyses.length >= 2) {
+          const btnSumm = h("button", "btn btn-outline", "Generate combined summary");
+          btnSumm.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+          row.appendChild(btnSumm);
+        }
+
+        nextCard.appendChild(row);
+      } else {
+        nextCard.innerHTML = '<div class="card-title">What\'s next?</div><div class="card-sub" style="margin-bottom:14px;">You can look at another analysis on this same cohort, or wrap up with a combined summary.</div>';
+        const row = h("div", "btn-row");
+        
+        if (STATE.completedAnalyses.length >= 2) {
+          const btnSumm = h("button", "btn btn-tealsolid", "Generate combined summary");
+          btnSumm.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+          row.appendChild(btnSumm);
+
+          remaining.forEach(k => {
+            const b = h("button", "btn btn-outline", "Run " + ANALYSIS_META[k].label);
+            const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
+            b.onclick = () => { userSay(sayText); startAnalysisFlow(k); };
+            row.appendChild(b);
+          });
+        } else {
+          remaining.forEach((k, i) => {
+            const b = h("button", "btn " + (i === 0 ? "btn-tealsolid" : "btn-outline"), "Run " + ANALYSIS_META[k].label);
+            const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
+            b.onclick = () => { userSay(sayText); startAnalysisFlow(k); };
+            row.appendChild(b);
+          });
+        }
+
         nextCard.appendChild(row);
       }
       wrap.appendChild(nextCard);
@@ -4022,12 +4094,37 @@
         });
       } else {
         aiSay(msg + " The tightened result set looks clean — ready to move on.", 1000).then(() => {
-          if (remaining.length) {
-            setChips(remaining.map((k, i) => ({ label: "Run " + ANALYSIS_META[k].label, primary: i === 0, onClick: () => { const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + "."); userSay(sayText); startAnalysisFlow(k); } })));
-            freeTextHandler = () => startAnalysisFlow(remaining[0]);
-          } else {
+          if (remaining.length === 0) {
             setChips([{ label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
             freeTextHandler = () => showFinalSummary();
+          } else if (STATE.completedAnalyses.length >= 2) {
+            const chipList = [
+              { label: "Generate combined summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }
+            ];
+            remaining.forEach(k => {
+              const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
+              chipList.push({
+                label: "Run " + ANALYSIS_META[k].label,
+                muted: true,
+                onClick: () => { userSay(sayText); startAnalysisFlow(k); }
+              });
+            });
+            setChips(chipList);
+            freeTextHandler = () => showFinalSummary();
+          } else {
+            const chipOrder = (key === "switch" && remaining.includes("persistence"))
+              ? ["persistence", "adherence"].filter(k => remaining.includes(k))
+              : remaining;
+            setChips(chipOrder.map((k, i) => ({
+              label: "Run " + ANALYSIS_META[k].label,
+              primary: i === 0,
+              onClick: () => {
+                const sayText = k === "persistence" ? "Let's look at persistence next." : (k === "adherence" ? "Let's confirm with compliance." : "Let's also look at " + ANALYSIS_META[k].label.toLowerCase() + ".");
+                userSay(sayText);
+                startAnalysisFlow(k);
+              }
+            })));
+            freeTextHandler = () => startAnalysisFlow(chipOrder[0]);
           }
         });
       }
@@ -4080,17 +4177,17 @@
         <!-- 10 Quarters Grid -->
         <div style="display:grid; grid-template-columns:repeat(10, 1fr); gap:12px; height:340px; border-bottom:1px solid var(--border); padding-bottom:32px; position:relative;">
           ${[
-            { q: "Q1-23", ntb: 25, tnf: 35, il17: 15, oral: 15, res: 10 },
-            { q: "Q2-23", ntb: 24, tnf: 37, il17: 15, oral: 14, res: 10 },
-            { q: "Q3-23", ntb: 23, tnf: 39, il17: 15, oral: 13, res: 10 },
-            { q: "Q4-23", ntb: 23, tnf: 40, il17: 15, oral: 12, res: 10 },
-            { q: "Q1-24", ntb: 22, tnf: 42, il17: 15, oral: 11, res: 10 },
-            { q: "Q2-24", ntb: 22, tnf: 44, il17: 14, oral: 10, res: 10 },
-            { q: "Q3-24", ntb: 21, tnf: 45, il17: 15, oral: 9, res: 10 },
-            { q: "Q4-24", ntb: 21, tnf: 47, il17: 14, oral: 8, res: 10 },
-            { q: "Q1-25", ntb: 20, tnf: 48, il17: 15, oral: 7, res: 10 },
-            { q: "Q2-25", ntb: 20, tnf: 49, il17: 15, oral: 6, res: 10 }
-          ].map(d => `
+          { q: "Q1-23", ntb: 25, tnf: 35, il17: 15, oral: 15, res: 10 },
+          { q: "Q2-23", ntb: 24, tnf: 37, il17: 15, oral: 14, res: 10 },
+          { q: "Q3-23", ntb: 23, tnf: 39, il17: 15, oral: 13, res: 10 },
+          { q: "Q4-23", ntb: 23, tnf: 40, il17: 15, oral: 12, res: 10 },
+          { q: "Q1-24", ntb: 22, tnf: 42, il17: 15, oral: 11, res: 10 },
+          { q: "Q2-24", ntb: 22, tnf: 44, il17: 14, oral: 10, res: 10 },
+          { q: "Q3-24", ntb: 21, tnf: 45, il17: 15, oral: 9, res: 10 },
+          { q: "Q4-24", ntb: 21, tnf: 47, il17: 14, oral: 8, res: 10 },
+          { q: "Q1-25", ntb: 20, tnf: 48, il17: 15, oral: 7, res: 10 },
+          { q: "Q2-25", ntb: 20, tnf: 49, il17: 15, oral: 6, res: 10 }
+        ].map(d => `
             <div style="display:flex; flex-direction:column; height:100%; position:relative;">
               <div style="display:flex; flex-direction:column; flex:1; width:100%; border-radius:4px; overflow:hidden;">
                 <div onmouseover="showSobTooltip(event, '${d.q}: New to Brand', '${d.ntb}% of quarter activity')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="height:${d.ntb}%; background:#10b981; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:filter 0.2s;">${d.ntb}%</div>
@@ -4273,7 +4370,7 @@
       const card = h("div", "card");
       card.style.padding = "24px";
       card.style.marginBottom = "16px";
-      
+
       const bins = [
         { bin: "0.0–0.1", val: 10.0, isComp: false },
         { bin: "0.1–0.2", val: 7.5, isComp: false },
@@ -4299,16 +4396,16 @@
           <div style="position:absolute; top:66%; left:0; right:0; border-top:1px dashed #e2e8f0; pointer-events:none;"></div>
 
           ${bins.map(b => {
-            const pctHeight = (b.val / 90) * 100;
-            const bg = b.isComp ? "#10b981" : "#ef4444";
-            const label = b.isComp ? "Compliant (≥0.80)" : "Non-compliant (<0.80)";
-            return `
+        const pctHeight = (b.val / 90) * 100;
+        const bg = b.isComp ? "#10b981" : "#ef4444";
+        const label = b.isComp ? "Compliant (≥0.80)" : "Non-compliant (<0.80)";
+        return `
               <div style="display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; position:relative; z-index:1;">
                 <div onmouseover="showSobTooltip(event, 'PDC Range: ${b.bin}', '${b.val}% of Skyrizi patients (${label})')" onmousemove="moveSobTooltip(event)" onmouseout="hideSobTooltip()" style="width:100%; height:${pctHeight}%; background:${bg}; border-radius:6px; cursor:pointer; transition:filter 0.2s;" onmouseenter="this.style.filter='brightness(1.1)'" onmouseleave="this.style.filter='none'"></div>
                 <div style="position:absolute; bottom:-28px; font-size:11px; font-weight:600; color:var(--ink-muted); white-space:nowrap;">${b.bin}</div>
               </div>
             `;
-          }).join("")}
+      }).join("")}
         </div>
 
         <!-- Legend -->
@@ -4497,50 +4594,84 @@
       setChips([]); freeTextHandler = null;
       renderStepper(4, STATE.completedAnalyses);
       const s = DATA.switch, a = DATA.adherence, p = DATA.persistence;
+      const hasSwitch = STATE.completedAnalyses.includes("switch");
+      const hasAdherence = STATE.completedAnalyses.includes("adherence");
+      const hasPersistence = STATE.completedAnalyses.includes("persistence");
+
       const wrap = h("div");
       wrap.appendChild(h("div", "panel-eyebrow", "Step 4 · Summary"));
       wrap.appendChild(h("div", "panel-title", "Putting it together"));
-      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort, source of business, compliance, and persistence — tied back to the original business question."));
+
+      const activeNames = ["cohort"];
+      if (hasSwitch) activeNames.push("source of business");
+      if (hasAdherence) activeNames.push("compliance");
+      if (hasPersistence) activeNames.push("persistence");
+
+      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across " + activeNames.join(", ") + " — tied back to the original business question."));
 
       const hero = h("div", "final-hero");
-      hero.innerHTML = '<h3>Is the plateau a switching problem, a compliance problem, or both?</h3><p>Patients are indeed moving away from older, more frequently-dosed therapies (TNF inhibitors) toward IL-23 inhibitors — driven by both lower persistence and lower compliance on weekly/biweekly agents. IL-23 inhibitors lead on every measure: lowest switch-away rate (' + pct(s.classes[2].switched, s.classes[2].total) + '%), highest compliance (' + a.byClass[0].value + '%), and the longest median persistence (' + p.series[0].medianMonths + ' months). This points to a broader market shift toward less-frequently-dosed, higher-persistence therapies — not a brand-specific access issue.</p>';
+      if (hasSwitch && hasPersistence && hasAdherence) {
+        hero.innerHTML = '<h3>Is the plateau a switching problem, a compliance problem, or both?</h3><p>Patients are indeed moving away from older, more frequently-dosed therapies (TNF inhibitors) toward IL-23 inhibitors — driven by both lower persistence and lower compliance on weekly/biweekly agents. IL-23 inhibitors lead on every measure: lowest switch-away rate (' + pct(s.classes[2].switched, s.classes[2].total) + '%), highest compliance (' + a.byClass[0].value + '%), and the longest median persistence (' + p.series[0].medianMonths + ' months). This points to a broader market shift toward less-frequently-dosed, higher-persistence therapies — not a brand-specific access issue.</p>';
+      } else if (hasSwitch && hasPersistence) {
+        hero.innerHTML = '<h3>Is the plateau driven by patient switching or persistence?</h3><p>Patients are moving away from older therapies toward IL-23 inhibitors — driven by both high switch-in volumes from TNF inhibitors (52% switch-in share) and longer median persistence on IL-23 therapies (10.5 months vs. 7.8 months for TNF). This indicates that patient retention and switching dynamics are favoring less-frequently-dosed biologics across the market.</p>';
+      } else if (hasSwitch && hasAdherence) {
+        hero.innerHTML = '<h3>Is the plateau driven by patient switching or compliance?</h3><p>Patients are moving away from older therapies toward IL-23 inhibitors — driven by both high switch-in volumes from TNF inhibitors (52% switch-in share) and compliance patterns across dosing frequencies (58.5% Skyrizi compliance vs. 74% for Sotyktu). This indicates that patient adherence and switching dynamics are shaping current market share.</p>';
+      } else {
+        hero.innerHTML = '<h3>Synthesized findings across completed analyses</h3><p>A comprehensive look at your confirmed PsO patient cohort and completed deep-dive analyses, highlighting key drivers and patient dynamics.</p>';
+      }
       wrap.appendChild(hero);
 
+      // Dynamic Recap Grid
       const recap = h("div", "recap-grid");
-      recap.innerHTML =
-        '<div class="recap-card"><div class="rc-title">Source of Business</div><div class="rc-value">52%</div><div class="rc-sub">switch-in share from TNF · 23% New to Brand</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Compliance</div><div class="rc-value">58.5%</div><div class="rc-sub">compliant (PDC ≥0.80) · Sotyktu leads at 74%</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">10.5 mo</div><div class="rc-sub">median persistence · Sotyktu leads at 15.5 mo</div></div>';
+      let recapHtml = "";
+      if (hasSwitch) {
+        recapHtml += '<div class="recap-card"><div class="rc-title">Source of Business</div><div class="rc-value">52%</div><div class="rc-sub">switch-in share from TNF · 23% New to Brand</div></div>';
+      }
+      if (hasAdherence) {
+        recapHtml += '<div class="recap-card"><div class="rc-title">Compliance</div><div class="rc-value">58.5%</div><div class="rc-sub">compliant (PDC ≥0.80) · Sotyktu leads at 74%</div></div>';
+      }
+      if (hasPersistence) {
+        recapHtml += '<div class="recap-card"><div class="rc-title">Persistence</div><div class="rc-value">10.5 mo</div><div class="rc-sub">median persistence · Sotyktu leads at 15.5 mo</div></div>';
+      }
+      recap.innerHTML = recapHtml;
       wrap.appendChild(recap);
 
       // Get the correct cohort data
       const cd = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
 
-      // Section 1: Cohort Definition
+      let sectionNum = 1;
+
+      // Section: Cohort Definition (Always present)
       const sec1 = h("div", "summary-section");
-      sec1.appendChild(h("h3", "section-header", "1. Patient Cohort Construction"));
+      sec1.appendChild(h("h3", "section-header", (sectionNum++) + ". Patient Cohort Construction"));
       sec1.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final cohort.", stages: cd.funnel }));
       wrap.appendChild(sec1);
 
-      // Section 2: Source of Business
-      const sec2 = h("div", "summary-section");
-      sec2.appendChild(h("h3", "section-header", "2. Source of Business"));
-      sec2.appendChild(sobMixStackedBarChart());
-      sec2.appendChild(sobOverviewSankeyChart());
-      wrap.appendChild(sec2);
+      // Section: Source of Business (Only if completed)
+      if (hasSwitch) {
+        const secSwitch = h("div", "summary-section");
+        secSwitch.appendChild(h("h3", "section-header", (sectionNum++) + ". Source of Business"));
+        secSwitch.appendChild(sobMixStackedBarChart());
+        secSwitch.appendChild(sobOverviewSankeyChart());
+        wrap.appendChild(secSwitch);
+      }
 
-      // Section 3: Medication Compliance (PDC)
-      const sec3 = h("div", "summary-section");
-      sec3.appendChild(h("h3", "section-header", "3. Medication Compliance (PDC)"));
-      sec3.appendChild(compliancePdcHistogramCard());
-      sec3.appendChild(complianceByBrandCard());
-      wrap.appendChild(sec3);
+      // Section: Medication Compliance (PDC) (Only if completed)
+      if (hasAdherence) {
+        const secAdh = h("div", "summary-section");
+        secAdh.appendChild(h("h3", "section-header", (sectionNum++) + ". Medication Compliance (PDC)"));
+        secAdh.appendChild(compliancePdcHistogramCard());
+        secAdh.appendChild(complianceByBrandCard());
+        wrap.appendChild(secAdh);
+      }
 
-      // Section 4: Therapy Persistence
-      const sec4 = h("div", "summary-section");
-      sec4.appendChild(h("h3", "section-header", "4. Therapy Persistence"));
-      sec4.appendChild(persistenceByBrandCurveCard());
-      wrap.appendChild(sec4);
+      // Section: Therapy Persistence (Only if completed)
+      if (hasPersistence) {
+        const secPers = h("div", "summary-section");
+        secPers.appendChild(h("h3", "section-header", (sectionNum++) + ". Therapy Persistence"));
+        secPers.appendChild(persistenceByBrandCurveCard());
+        wrap.appendChild(secPers);
+      }
 
       const card = h("div", "card");
       card.innerHTML = '<div class="card-title">Suggested next steps</div><ul style="font-size:13px;color:var(--ink-secondary);line-height:1.7;padding-left:20px;margin:0;">' +
@@ -4559,7 +4690,7 @@
       wrap.appendChild(btnRow);
 
       renderPanel(wrap);
-      await aiSay("Here's the combined picture across cohort, source of business, compliance, and persistence — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
+      await aiSay("Here's the combined picture across " + activeNames.join(", ") + " — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
       setChips([
         { label: "Export summary (PDF)", primary: true, onClick: () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.") },
         { label: "Start a new analysis", muted: true, onClick: () => { if (confirm("Restart the demo from the landing page?")) location.reload(); } }
